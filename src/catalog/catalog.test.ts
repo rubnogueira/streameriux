@@ -18,6 +18,7 @@ import {
   setUsePlaylistGroups,
 } from './index'
 import { gpuixIconSrc, materializeSvg, usableIconSrc } from '../lib/icon'
+import { installMockFetch } from '../lib/mock-fetch'
 
 describe('parseChannelToml', () => {
   it('reads [[channel]] tables', () => {
@@ -372,10 +373,12 @@ describe('addCatalogSource', () => {
 
   it('adds a GitHub blob M3U URL as a playlist using the raw file URL', async () => {
     const m3u = '#EXTM3U\n#EXTINF:-1,One\nhttps://example.com/one.m3u8\n'
-    globalThis.fetch = vi.fn(async (input: RequestInfo | URL) => {
-      expect(String(input)).toBe('https://raw.githubusercontent.com/o/r/main/list.m3u')
-      return new Response(m3u, { status: 200 })
-    }) as typeof fetch
+    installMockFetch(
+      vi.fn(async (input: RequestInfo | URL) => {
+        expect(String(input)).toBe('https://raw.githubusercontent.com/o/r/main/list.m3u')
+        return new Response(m3u, { status: 200 })
+      }),
+    )
 
     const result = await addCatalogSource('https://github.com/o/r/blob/main/list.m3u', { intent: 'playlist' })
     expect(result).toEqual({ kind: 'playlist', count: 1 })
@@ -385,7 +388,7 @@ describe('addCatalogSource', () => {
   })
 
   it('does not fall back to user.toml when playlist intent gets non-playlist content', async () => {
-    globalThis.fetch = vi.fn(async () => new Response('<!doctype html>', { status: 200 })) as typeof fetch
+    installMockFetch(vi.fn(async () => new Response('<!doctype html>', { status: 200 })))
 
     await expect(
       addCatalogSource('https://example.com/list.m3u', { intent: 'playlist' }),

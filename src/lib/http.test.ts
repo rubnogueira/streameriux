@@ -1,13 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { installMockFetch } from './mock-fetch'
 import { mediaFetch, mediaSource } from './http'
 
 const realFetch = globalThis.fetch
-
-function setMockFetch(mock: ReturnType<typeof vi.fn>): void {
-  ;(globalThis as { fetch: typeof fetch }).fetch = Object.assign(mock, {
-    preconnect: vi.fn(),
-  }) as typeof fetch
-}
 
 function empty204(): Response {
   return {
@@ -35,7 +30,7 @@ describe('mediaFetch', () => {
         headers: { 'Content-Type': 'application/vnd.apple.mpegurl', 'Content-Length': '42' },
       }),
     )
-    setMockFetch(fetch)
+    installMockFetch(fetch)
 
     const response = await mediaFetch(
       'https://example.com/live/playlist.m3u8',
@@ -62,7 +57,7 @@ describe('mediaFetch', () => {
           headers: { 'Content-Type': 'application/vnd.apple.mpegurl' },
         }),
       )
-    setMockFetch(fetch)
+    installMockFetch(fetch)
 
     const response = await mediaFetch('https://example.com/live/playlist.m3u8')
 
@@ -75,7 +70,7 @@ describe('mediaFetch', () => {
 
   it('returns a 502 when every playlist attempt is empty', async () => {
     const fetch = vi.fn().mockResolvedValue(empty204())
-    setMockFetch(fetch)
+    installMockFetch(fetch)
 
     const response = await mediaFetch(
       'https://example.com/live/alt/playlist.m3u8',
@@ -91,7 +86,7 @@ describe('mediaFetch', () => {
       .fn()
       .mockResolvedValueOnce(empty204())
       .mockResolvedValueOnce(new Response('segment', { status: 200 }))
-    setMockFetch(fetch)
+    installMockFetch(fetch)
 
     const response = await mediaFetch('https://example.com/seg.ts', {
       headers: { Range: 'bytes=0-' },
