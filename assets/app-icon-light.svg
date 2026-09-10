@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- streameriux app icon — light appearance. Same glyph as the dark variant on
+       a brighter, glossier coral glass so it stays vivid on a light desktop. -->
+  <defs>
+    <linearGradient id="bg" x1="0.12" y1="0" x2="0.88" y2="1">
+      <stop offset="0" stop-color="#FF8B7E"/>
+      <stop offset="0.55" stop-color="#FF5A4C"/>
+      <stop offset="1" stop-color="#F0362A"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="0.5" cy="0.13" r="0.95">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.62"/>
+      <stop offset="0.42" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="depth" x1="0" y1="0.55" x2="0" y2="1">
+      <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#B01B10" stop-opacity="0.30"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="72" y="72" width="880" height="880" rx="204" fill="url(#bg)"/>
+  <rect x="72" y="72" width="880" height="880" rx="204" fill="url(#sheen)"/>
+  <rect x="72" y="72" width="880" height="880" rx="204" fill="url(#depth)"/>
+  <rect x="82" y="82" width="860" height="860" rx="196" fill="none" stroke="#FFFFFF" stroke-opacity="0.34" stroke-width="4"/>
+
+  <g fill="#FFFFFF">
+    <g fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round">
+      <path d="M462 330 a 74 74 0 0 0 0 88"/>
+      <path d="M562 330 a 74 74 0 0 1 0 88"/>
+      <path d="M424 306 a 122 122 0 0 0 0 136"/>
+      <path d="M600 306 a 122 122 0 0 1 0 136"/>
+    </g>
+    <circle cx="512" cy="374" r="30"/>
+
+    <rect x="330" y="470" width="364" height="252" rx="46" fill="none" stroke="#FFFFFF" stroke-width="30"/>
+    <rect x="392" y="536" width="240" height="24" rx="12"/>
+    <rect x="392" y="586" width="240" height="24" rx="12"/>
+    <rect x="392" y="636" width="150" height="24" rx="12"/>
+
+    <rect x="500" y="722" width="24" height="40" rx="8"/>
+    <rect x="440" y="760" width="144" height="24" rx="12"/>
+  </g>
+</svg>

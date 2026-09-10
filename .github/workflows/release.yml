@@ -1,0 +1,84 @@
+name: Release
+
+# Builds the standalone macOS binary + .app bundle and publishes them as a
+# GitHub Release. Runs on macOS because bundle:mac rasterises the app icon with
+# qlmanage / sips / iconutil, which only exist on macOS.
+#
+# The version is the single source of truth in package.json — nothing here
+# hardcodes it. Trigger either way:
+#   • run it manually from the Actions tab (uses package.json's version), or
+#   • push a tag:  bun run release:tag   (reads version from package.json)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.2'
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Resolve version
+        id: version
+        run: |
+          # Single source of truth: package.json. A tag push must match it so the
+          # published binary and its tag never disagree.
+          pkg="$(bun -e 'console.log((await Bun.file("package.json").json()).version)')"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            tagver="${GITHUB_REF_NAME#v}"
+            if [ "$tagver" != "$pkg" ]; then
+              echo "::error::Tag v$tagver does not match package.json version $pkg. Bump package.json first."
+              exit 1
+            fi
+          fi
+          echo "version=${pkg}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${pkg}" >> "$GITHUB_OUTPUT"
+          echo "Releasing streameriux ${pkg}"
+
+      - name: Type-check
+        run: bun run typecheck
+
+      - name: Test
+        run: bun run test
+
+      - name: Build binary
+        run: bun run build
+
+      - name: Bundle macOS .app
+        run: bun run bundle:mac
+
+      - name: Package artifacts
+        run: |
+          cd dist
+          # ditto preserves the .app bundle structure and resource forks; a plain
+          # zip would mangle the icon resources.
+          ditto -c -k --keepParent streameriux.app "streameriux-${{ steps.version.outputs.version }}-macos.zip"
+          shasum -a 256 "streameriux-${{ steps.version.outputs.version }}-macos.zip" streameriux > "streameriux-${{ steps.version.outputs.version }}-checksums.txt"
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: streameriux ${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            dist/streameriux-${{ steps.version.outputs.version }}-macos.zip
+            dist/streameriux
+            dist/streameriux-${{ steps.version.outputs.version }}-checksums.txt

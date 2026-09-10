@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- streameriux app icon — dark appearance. macOS 26 "liquid glass" squircle:
+       a dark charcoal glass with a soft red glow and the brand-red broadcast /
+       playlist-TV glyph. Also the source for the Dock .icns. Kept to simple
+       primitives so it rasterises cleanly with a transparent background. -->
+  <defs>
+    <linearGradient id="bg" x1="0.12" y1="0" x2="0.88" y2="1">
+      <stop offset="0" stop-color="#2A2A33"/>
+      <stop offset="0.55" stop-color="#16161C"/>
+      <stop offset="1" stop-color="#0B0B10"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.46" r="0.62">
+      <stop offset="0" stop-color="#FF4D45" stop-opacity="0.28"/>
+      <stop offset="0.6" stop-color="#FF4D45" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#FF4D45" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sheen" cx="0.5" cy="0.14" r="0.9">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.14"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.03"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="72" y="72" width="880" height="880" rx="204" fill="url(#bg)"/>
+  <rect x="72" y="72" width="880" height="880" rx="204" fill="url(#glow)"/>
+  <rect x="72" y="72" width="880" height="880" rx="204" fill="url(#sheen)"/>
+  <rect x="82" y="82" width="860" height="860" rx="196" fill="none" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="4"/>
+
+  <g fill="#FF5A4F">
+    <g fill="none" stroke="#FF5A4F" stroke-width="30" stroke-linecap="round">
+      <path d="M462 330 a 74 74 0 0 0 0 88"/>
+      <path d="M562 330 a 74 74 0 0 1 0 88"/>
+      <path d="M424 306 a 122 122 0 0 0 0 136"/>
+      <path d="M600 306 a 122 122 0 0 1 0 136"/>
+    </g>
+    <circle cx="512" cy="374" r="30"/>
+
+    <rect x="330" y="470" width="364" height="252" rx="46" fill="none" stroke="#FF5A4F" stroke-width="30"/>
+    <rect x="392" y="536" width="240" height="24" rx="12"/>
+    <rect x="392" y="586" width="240" height="24" rx="12"/>
+    <rect x="392" y="636" width="150" height="24" rx="12"/>
+
+    <rect x="500" y="722" width="24" height="40" rx="8"/>
+    <rect x="440" y="760" width="144" height="24" rx="12"/>
+  </g>
+</svg>

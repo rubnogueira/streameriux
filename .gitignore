@@ -1,0 +1,17 @@
+node_modules/
+dist/
+web-dist/
+tmp/
+screenshots/
+channels/cache/
+# Per-user runtime state written by the app — never ship a personal setup.
+# The catalog reader tolerates these being absent (defaults are recreated).
+channels/favorites.toml
+channels/composer.toml
+channels/groups.toml
+channels/hidden.toml
+channels/epg.toml
+channels/settings.toml
+channels/icons/
+*.log
+.DS_Store

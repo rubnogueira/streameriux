@@ -1,0 +1,2484 @@
+/** Country and region data from iptv-org (ISO 3166-2 + region codes). */
+
+export type CountryInfo = { code: string; name: string; flag: string; label: string }
+
+export const COUNTRIES: Record<string, { name: string; flag: string }> = {
+  "AF": {
+    "name": "Afghanistan",
+    "flag": "🇦🇫"
+  },
+  "AX": {
+    "name": "Aland",
+    "flag": "🇦🇽"
+  },
+  "AL": {
+    "name": "Albania",
+    "flag": "🇦🇱"
+  },
+  "DZ": {
+    "name": "Algeria",
+    "flag": "🇩🇿"
+  },
+  "AS": {
+    "name": "American Samoa",
+    "flag": "🇦🇸"
+  },
+  "AD": {
+    "name": "Andorra",
+    "flag": "🇦🇩"
+  },
+  "AO": {
+    "name": "Angola",
+    "flag": "🇦🇴"
+  },
+  "AI": {
+    "name": "Anguilla",
+    "flag": "🇦🇮"
+  },
+  "AQ": {
+    "name": "Antarctica",
+    "flag": "🇦🇶"
+  },
+  "AG": {
+    "name": "Antigua and Barbuda",
+    "flag": "🇦🇬"
+  },
+  "AR": {
+    "name": "Argentina",
+    "flag": "🇦🇷"
+  },
+  "AM": {
+    "name": "Armenia",
+    "flag": "🇦🇲"
+  },
+  "AW": {
+    "name": "Aruba",
+    "flag": "🇦🇼"
+  },
+  "AU": {
+    "name": "Australia",
+    "flag": "🇦🇺"
+  },
+  "AT": {
+    "name": "Austria",
+    "flag": "🇦🇹"
+  },
+  "AZ": {
+    "name": "Azerbaijan",
+    "flag": "🇦🇿"
+  },
+  "BS": {
+    "name": "Bahamas",
+    "flag": "🇧🇸"
+  },
+  "BH": {
+    "name": "Bahrain",
+    "flag": "🇧🇭"
+  },
+  "BD": {
+    "name": "Bangladesh",
+    "flag": "🇧🇩"
+  },
+  "BB": {
+    "name": "Barbados",
+    "flag": "🇧🇧"
+  },
+  "BY": {
+    "name": "Belarus",
+    "flag": "🇧🇾"
+  },
+  "BE": {
+    "name": "Belgium",
+    "flag": "🇧🇪"
+  },
+  "BZ": {
+    "name": "Belize",
+    "flag": "🇧🇿"
+  },
+  "BJ": {
+    "name": "Benin",
+    "flag": "🇧🇯"
+  },
+  "BM": {
+    "name": "Bermuda",
+    "flag": "🇧🇲"
+  },
+  "BT": {
+    "name": "Bhutan",
+    "flag": "🇧🇹"
+  },
+  "BO": {
+    "name": "Bolivia",
+    "flag": "🇧🇴"
+  },
+  "BQ": {
+    "name": "Bonaire",
+    "flag": "🇧🇶"
+  },
+  "BA": {
+    "name": "Bosnia and Herzegovina",
+    "flag": "🇧🇦"
+  },
+  "BW": {
+    "name": "Botswana",
+    "flag": "🇧🇼"
+  },
+  "BV": {
+    "name": "Bouvet Island",
+    "flag": "🇧🇻"
+  },
+  "BR": {
+    "name": "Brazil",
+    "flag": "🇧🇷"
+  },
+  "IO": {
+    "name": "British Indian Ocean Territory",
+    "flag": "🇮🇴"
+  },
+  "VG": {
+    "name": "British Virgin Islands",
+    "flag": "🇻🇬"
+  },
+  "BN": {
+    "name": "Brunei",
+    "flag": "🇧🇳"
+  },
+  "BG": {
+    "name": "Bulgaria",
+    "flag": "🇧🇬"
+  },
+  "BF": {
+    "name": "Burkina Faso",
+    "flag": "🇧🇫"
+  },
+  "BI": {
+    "name": "Burundi",
+    "flag": "🇧🇮"
+  },
+  "KH": {
+    "name": "Cambodia",
+    "flag": "🇰🇭"
+  },
+  "CM": {
+    "name": "Cameroon",
+    "flag": "🇨🇲"
+  },
+  "CA": {
+    "name": "Canada",
+    "flag": "🇨🇦"
+  },
+  "CV": {
+    "name": "Cape Verde",
+    "flag": "🇨🇻"
+  },
+  "KY": {
+    "name": "Cayman Islands",
+    "flag": "🇰🇾"
+  },
+  "CF": {
+    "name": "Central African Republic",
+    "flag": "🇨🇫"
+  },
+  "TD": {
+    "name": "Chad",
+    "flag": "🇹🇩"
+  },
+  "CL": {
+    "name": "Chile",
+    "flag": "🇨🇱"
+  },
+  "CN": {
+    "name": "China",
+    "flag": "🇨🇳"
+  },
+  "CX": {
+    "name": "Christmas Island",
+    "flag": "🇨🇽"
+  },
+  "CC": {
+    "name": "Cocos (Keeling) Islands",
+    "flag": "🇨🇨"
+  },
+  "CO": {
+    "name": "Colombia",
+    "flag": "🇨🇴"
+  },
+  "KM": {
+    "name": "Comoros",
+    "flag": "🇰🇲"
+  },
+  "CK": {
+    "name": "Cook Islands",
+    "flag": "🇨🇰"
+  },
+  "CR": {
+    "name": "Costa Rica",
+    "flag": "🇨🇷"
+  },
+  "HR": {
+    "name": "Croatia",
+    "flag": "🇭🇷"
+  },
+  "CU": {
+    "name": "Cuba",
+    "flag": "🇨🇺"
+  },
+  "CW": {
+    "name": "Curacao",
+    "flag": "🇨🇼"
+  },
+  "CY": {
+    "name": "Cyprus",
+    "flag": "🇨🇾"
+  },
+  "CZ": {
+    "name": "Czech Republic",
+    "flag": "🇨🇿"
+  },
+  "CD": {
+    "name": "Democratic Republic of the Congo",
+    "flag": "🇨🇩"
+  },
+  "DK": {
+    "name": "Denmark",
+    "flag": "🇩🇰"
+  },
+  "DJ": {
+    "name": "Djibouti",
+    "flag": "🇩🇯"
+  },
+  "DM": {
+    "name": "Dominica",
+    "flag": "🇩🇲"
+  },
+  "DO": {
+    "name": "Dominican Republic",
+    "flag": "🇩🇴"
+  },
+  "TL": {
+    "name": "East Timor",
+    "flag": "🇹🇱"
+  },
+  "EC": {
+    "name": "Ecuador",
+    "flag": "🇪🇨"
+  },
+  "EG": {
+    "name": "Egypt",
+    "flag": "🇪🇬"
+  },
+  "SV": {
+    "name": "El Salvador",
+    "flag": "🇸🇻"
+  },
+  "GQ": {
+    "name": "Equatorial Guinea",
+    "flag": "🇬🇶"
+  },
+  "ER": {
+    "name": "Eritrea",
+    "flag": "🇪🇷"
+  },
+  "EE": {
+    "name": "Estonia",
+    "flag": "🇪🇪"
+  },
+  "ET": {
+    "name": "Ethiopia",
+    "flag": "🇪🇹"
+  },
+  "FK": {
+    "name": "Falkland Islands",
+    "flag": "🇫🇰"
+  },
+  "FO": {
+    "name": "Faroe Islands",
+    "flag": "🇫🇴"
+  },
+  "FJ": {
+    "name": "Fiji",
+    "flag": "🇫🇯"
+  },
+  "FI": {
+    "name": "Finland",
+    "flag": "🇫🇮"
+  },
+  "FR": {
+    "name": "France",
+    "flag": "🇫🇷"
+  },
+  "GF": {
+    "name": "French Guiana",
+    "flag": "🇬🇫"
+  },
+  "PF": {
+    "name": "French Polynesia",
+    "flag": "🇵🇫"
+  },
+  "TF": {
+    "name": "French Southern Territories",
+    "flag": "🇹🇫"
+  },
+  "GA": {
+    "name": "Gabon",
+    "flag": "🇬🇦"
+  },
+  "GM": {
+    "name": "Gambia",
+    "flag": "🇬🇲"
+  },
+  "GE": {
+    "name": "Georgia",
+    "flag": "🇬🇪"
+  },
+  "DE": {
+    "name": "Germany",
+    "flag": "🇩🇪"
+  },
+  "GH": {
+    "name": "Ghana",
+    "flag": "🇬🇭"
+  },
+  "GI": {
+    "name": "Gibraltar",
+    "flag": "🇬🇮"
+  },
+  "GR": {
+    "name": "Greece",
+    "flag": "🇬🇷"
+  },
+  "GL": {
+    "name": "Greenland",
+    "flag": "🇬🇱"
+  },
+  "GD": {
+    "name": "Grenada",
+    "flag": "🇬🇩"
+  },
+  "GP": {
+    "name": "Guadeloupe",
+    "flag": "🇬🇵"
+  },
+  "GU": {
+    "name": "Guam",
+    "flag": "🇬🇺"
+  },
+  "GT": {
+    "name": "Guatemala",
+    "flag": "🇬🇹"
+  },
+  "GG": {
+    "name": "Guernsey",
+    "flag": "🇬🇬"
+  },
+  "GN": {
+    "name": "Guinea",
+    "flag": "🇬🇳"
+  },
+  "GW": {
+    "name": "Guinea-Bissau",
+    "flag": "🇬🇼"
+  },
+  "GY": {
+    "name": "Guyana",
+    "flag": "🇬🇾"
+  },
+  "HT": {
+    "name": "Haiti",
+    "flag": "🇭🇹"
+  },
+  "HM": {
+    "name": "Heard Island and McDonald Islands",
+    "flag": "🇭🇲"
+  },
+  "HN": {
+    "name": "Honduras",
+    "flag": "🇭🇳"
+  },
+  "HK": {
+    "name": "Hong Kong",
+    "flag": "🇭🇰"
+  },
+  "HU": {
+    "name": "Hungary",
+    "flag": "🇭🇺"
+  },
+  "IS": {
+    "name": "Iceland",
+    "flag": "🇮🇸"
+  },
+  "IN": {
+    "name": "India",
+    "flag": "🇮🇳"
+  },
+  "ID": {
+    "name": "Indonesia",
+    "flag": "🇮🇩"
+  },
+  "IR": {
+    "name": "Iran",
+    "flag": "🇮🇷"
+  },
+  "IQ": {
+    "name": "Iraq",
+    "flag": "🇮🇶"
+  },
+  "IE": {
+    "name": "Ireland",
+    "flag": "🇮🇪"
+  },
+  "IM": {
+    "name": "Isle of Man",
+    "flag": "🇮🇲"
+  },
+  "IL": {
+    "name": "Israel",
+    "flag": "🇮🇱"
+  },
+  "IT": {
+    "name": "Italy",
+    "flag": "🇮🇹"
+  },
+  "CI": {
+    "name": "Ivory Coast",
+    "flag": "🇨🇮"
+  },
+  "JM": {
+    "name": "Jamaica",
+    "flag": "🇯🇲"
+  },
+  "JP": {
+    "name": "Japan",
+    "flag": "🇯🇵"
+  },
+  "JE": {
+    "name": "Jersey",
+    "flag": "🇯🇪"
+  },
+  "JO": {
+    "name": "Jordan",
+    "flag": "🇯🇴"
+  },
+  "KZ": {
+    "name": "Kazakhstan",
+    "flag": "🇰🇿"
+  },
+  "KE": {
+    "name": "Kenya",
+    "flag": "🇰🇪"
+  },
+  "KI": {
+    "name": "Kiribati",
+    "flag": "🇰🇮"
+  },
+  "XK": {
+    "name": "Kosovo",
+    "flag": "🇽🇰"
+  },
+  "KW": {
+    "name": "Kuwait",
+    "flag": "🇰🇼"
+  },
+  "KG": {
+    "name": "Kyrgyzstan",
+    "flag": "🇰🇬"
+  },
+  "LA": {
+    "name": "Laos",
+    "flag": "🇱🇦"
+  },
+  "LV": {
+    "name": "Latvia",
+    "flag": "🇱🇻"
+  },
+  "LB": {
+    "name": "Lebanon",
+    "flag": "🇱🇧"
+  },
+  "LS": {
+    "name": "Lesotho",
+    "flag": "🇱🇸"
+  },
+  "LR": {
+    "name": "Liberia",
+    "flag": "🇱🇷"
+  },
+  "LY": {
+    "name": "Libya",
+    "flag": "🇱🇾"
+  },
+  "LI": {
+    "name": "Liechtenstein",
+    "flag": "🇱🇮"
+  },
+  "LT": {
+    "name": "Lithuania",
+    "flag": "🇱🇹"
+  },
+  "LU": {
+    "name": "Luxembourg",
+    "flag": "🇱🇺"
+  },
+  "MO": {
+    "name": "Macao",
+    "flag": "🇲🇴"
+  },
+  "MG": {
+    "name": "Madagascar",
+    "flag": "🇲🇬"
+  },
+  "MW": {
+    "name": "Malawi",
+    "flag": "🇲🇼"
+  },
+  "MY": {
+    "name": "Malaysia",
+    "flag": "🇲🇾"
+  },
+  "MV": {
+    "name": "Maldives",
+    "flag": "🇲🇻"
+  },
+  "ML": {
+    "name": "Mali",
+    "flag": "🇲🇱"
+  },
+  "MT": {
+    "name": "Malta",
+    "flag": "🇲🇹"
+  },
+  "MH": {
+    "name": "Marshall Islands",
+    "flag": "🇲🇭"
+  },
+  "MQ": {
+    "name": "Martinique",
+    "flag": "🇲🇶"
+  },
+  "MR": {
+    "name": "Mauritania",
+    "flag": "🇲🇷"
+  },
+  "MU": {
+    "name": "Mauritius",
+    "flag": "🇲🇺"
+  },
+  "YT": {
+    "name": "Mayotte",
+    "flag": "🇾🇹"
+  },
+  "MX": {
+    "name": "Mexico",
+    "flag": "🇲🇽"
+  },
+  "FM": {
+    "name": "Micronesia",
+    "flag": "🇫🇲"
+  },
+  "MD": {
+    "name": "Moldova",
+    "flag": "🇲🇩"
+  },
+  "MC": {
+    "name": "Monaco",
+    "flag": "🇲🇨"
+  },
+  "MN": {
+    "name": "Mongolia",
+    "flag": "🇲🇳"
+  },
+  "ME": {
+    "name": "Montenegro",
+    "flag": "🇲🇪"
+  },
+  "MS": {
+    "name": "Montserrat",
+    "flag": "🇲🇸"
+  },
+  "MA": {
+    "name": "Morocco",
+    "flag": "🇲🇦"
+  },
+  "MZ": {
+    "name": "Mozambique",
+    "flag": "🇲🇿"
+  },
+  "MM": {
+    "name": "Myanmar",
+    "flag": "🇲🇲"
+  },
+  "NA": {
+    "name": "Namibia",
+    "flag": "🇳🇦"
+  },
+  "NR": {
+    "name": "Nauru",
+    "flag": "🇳🇷"
+  },
+  "NP": {
+    "name": "Nepal",
+    "flag": "🇳🇵"
+  },
+  "NL": {
+    "name": "Netherlands",
+    "flag": "🇳🇱"
+  },
+  "NC": {
+    "name": "New Caledonia",
+    "flag": "🇳🇨"
+  },
+  "NZ": {
+    "name": "New Zealand",
+    "flag": "🇳🇿"
+  },
+  "NI": {
+    "name": "Nicaragua",
+    "flag": "🇳🇮"
+  },
+  "NE": {
+    "name": "Niger",
+    "flag": "🇳🇪"
+  },
+  "NG": {
+    "name": "Nigeria",
+    "flag": "🇳🇬"
+  },
+  "NU": {
+    "name": "Niue",
+    "flag": "🇳🇺"
+  },
+  "NF": {
+    "name": "Norfolk Island",
+    "flag": "🇳🇫"
+  },
+  "KP": {
+    "name": "North Korea",
+    "flag": "🇰🇵"
+  },
+  "MK": {
+    "name": "North Macedonia",
+    "flag": "🇲🇰"
+  },
+  "MP": {
+    "name": "Northern Mariana Islands",
+    "flag": "🇲🇵"
+  },
+  "NO": {
+    "name": "Norway",
+    "flag": "🇳🇴"
+  },
+  "OM": {
+    "name": "Oman",
+    "flag": "🇴🇲"
+  },
+  "PK": {
+    "name": "Pakistan",
+    "flag": "🇵🇰"
+  },
+  "PW": {
+    "name": "Palau",
+    "flag": "🇵🇼"
+  },
+  "PS": {
+    "name": "Palestine",
+    "flag": "🇵🇸"
+  },
+  "PA": {
+    "name": "Panama",
+    "flag": "🇵🇦"
+  },
+  "PG": {
+    "name": "Papua New Guinea",
+    "flag": "🇵🇬"
+  },
+  "PY": {
+    "name": "Paraguay",
+    "flag": "🇵🇾"
+  },
+  "PE": {
+    "name": "Peru",
+    "flag": "🇵🇪"
+  },
+  "PH": {
+    "name": "Philippines",
+    "flag": "🇵🇭"
+  },
+  "PN": {
+    "name": "Pitcairn Islands",
+    "flag": "🇵🇳"
+  },
+  "PL": {
+    "name": "Poland",
+    "flag": "🇵🇱"
+  },
+  "PT": {
+    "name": "Portugal",
+    "flag": "🇵🇹"
+  },
+  "PR": {
+    "name": "Puerto Rico",
+    "flag": "🇵🇷"
+  },
+  "QA": {
+    "name": "Qatar",
+    "flag": "🇶🇦"
+  },
+  "CG": {
+    "name": "Republic of the Congo",
+    "flag": "🇨🇬"
+  },
+  "RO": {
+    "name": "Romania",
+    "flag": "🇷🇴"
+  },
+  "RU": {
+    "name": "Russia",
+    "flag": "🇷🇺"
+  },
+  "RW": {
+    "name": "Rwanda",
+    "flag": "🇷🇼"
+  },
+  "RE": {
+    "name": "Reunion",
+    "flag": "🇷🇪"
+  },
+  "BL": {
+    "name": "Saint Barthélemy",
+    "flag": "🇧🇱"
+  },
+  "SH": {
+    "name": "Saint Helena",
+    "flag": "🇸🇭"
+  },
+  "KN": {
+    "name": "Saint Kitts and Nevis",
+    "flag": "🇰🇳"
+  },
+  "LC": {
+    "name": "Saint Lucia",
+    "flag": "🇱🇨"
+  },
+  "MF": {
+    "name": "Saint Martin",
+    "flag": "🇲🇫"
+  },
+  "PM": {
+    "name": "Saint Pierre and Miquelon",
+    "flag": "🇵🇲"
+  },
+  "VC": {
+    "name": "Saint Vincent and the Grenadines",
+    "flag": "🇻🇨"
+  },
+  "WS": {
+    "name": "Samoa",
+    "flag": "🇼🇸"
+  },
+  "SM": {
+    "name": "San Marino",
+    "flag": "🇸🇲"
+  },
+  "SA": {
+    "name": "Saudi Arabia",
+    "flag": "🇸🇦"
+  },
+  "SN": {
+    "name": "Senegal",
+    "flag": "🇸🇳"
+  },
+  "RS": {
+    "name": "Serbia",
+    "flag": "🇷🇸"
+  },
+  "SC": {
+    "name": "Seychelles",
+    "flag": "🇸🇨"
+  },
+  "SL": {
+    "name": "Sierra Leone",
+    "flag": "🇸🇱"
+  },
+  "SG": {
+    "name": "Singapore",
+    "flag": "🇸🇬"
+  },
+  "SX": {
+    "name": "Sint Maarten",
+    "flag": "🇸🇽"
+  },
+  "SK": {
+    "name": "Slovakia",
+    "flag": "🇸🇰"
+  },
+  "SI": {
+    "name": "Slovenia",
+    "flag": "🇸🇮"
+  },
+  "SB": {
+    "name": "Solomon Islands",
+    "flag": "🇸🇧"
+  },
+  "SO": {
+    "name": "Somalia",
+    "flag": "🇸🇴"
+  },
+  "ZA": {
+    "name": "South Africa",
+    "flag": "🇿🇦"
+  },
+  "GS": {
+    "name": "South Georgia and the South Sandwich Islands",
+    "flag": "🇬🇸"
+  },
+  "KR": {
+    "name": "South Korea",
+    "flag": "🇰🇷"
+  },
+  "SS": {
+    "name": "South Sudan",
+    "flag": "🇸🇸"
+  },
+  "ES": {
+    "name": "Spain",
+    "flag": "🇪🇸"
+  },
+  "LK": {
+    "name": "Sri Lanka",
+    "flag": "🇱🇰"
+  },
+  "SD": {
+    "name": "Sudan",
+    "flag": "🇸🇩"
+  },
+  "SR": {
+    "name": "Suriname",
+    "flag": "🇸🇷"
+  },
+  "SJ": {
+    "name": "Svalbard and Jan Mayen",
+    "flag": "🇸🇯"
+  },
+  "SZ": {
+    "name": "Swaziland",
+    "flag": "🇸🇿"
+  },
+  "SE": {
+    "name": "Sweden",
+    "flag": "🇸🇪"
+  },
+  "CH": {
+    "name": "Switzerland",
+    "flag": "🇨🇭"
+  },
+  "SY": {
+    "name": "Syria",
+    "flag": "🇸🇾"
+  },
+  "ST": {
+    "name": "Sao Tome and Principe",
+    "flag": "🇸🇹"
+  },
+  "TW": {
+    "name": "Taiwan",
+    "flag": "🇹🇼"
+  },
+  "TJ": {
+    "name": "Tajikistan",
+    "flag": "🇹🇯"
+  },
+  "TZ": {
+    "name": "Tanzania",
+    "flag": "🇹🇿"
+  },
+  "TH": {
+    "name": "Thailand",
+    "flag": "🇹🇭"
+  },
+  "TG": {
+    "name": "Togo",
+    "flag": "🇹🇬"
+  },
+  "TK": {
+    "name": "Tokelau",
+    "flag": "🇹🇰"
+  },
+  "TO": {
+    "name": "Tonga",
+    "flag": "🇹🇴"
+  },
+  "TT": {
+    "name": "Trinidad and Tobago",
+    "flag": "🇹🇹"
+  },
+  "TN": {
+    "name": "Tunisia",
+    "flag": "🇹🇳"
+  },
+  "TR": {
+    "name": "Turkiye",
+    "flag": "🇹🇷"
+  },
+  "TM": {
+    "name": "Turkmenistan",
+    "flag": "🇹🇲"
+  },
+  "TC": {
+    "name": "Turks and Caicos Islands",
+    "flag": "🇹🇨"
+  },
+  "TV": {
+    "name": "Tuvalu",
+    "flag": "🇹🇻"
+  },
+  "UM": {
+    "name": "U.S. Minor Outlying Islands",
+    "flag": "🇺🇲"
+  },
+  "VI": {
+    "name": "U.S. Virgin Islands",
+    "flag": "🇻🇮"
+  },
+  "UG": {
+    "name": "Uganda",
+    "flag": "🇺🇬"
+  },
+  "UA": {
+    "name": "Ukraine",
+    "flag": "🇺🇦"
+  },
+  "AE": {
+    "name": "United Arab Emirates",
+    "flag": "🇦🇪"
+  },
+  "UK": {
+    "name": "United Kingdom",
+    "flag": "🇬🇧"
+  },
+  "US": {
+    "name": "United States",
+    "flag": "🇺🇸"
+  },
+  "UY": {
+    "name": "Uruguay",
+    "flag": "🇺🇾"
+  },
+  "UZ": {
+    "name": "Uzbekistan",
+    "flag": "🇺🇿"
+  },
+  "VU": {
+    "name": "Vanuatu",
+    "flag": "🇻🇺"
+  },
+  "VA": {
+    "name": "Vatican City",
+    "flag": "🇻🇦"
+  },
+  "VE": {
+    "name": "Venezuela",
+    "flag": "🇻🇪"
+  },
+  "VN": {
+    "name": "Vietnam",
+    "flag": "🇻🇳"
+  },
+  "WF": {
+    "name": "Wallis and Futuna",
+    "flag": "🇼🇫"
+  },
+  "EH": {
+    "name": "Western Sahara",
+    "flag": "🇪🇭"
+  },
+  "YE": {
+    "name": "Yemen",
+    "flag": "🇾🇪"
+  },
+  "ZM": {
+    "name": "Zambia",
+    "flag": "🇿🇲"
+  },
+  "ZW": {
+    "name": "Zimbabwe",
+    "flag": "🇿🇼"
+  }
+}
+
+export const REGIONS: Record<string, readonly string[]> = {
+  "AFR": [
+    "AO",
+    "BF",
+    "BI",
+    "BJ",
+    "BW",
+    "CD",
+    "CF",
+    "CG",
+    "CI",
+    "CM",
+    "CV",
+    "DJ",
+    "DZ",
+    "EG",
+    "EH",
+    "ER",
+    "ET",
+    "GA",
+    "GH",
+    "GM",
+    "GN",
+    "GQ",
+    "GW",
+    "KE",
+    "KM",
+    "LR",
+    "LS",
+    "LY",
+    "MA",
+    "MG",
+    "ML",
+    "MR",
+    "MU",
+    "MW",
+    "MZ",
+    "NA",
+    "NE",
+    "NG",
+    "RE",
+    "RW",
+    "SC",
+    "SD",
+    "SH",
+    "SL",
+    "SN",
+    "SO",
+    "SS",
+    "ST",
+    "SZ",
+    "TD",
+    "TF",
+    "TG",
+    "TN",
+    "TZ",
+    "UG",
+    "YT",
+    "ZA",
+    "ZM",
+    "ZW"
+  ],
+  "AMER": [
+    "AG",
+    "AI",
+    "AR",
+    "AW",
+    "BB",
+    "BL",
+    "BM",
+    "BO",
+    "BR",
+    "BS",
+    "BV",
+    "BZ",
+    "CA",
+    "CL",
+    "CO",
+    "CR",
+    "CU",
+    "CW",
+    "DM",
+    "DO",
+    "EC",
+    "FK",
+    "GD",
+    "GF",
+    "GL",
+    "GP",
+    "GS",
+    "GT",
+    "GY",
+    "HN",
+    "HT",
+    "JM",
+    "KN",
+    "KY",
+    "LC",
+    "MF",
+    "MQ",
+    "MS",
+    "MX",
+    "NI",
+    "PA",
+    "PE",
+    "PM",
+    "PR",
+    "PY",
+    "SR",
+    "SV",
+    "SX",
+    "TC",
+    "TT",
+    "US",
+    "UY",
+    "VC",
+    "VE",
+    "VG",
+    "VI"
+  ],
+  "APAC": [
+    "AF",
+    "AS",
+    "AU",
+    "BD",
+    "BN",
+    "BT",
+    "CK",
+    "CN",
+    "FJ",
+    "FM",
+    "GU",
+    "ID",
+    "IN",
+    "JP",
+    "KH",
+    "KI",
+    "KP",
+    "KR",
+    "LA",
+    "LK",
+    "MH",
+    "MM",
+    "MN",
+    "MP",
+    "MV",
+    "MY",
+    "NC",
+    "NF",
+    "NP",
+    "NR",
+    "NU",
+    "NZ",
+    "PF",
+    "PG",
+    "PH",
+    "PK",
+    "PN",
+    "PW",
+    "SB",
+    "SG",
+    "TH",
+    "TK",
+    "TL",
+    "TO",
+    "TV",
+    "TW",
+    "VN",
+    "VU",
+    "WF",
+    "WS"
+  ],
+  "ARAB": [
+    "AE",
+    "BH",
+    "DJ",
+    "DZ",
+    "EG",
+    "IQ",
+    "JO",
+    "KM",
+    "KW",
+    "LB",
+    "LY",
+    "MA",
+    "MR",
+    "OM",
+    "PS",
+    "QA",
+    "SA",
+    "SD",
+    "SO",
+    "SY",
+    "TN",
+    "YE"
+  ],
+  "ASEAN": [
+    "BN",
+    "KH",
+    "ID",
+    "LA",
+    "MY",
+    "MM",
+    "PH",
+    "SG",
+    "TH",
+    "VN"
+  ],
+  "ASIA": [
+    "AE",
+    "AF",
+    "AM",
+    "AZ",
+    "BD",
+    "BH",
+    "BN",
+    "BT",
+    "CN",
+    "CY",
+    "GE",
+    "ID",
+    "IL",
+    "IN",
+    "IQ",
+    "IR",
+    "JO",
+    "JP",
+    "KG",
+    "KH",
+    "KP",
+    "KR",
+    "KW",
+    "KZ",
+    "LA",
+    "LB",
+    "LK",
+    "MM",
+    "MN",
+    "MV",
+    "MY",
+    "NP",
+    "OM",
+    "PH",
+    "PK",
+    "PS",
+    "QA",
+    "RU",
+    "SA",
+    "SG",
+    "SY",
+    "TH",
+    "TJ",
+    "TL",
+    "TM",
+    "TR",
+    "TW",
+    "UZ",
+    "VN",
+    "YE"
+  ],
+  "BALKAN": [
+    "AL",
+    "BA",
+    "BG",
+    "HR",
+    "GR",
+    "XK",
+    "ME",
+    "MK",
+    "RO",
+    "RS",
+    "SI",
+    "TR"
+  ],
+  "BENELUX": [
+    "BE",
+    "LU",
+    "NL"
+  ],
+  "CARIB": [
+    "AG",
+    "AI",
+    "AW",
+    "BB",
+    "BL",
+    "BS",
+    "CU",
+    "CW",
+    "DM",
+    "DO",
+    "GD",
+    "GP",
+    "HT",
+    "JM",
+    "KN",
+    "KY",
+    "LC",
+    "MF",
+    "MQ",
+    "MS",
+    "PR",
+    "SX",
+    "TC",
+    "TT",
+    "VC",
+    "VG",
+    "VI"
+  ],
+  "CAS": [
+    "KG",
+    "KZ",
+    "TJ",
+    "TM",
+    "UZ"
+  ],
+  "CEE": [
+    "AL",
+    "AM",
+    "AZ",
+    "BY",
+    "GE",
+    "MD",
+    "RU",
+    "UA",
+    "BA",
+    "BG",
+    "HR",
+    "CZ",
+    "HU",
+    "XK",
+    "ME",
+    "MK",
+    "PL",
+    "RO",
+    "RS",
+    "SK",
+    "SI"
+  ],
+  "CENAMER": [
+    "BZ",
+    "CR",
+    "SV",
+    "GT",
+    "HN",
+    "NI",
+    "PA"
+  ],
+  "CEU": [
+    "AT",
+    "HR",
+    "CZ",
+    "DE",
+    "HU",
+    "IT",
+    "PL",
+    "SK",
+    "SI"
+  ],
+  "CIS": [
+    "AM",
+    "AZ",
+    "BY",
+    "KG",
+    "KZ",
+    "MD",
+    "RU",
+    "TJ",
+    "UZ"
+  ],
+  "EAF": [
+    "BI",
+    "KE",
+    "TZ",
+    "UG",
+    "DJ",
+    "ET",
+    "SO",
+    "KM",
+    "TF",
+    "MG",
+    "MU",
+    "IO",
+    "YT",
+    "RE",
+    "SC",
+    "SS",
+    "MW",
+    "MZ",
+    "ZM",
+    "ZW"
+  ],
+  "EAS": [
+    "CN",
+    "HK",
+    "MO",
+    "JP",
+    "MN",
+    "KP",
+    "KR",
+    "TW"
+  ],
+  "EMEA": [
+    " the Middle East and Africa\",AD",
+    "AE",
+    "AL",
+    "AM",
+    "AO",
+    "AT",
+    "AZ",
+    "BA",
+    "BE",
+    "BF",
+    "BG",
+    "BH",
+    "BI",
+    "BJ",
+    "BW",
+    "BY",
+    "CD",
+    "CF",
+    "CG",
+    "CH",
+    "CI",
+    "CM",
+    "CV",
+    "CY",
+    "CZ",
+    "DE",
+    "DJ",
+    "DK",
+    "DZ",
+    "EE",
+    "EG",
+    "EH",
+    "ER",
+    "ES",
+    "ET",
+    "FI",
+    "FR",
+    "GA",
+    "GE",
+    "GH",
+    "GM",
+    "GN",
+    "GQ",
+    "GR",
+    "GW",
+    "HR",
+    "HU",
+    "IE",
+    "IQ",
+    "IR",
+    "IS",
+    "IT",
+    "JO",
+    "KE",
+    "KM",
+    "KW",
+    "KZ",
+    "LB",
+    "LI",
+    "LR",
+    "LS",
+    "LT",
+    "LU",
+    "LV",
+    "LY",
+    "MA",
+    "MC",
+    "MD",
+    "ME",
+    "MG",
+    "MK",
+    "ML",
+    "MR",
+    "MT",
+    "MU",
+    "MW",
+    "MZ",
+    "NA",
+    "NE",
+    "NG",
+    "NL",
+    "NO",
+    "OM",
+    "PL",
+    "PS",
+    "PT",
+    "QA",
+    "RE",
+    "RO",
+    "RS",
+    "RU",
+    "RW",
+    "SA",
+    "SC",
+    "SD",
+    "SE",
+    "SH",
+    "SI",
+    "SK",
+    "SL",
+    "SM",
+    "SN",
+    "SO",
+    "SS",
+    "ST",
+    "SY",
+    "SZ",
+    "TD",
+    "TF",
+    "TG",
+    "TN",
+    "TR",
+    "TZ",
+    "UA",
+    "UG",
+    "UK",
+    "VA",
+    "YE",
+    "YT",
+    "ZA",
+    "ZM",
+    "ZW"
+  ],
+  "EU": [
+    "AT",
+    "BE",
+    "BG",
+    "CY",
+    "CZ",
+    "DE",
+    "DK",
+    "EE",
+    "ES",
+    "FI",
+    "FR",
+    "GR",
+    "HR",
+    "HU",
+    "IE",
+    "IT",
+    "LT",
+    "LU",
+    "LV",
+    "MT",
+    "NL",
+    "PL",
+    "PT",
+    "RO",
+    "SE",
+    "SI",
+    "SK"
+  ],
+  "EUR": [
+    "AD",
+    "AL",
+    "AM",
+    "AT",
+    "AZ",
+    "BA",
+    "BE",
+    "BG",
+    "BY",
+    "CH",
+    "CY",
+    "CZ",
+    "DE",
+    "DK",
+    "EE",
+    "ES",
+    "FI",
+    "FR",
+    "GE",
+    "GR",
+    "HR",
+    "HU",
+    "IE",
+    "IS",
+    "IT",
+    "KZ",
+    "LI",
+    "LT",
+    "LU",
+    "LV",
+    "MC",
+    "MD",
+    "ME",
+    "MK",
+    "MT",
+    "NL",
+    "NO",
+    "PL",
+    "PT",
+    "RO",
+    "RS",
+    "RU",
+    "SE",
+    "SI",
+    "SK",
+    "SM",
+    "TR",
+    "UA",
+    "UK",
+    "VA"
+  ],
+  "GCC": [
+    "AE",
+    "BH",
+    "KW",
+    "OM",
+    "QA",
+    "SA"
+  ],
+  "HISPAM": [
+    "AR",
+    "BO",
+    "CL",
+    "CO",
+    "CR",
+    "CU",
+    "DO",
+    "EC",
+    "GT",
+    "HN",
+    "MX",
+    "NI",
+    "PA",
+    "PE",
+    "PR",
+    "PY",
+    "SV",
+    "UY",
+    "VE"
+  ],
+  "LAC": [
+    "AG",
+    "AI",
+    "AR",
+    "AW",
+    "BB",
+    "BL",
+    "BO",
+    "BR",
+    "BS",
+    "CL",
+    "CO",
+    "CR",
+    "CU",
+    "CW",
+    "DM",
+    "DO",
+    "EC",
+    "GD",
+    "GF",
+    "GP",
+    "GT",
+    "HN",
+    "HT",
+    "JM",
+    "KN",
+    "KY",
+    "LC",
+    "MF",
+    "MQ",
+    "MS",
+    "MX",
+    "NI",
+    "PA",
+    "PE",
+    "PR",
+    "PY",
+    "SV",
+    "SX",
+    "TC",
+    "TT",
+    "UY",
+    "VC",
+    "VE",
+    "VG",
+    "VI"
+  ],
+  "LATAM": [
+    "AR",
+    "BL",
+    "BO",
+    "BR",
+    "CL",
+    "CO",
+    "CR",
+    "CU",
+    "DO",
+    "EC",
+    "GF",
+    "GP",
+    "GT",
+    "HN",
+    "HT",
+    "MF",
+    "MQ",
+    "MX",
+    "NI",
+    "PA",
+    "PE",
+    "PR",
+    "PY",
+    "SV",
+    "UY",
+    "VE"
+  ],
+  "MAGHREB": [
+    "DZ",
+    "LY",
+    "MA",
+    "MR",
+    "TN"
+  ],
+  "MENA": [
+    "AE",
+    "BH",
+    "CY",
+    "DJ",
+    "DZ",
+    "EG",
+    "EH",
+    "IL",
+    "IQ",
+    "IR",
+    "JO",
+    "KW",
+    "LB",
+    "LY",
+    "MA",
+    "OM",
+    "PS",
+    "QA",
+    "SA",
+    "SD",
+    "SY",
+    "TN",
+    "TR",
+    "YE"
+  ],
+  "MIDEAST": [
+    "AE",
+    "BH",
+    "CY",
+    "EG",
+    "IL",
+    "IQ",
+    "IR",
+    "JO",
+    "KW",
+    "LB",
+    "OM",
+    "PS",
+    "QA",
+    "SA",
+    "SY",
+    "TR",
+    "YE"
+  ],
+  "NAM": [
+    "BM",
+    "CA",
+    "GL",
+    "PM",
+    "US"
+  ],
+  "NEU": [
+    "DK",
+    "EE",
+    "LV",
+    "LT",
+    "FI",
+    "IS",
+    "NO",
+    "SE"
+  ],
+  "NORAM": [
+    "AG",
+    "AI",
+    "AW",
+    "BB",
+    "BL",
+    "BM",
+    "BS",
+    "BZ",
+    "CA",
+    "CR",
+    "CU",
+    "CW",
+    "DM",
+    "DO",
+    "GD",
+    "GL",
+    "GP",
+    "GT",
+    "HN",
+    "HT",
+    "JM",
+    "KN",
+    "KY",
+    "LC",
+    "MF",
+    "MQ",
+    "MS",
+    "MX",
+    "NI",
+    "PA",
+    "PM",
+    "PR",
+    "SV",
+    "SX",
+    "TC",
+    "TT",
+    "US",
+    "VC",
+    "VG",
+    "VI"
+  ],
+  "NORD": [
+    "AX",
+    "DK",
+    "FO",
+    "FI",
+    "IS",
+    "NO",
+    "SE"
+  ],
+  "OCE": [
+    "AS",
+    "AU",
+    "CK",
+    "FJ",
+    "FM",
+    "GU",
+    "KI",
+    "MH",
+    "MP",
+    "NC",
+    "NF",
+    "NR",
+    "NU",
+    "NZ",
+    "PF",
+    "PG",
+    "PN",
+    "PW",
+    "SB",
+    "TK",
+    "TO",
+    "TV",
+    "VU",
+    "WF",
+    "WS"
+  ],
+  "SAF": [
+    "BW",
+    "SZ",
+    "LS",
+    "NA",
+    "ZA"
+  ],
+  "SAS": [
+    "AF",
+    "BD",
+    "BT",
+    "IN",
+    "LK",
+    "MV",
+    "NP",
+    "PK"
+  ],
+  "SEA": [
+    "BN",
+    "KH",
+    "TL",
+    "ID",
+    "LA",
+    "MY",
+    "MM",
+    "PH",
+    "SG",
+    "TH",
+    "VN"
+  ],
+  "SER": [
+    "CY",
+    "GR",
+    "IT",
+    "VA",
+    "IT",
+    "MT",
+    "PT",
+    "SM",
+    "ES",
+    "TR"
+  ],
+  "SOUTHAM": [
+    "AR",
+    "BO",
+    "BR",
+    "CL",
+    "CO",
+    "EC",
+    "PY",
+    "PE",
+    "UY",
+    "VE",
+    "BV",
+    "FK",
+    "GF",
+    "GY",
+    "GS",
+    "SR"
+  ],
+  "SSA": [
+    "AO",
+    "BF",
+    "BI",
+    "BJ",
+    "BW",
+    "CD",
+    "CF",
+    "CG",
+    "CI",
+    "CM",
+    "CV",
+    "DJ",
+    "ER",
+    "ET",
+    "GA",
+    "GH",
+    "GM",
+    "GN",
+    "GQ",
+    "GW",
+    "KE",
+    "KM",
+    "LR",
+    "LS",
+    "MG",
+    "ML",
+    "MR",
+    "MU",
+    "MW",
+    "MZ",
+    "NA",
+    "NE",
+    "NG",
+    "RW",
+    "SC",
+    "SD",
+    "SL",
+    "SN",
+    "SO",
+    "SS",
+    "ST",
+    "SZ",
+    "TD",
+    "TG",
+    "TZ",
+    "UG",
+    "ZA",
+    "ZM",
+    "ZW"
+  ],
+  "UN": [
+    "AF",
+    "AL",
+    "DZ",
+    "AD",
+    "AO",
+    "AG",
+    "AR",
+    "AM",
+    "AU",
+    "AT",
+    "AZ",
+    "BH",
+    "BD",
+    "BB",
+    "BY",
+    "BE",
+    "BZ",
+    "BJ",
+    "BT",
+    "BO",
+    "BA",
+    "BW",
+    "BR",
+    "BN",
+    "BG",
+    "BF",
+    "BI",
+    "KH",
+    "CM",
+    "CA",
+    "CV",
+    "CF",
+    "TD",
+    "CL",
+    "CO",
+    "KM",
+    "CR",
+    "HR",
+    "CU",
+    "CY",
+    "CZ",
+    "CD",
+    "DJ",
+    "DM",
+    "DO",
+    "EC",
+    "EG",
+    "SV",
+    "GQ",
+    "ER",
+    "EE",
+    "SZ",
+    "ET",
+    "FM",
+    "FJ",
+    "FI",
+    "FR",
+    "GA",
+    "GE",
+    "DE",
+    "GH",
+    "GR",
+    "GD",
+    "GT",
+    "GN",
+    "GW",
+    "GY",
+    "HT",
+    "HN",
+    "HU",
+    "IS",
+    "IN",
+    "ID",
+    "IR",
+    "IQ",
+    "IE",
+    "IL",
+    "IT",
+    "CI",
+    "JM",
+    "JP",
+    "JO",
+    "KZ",
+    "KE",
+    "NL",
+    "KI",
+    "KW",
+    "KG",
+    "LA",
+    "LV",
+    "LB",
+    "LS",
+    "LR",
+    "LY",
+    "LI",
+    "LT",
+    "LU",
+    "MG",
+    "MW",
+    "MY",
+    "MV",
+    "ML",
+    "MT",
+    "MH",
+    "MR",
+    "MU",
+    "MX",
+    "MD",
+    "MC",
+    "MN",
+    "ME",
+    "MA",
+    "MZ",
+    "MM",
+    "NA",
+    "NR",
+    "NP",
+    "NZ",
+    "NI",
+    "NE",
+    "NG",
+    "KP",
+    "MK",
+    "NO",
+    "OM",
+    "PK",
+    "PW",
+    "PA",
+    "PG",
+    "PY",
+    "CN",
+    "PE",
+    "PH",
+    "PL",
+    "PT",
+    "QA",
+    "CG",
+    "RO",
+    "RU",
+    "RW",
+    "KN",
+    "LC",
+    "VC",
+    "WS",
+    "SM",
+    "SA",
+    "SN",
+    "RS",
+    "SC",
+    "SL",
+    "SG",
+    "SK",
+    "SI",
+    "SB",
+    "SO",
+    "ZA",
+    "KR",
+    "SS",
+    "ES",
+    "LK",
+    "SD",
+    "SR",
+    "SE",
+    "CH",
+    "SY",
+    "ST",
+    "TW",
+    "TJ",
+    "TZ",
+    "TH",
+    "BS",
+    "GM",
+    "TL",
+    "TG",
+    "TO",
+    "TT",
+    "TN",
+    "TR",
+    "TM",
+    "TV",
+    "UG",
+    "UA",
+    "AE",
+    "UK",
+    "US",
+    "UY",
+    "UZ",
+    "VU",
+    "VE",
+    "VN",
+    "YE",
+    "ZM",
+    "ZW"
+  ],
+  "WAF": [
+    "BF",
+    "BJ",
+    "CI",
+    "CV",
+    "GH",
+    "GM",
+    "GN",
+    "GW",
+    "LR",
+    "ML",
+    "MR",
+    "NE",
+    "NG",
+    "SH",
+    "SL",
+    "SN",
+    "TG"
+  ],
+  "WAS": [
+    "AM",
+    "AZ",
+    "BH",
+    "CY",
+    "EG",
+    "GE",
+    "IR",
+    "IQ",
+    "IL",
+    "JO",
+    "KW",
+    "LB",
+    "OM",
+    "PS",
+    "QA",
+    "SA",
+    "SY",
+    "TR",
+    "AE",
+    "YE"
+  ],
+  "WER": [
+    "AD",
+    "AT",
+    "BE",
+    "FR",
+    "DE",
+    "IE",
+    "LI",
+    "LU",
+    "MC",
+    "NL",
+    "CH",
+    "UK"
+  ],
+  "WW": [
+    "AD",
+    "AE",
+    "AF",
+    "AG",
+    "AI",
+    "AL",
+    "AM",
+    "AO",
+    "AQ",
+    "AR",
+    "AS",
+    "AT",
+    "AU",
+    "AW",
+    "AX",
+    "AZ",
+    "BA",
+    "BB",
+    "BD",
+    "BE",
+    "BF",
+    "BG",
+    "BH",
+    "BI",
+    "BJ",
+    "BL",
+    "BM",
+    "BN",
+    "BO",
+    "BQ",
+    "BR",
+    "BS",
+    "BT",
+    "BV",
+    "BW",
+    "BY",
+    "BZ",
+    "CA",
+    "CC",
+    "CD",
+    "CF",
+    "CG",
+    "CH",
+    "CI",
+    "CK",
+    "CL",
+    "CM",
+    "CN",
+    "CO",
+    "CR",
+    "CU",
+    "CV",
+    "CW",
+    "CX",
+    "CY",
+    "CZ",
+    "DE",
+    "DJ",
+    "DK",
+    "DM",
+    "DO",
+    "DZ",
+    "EC",
+    "EE",
+    "EG",
+    "EH",
+    "ER",
+    "ES",
+    "ET",
+    "FI",
+    "FJ",
+    "FK",
+    "FM",
+    "FO",
+    "FR",
+    "GA",
+    "UK",
+    "GD",
+    "GE",
+    "GF",
+    "GG",
+    "GH",
+    "GI",
+    "GL",
+    "GM",
+    "GN",
+    "GP",
+    "GQ",
+    "GR",
+    "GS",
+    "GT",
+    "GU",
+    "GW",
+    "GY",
+    "HK",
+    "HM",
+    "HN",
+    "HR",
+    "HT",
+    "HU",
+    "ID",
+    "IE",
+    "IL",
+    "IM",
+    "IN",
+    "IO",
+    "IQ",
+    "IR",
+    "IS",
+    "IT",
+    "JE",
+    "JM",
+    "JO",
+    "JP",
+    "KE",
+    "KG",
+    "KH",
+    "KI",
+    "KM",
+    "KN",
+    "KP",
+    "KR",
+    "KW",
+    "KY",
+    "KZ",
+    "LA",
+    "LB",
+    "LC",
+    "LI",
+    "LK",
+    "LR",
+    "LS",
+    "LT",
+    "LU",
+    "LV",
+    "LY",
+    "MA",
+    "MC",
+    "MD",
+    "ME",
+    "MF",
+    "MG",
+    "MH",
+    "MK",
+    "ML",
+    "MM",
+    "MN",
+    "MO",
+    "MP",
+    "MQ",
+    "MR",
+    "MS",
+    "MT",
+    "MU",
+    "MV",
+    "MW",
+    "MX",
+    "MY",
+    "MZ",
+    "NA",
+    "NC",
+    "NE",
+    "NF",
+    "NG",
+    "NI",
+    "NL",
+    "NO",
+    "NP",
+    "NR",
+    "NU",
+    "NZ",
+    "OM",
+    "PA",
+    "PE",
+    "PF",
+    "PG",
+    "PH",
+    "PK",
+    "PL",
+    "PM",
+    "PN",
+    "PR",
+    "PS",
+    "PT",
+    "PW",
+    "PY",
+    "QA",
+    "RE",
+    "RO",
+    "RS",
+    "RU",
+    "RW",
+    "SA",
+    "SB",
+    "SC",
+    "SD",
+    "SE",
+    "SG",
+    "SH",
+    "SI",
+    "SJ",
+    "SK",
+    "SL",
+    "SM",
+    "SN",
+    "SO",
+    "SR",
+    "SS",
+    "ST",
+    "SV",
+    "SX",
+    "SY",
+    "SZ",
+    "TC",
+    "TD",
+    "TF",
+    "TG",
+    "TH",
+    "TJ",
+    "TK",
+    "TL",
+    "TM",
+    "TN",
+    "TO",
+    "TR",
+    "TT",
+    "TV",
+    "TW",
+    "TZ",
+    "UA",
+    "UG",
+    "UM",
+    "US",
+    "UY",
+    "UZ",
+    "VA",
+    "VC",
+    "VE",
+    "VG",
+    "VI",
+    "VN",
+    "VU",
+    "WF",
+    "WS",
+    "XK",
+    "YE",
+    "YT",
+    "ZA",
+    "ZM",
+    "ZW"
+  ]
+}
+
+export const WORLDWIDE_CODES = new Set(["INT", "WW", "UN"])
+
+export const COUNTRY_OPTIONS: CountryInfo[] = Object.entries(COUNTRIES)
+  .map(([code, info]) => ({ code, name: info.name, flag: info.flag, label: `${info.flag} ${info.name}` }))
+  .sort((a, b) => a.name.localeCompare(b.name))
