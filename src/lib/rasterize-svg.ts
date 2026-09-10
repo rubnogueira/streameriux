@@ -1,7 +1,7 @@
-import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 /**
  * Rasterise an SVG to a PNG **preserving transparency**.
@@ -14,9 +14,9 @@ import { join } from 'node:path'
  * Command Line Tools; when it is missing we return false and callers fall back.
  */
 
-const WORK = join(tmpdir(), 'gpiux-streamer-rasterizer')
-mkdirSync(WORK, { recursive: true })
-const SWIFT_SRC = join(WORK, 'svg-to-png.swift')
+const WORK = join(tmpdir(), "gpiux-streamer-rasterizer");
+mkdirSync(WORK, { recursive: true });
+const SWIFT_SRC = join(WORK, "svg-to-png.swift");
 
 const SWIFT_PROGRAM = `import AppKit
 import Foundation
@@ -38,20 +38,28 @@ image.draw(in: NSRect(x: 0, y: 0, width: size, height: size), from: .zero, opera
 NSGraphicsContext.restoreGraphicsState()
 guard let data = rep.representation(using: .png, properties: [:]) else { exit(1) }
 try data.write(to: URL(fileURLWithPath: args[2]))
-`
+`;
+
+/** AppKit rasterisation needs a GUI session and is too slow for vitest workers (CI included). */
+export function isRasterizeSvgDisabled(): boolean {
+  if (typeof process === "undefined") return true;
+  const vitest = process.env.VITEST;
+  return vitest === "true" || vitest === "1";
+}
 
 /** Renders `svgPath` to `pngPath` at `size`×`size` with a transparent background. */
 export function rasterizeSvgToPng(svgPath: string, pngPath: string, size: number): boolean {
-  if (typeof process === 'undefined' || process.platform !== 'darwin') return false
-  if (!existsSync(svgPath)) return false
+  if (typeof process === "undefined" || process.platform !== "darwin") return false;
+  if (isRasterizeSvgDisabled()) return false;
+  if (!existsSync(svgPath)) return false;
   try {
-    if (!existsSync(SWIFT_SRC)) writeFileSync(SWIFT_SRC, SWIFT_PROGRAM)
-    execFileSync('swift', [SWIFT_SRC, svgPath, pngPath, String(size)], {
-      stdio: ['ignore', 'ignore', 'ignore'],
+    if (!existsSync(SWIFT_SRC)) writeFileSync(SWIFT_SRC, SWIFT_PROGRAM);
+    execFileSync("swift", [SWIFT_SRC, svgPath, pngPath, String(size)], {
+      stdio: ["ignore", "ignore", "ignore"],
       timeout: 60_000,
-    })
-    return existsSync(pngPath)
+    });
+    return existsSync(pngPath);
   } catch {
-    return false
+    return false;
   }
 }

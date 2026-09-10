@@ -5,14 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "bun scripts/dev.ts",
-    "dev:hot": "bun --hot app.tsx",
-    "build": "bun build --compile --external web-audio-api app.tsx --outfile dist/streameriux",
+    "dev:hot": "bun --hot src/app/app.tsx",
+    "build": "bun build --compile --external web-audio-api src/app/app.tsx --outfile dist/streameriux",
     "bundle:mac": "bun scripts/bundle-mac.ts",
     "web:dev": "bun web.ts",
     "screenshot": "bun screenshot.ts",
-    "test": "vitest run",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check .",
+    "compile:check": "bun scripts/compile-check.ts",
+    "precommit": "bun run lint && bun run format:check && bun run typecheck && bun run compile:check",
+    "test": "vitest run --coverage --typecheck",
     "typecheck": "tsc --noEmit",
-    "release:tag": "bun scripts/release-tag.ts"
+    "release:tag": "bun scripts/release-tag.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@gpuix/react": "^0.7.0",
@@ -24,8 +30,17 @@
     "web-audio-api": "^1.5.6"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
     "@types/bun": "^1.4.2",
     "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.3.0",
+    "@vitest/coverage-v8": "^5.0.0",
+    "husky": "^9.1.7",
+    "jsdom": "^30.0.1",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
+    "react-dom": "19.2.8",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"
   }

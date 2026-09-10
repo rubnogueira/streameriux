@@ -1,52 +1,84 @@
-import { useCallback, useRef } from 'react'
-import type { PublicInstance } from '@gpuix/react'
-import type { EventPayload } from '@gpuix/native'
-import { dragRouter } from '../focus'
-import { ratioFromEvent, thumbLeftPx, usePaintedBounds, SCRUB_BAR_HEIGHT, SCRUB_THUMB_SIZE, SCRUB_TRACK_HEIGHT } from './seek-bar'
-import { C } from '../theme'
+import { useCallback, useRef } from "react";
+import type { PublicInstance } from "@gpuix/react";
+import type { EventPayload } from "@gpuix/native";
+import { dragRouter } from "../focus";
+import {
+  ratioFromEvent,
+  thumbLeftPx,
+  usePaintedBounds,
+  SCRUB_BAR_HEIGHT,
+  SCRUB_THUMB_SIZE,
+  SCRUB_TRACK_HEIGHT,
+} from "./seek-bar";
+import { C } from "../theme";
 
-export function VolumeSlider({ value, onChange }: { value: number; onChange: (value: number) => void }) {
-  const trackRef = useRef<PublicInstance | null>(null)
-  const { boundsRef, sample, trackWidth, attachRef } = usePaintedBounds(trackRef)
-  const draggingRef = useRef(false)
-  const layoutWidth = trackWidth || (boundsRef.current?.[2] ?? 0)
-  const fillWidth = layoutWidth > 0 ? value * layoutWidth : 0
-  const thumbLeft = thumbLeftPx(layoutWidth, value)
+export function applyVolumePointer(
+  event: EventPayload,
+  sample: () => PaintedBounds | null,
+  boundsRef: { current: PaintedBounds | null },
+  onChange: (value: number) => void,
+): void {
+  const bounds = sample() ?? boundsRef.current;
+  const ratio = ratioFromEvent(event, bounds);
+  if (ratio == null) return;
+  onChange(ratio);
+}
+
+type PaintedBounds = [number, number, number, number];
+
+export function finishVolumePointerDrag(
+  dragging: { current: boolean },
+  apply: (event: EventPayload) => void,
+  event: EventPayload,
+): void {
+  if (!dragging.current) return;
+  dragging.current = false;
+  dragRouter.current = null;
+  apply(event);
+}
+
+export function VolumeSlider({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  const trackRef = useRef<PublicInstance | null>(null);
+  const { boundsRef, sample, trackWidth, attachRef } = usePaintedBounds(trackRef);
+  const draggingRef = useRef(false);
+  const layoutWidth = trackWidth || (boundsRef.current?.[2] ?? 0);
+  const fillWidth = layoutWidth > 0 ? value * layoutWidth : 0;
+  const thumbLeft = thumbLeftPx(layoutWidth, value);
 
   const apply = useCallback(
     (event: EventPayload) => {
-      const bounds = sample() ?? boundsRef.current
-      const ratio = ratioFromEvent(event, bounds)
-      if (ratio == null) return
-      onChange(ratio)
+      applyVolumePointer(event, sample, boundsRef, onChange);
     },
     [boundsRef, onChange, sample],
-  )
+  );
 
   const endDrag = useCallback(
     (event: EventPayload) => {
-      if (!draggingRef.current) return
-      draggingRef.current = false
-      dragRouter.current = null
-      apply(event)
+      finishVolumePointerDrag(draggingRef, apply, event);
     },
     [apply],
-  )
+  );
 
   const beginDrag = useCallback(
     (event: EventPayload) => {
-      if (event.button != null && event.button !== 0) return
-      draggingRef.current = true
-      apply(event)
+      if (event.button != null && event.button !== 0) return;
+      draggingRef.current = true;
+      apply(event);
       dragRouter.current = {
         move: apply,
         end: endDrag,
-      }
+      };
     },
     [apply, endDrag],
-  )
+  );
 
-  const barTop = (SCRUB_TRACK_HEIGHT - SCRUB_BAR_HEIGHT) / 2
+  const barTop = (SCRUB_TRACK_HEIGHT - SCRUB_BAR_HEIGHT) / 2;
 
   return (
     <div
@@ -56,48 +88,49 @@ export function VolumeSlider({ value, onChange }: { value: number; onChange: (va
       style={{
         width: 88,
         height: SCRUB_TRACK_HEIGHT,
-        position: 'relative',
-        cursor: 'pointer',
+        position: "relative",
+        cursor: "pointer",
+        backgroundColor: "#FFFFFF01",
       }}
     >
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           left: 0,
           right: 0,
           top: barTop,
           height: SCRUB_BAR_HEIGHT,
           borderRadius: 2,
           backgroundColor: C.track,
-          pointerEvents: 'none',
+          pointerEvents: "none",
         }}
       />
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           left: 0,
           top: barTop,
           width: fillWidth,
           height: SCRUB_BAR_HEIGHT,
           borderRadius: 2,
           backgroundColor: C.secondary,
-          pointerEvents: 'none',
+          pointerEvents: "none",
         }}
       />
       {layoutWidth > 0 ? (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: thumbLeft,
             top: (SCRUB_TRACK_HEIGHT - SCRUB_THUMB_SIZE) / 2,
             width: SCRUB_THUMB_SIZE,
             height: SCRUB_THUMB_SIZE,
             borderRadius: SCRUB_THUMB_SIZE / 2,
             backgroundColor: C.thumb,
-            pointerEvents: 'none',
+            pointerEvents: "none",
           }}
         />
       ) : null}
     </div>
-  )
+  );
 }

@@ -1,58 +1,76 @@
-import { existsSync, mkdirSync, rmSync, statSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { rasterizeSvgToPng } from '../../src/lib/rasterize-svg'
-import { APP_VERSION } from '../../src/version'
+import { existsSync, mkdirSync, rmSync, statSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { rasterizeSvgToPng } from "../../src/lib/rasterize-svg";
+import { APP_VERSION } from "../../src/version";
 
-const SCRIPTS = dirname(fileURLToPath(import.meta.url))
-export const ROOT = join(SCRIPTS, '..', '..')
-export const APP_NAME = 'streameriux'
-export const RELEASE_BUNDLE_ID = 'dev.streameriux.app'
+const SCRIPTS = dirname(fileURLToPath(import.meta.url));
+export const ROOT = join(SCRIPTS, "..", "..");
+export const APP_NAME = "streameriux";
+export const RELEASE_BUNDLE_ID = "dev.streameriux.app";
+
+export type CommandRunner = (command: string, args: string[]) => Promise<boolean>;
 
 export async function run(command: string, args: string[]): Promise<boolean> {
-  const proc = Bun.spawn([command, ...args], { stdout: 'ignore', stderr: 'ignore' })
-  return (await proc.exited) === 0
+  const proc = Bun.spawn([command, ...args], { stdout: "ignore", stderr: "ignore" });
+  return (await proc.exited) === 0;
 }
 
 /** Rasterise assets/app-icon.svg to a .icns, keeping the squircle's corners transparent. */
-export async function buildAppIcon(target: string, distWork = join(ROOT, 'dist')): Promise<boolean> {
-  const svg = join(ROOT, 'assets', 'app-icon.svg')
-  if (!existsSync(svg)) return false
-  const work = join(distWork, '.iconwork')
-  const iconset = join(work, 'icon.iconset')
-  rmSync(work, { recursive: true, force: true })
-  mkdirSync(iconset, { recursive: true })
+export async function buildAppIcon(
+  target: string,
+  distWork = join(ROOT, "dist"),
+  runCommand: CommandRunner = run,
+): Promise<boolean> {
+  const svg = join(ROOT, "assets", "app-icon.svg");
+  if (!existsSync(svg)) return false;
+  const work = join(distWork, ".iconwork");
+  const iconset = join(work, "icon.iconset");
+  rmSync(work, { recursive: true, force: true });
+  mkdirSync(iconset, { recursive: true });
 
   // NSImage (not qlmanage) so the transparent margin around the icon stays
   // transparent instead of being flattened to a white tile behind the Dock icon.
-  const master = join(work, 'master.png')
-  if (!rasterizeSvgToPng(svg, master, 1024)) return false
+  const master = join(work, "master.png");
+  if (!rasterizeSvgToPng(svg, master, 1024)) return false;
 
-  const sizes = [16, 32, 64, 128, 256, 512, 1024]
+  const sizes = [16, 32, 64, 128, 256, 512, 1024];
   for (const size of sizes) {
-    await run('sips', ['-z', String(size), String(size), master, '--out', join(iconset, `icon_${size}x${size}.png`)])
-    const retina = size * 2
+    await runCommand("sips", [
+      "-z",
+      String(size),
+      String(size),
+      master,
+      "--out",
+      join(iconset, `icon_${size}x${size}.png`),
+    ]);
+    const retina = size * 2;
     if (retina <= 1024) {
-      await run('sips', ['-z', String(retina), String(retina), master, '--out', join(iconset, `icon_${size}x${size}@2x.png`)])
+      await runCommand("sips", [
+        "-z",
+        String(retina),
+        String(retina),
+        master,
+        "--out",
+        join(iconset, `icon_${size}x${size}@2x.png`),
+      ]);
     }
   }
 
-  const ok = await run('iconutil', ['-c', 'icns', iconset, '-o', target])
-  rmSync(work, { recursive: true, force: true })
-  return ok && existsSync(target)
+  const ok = await runCommand("iconutil", ["-c", "icns", iconset, "-o", target]);
+  rmSync(work, { recursive: true, force: true });
+  return ok && existsSync(target);
 }
 
 export function renderInfoPlist(options: {
-  bundleId: string
-  displayName?: string
-  hasIcon: boolean
-  appSleepDisabled?: boolean
+  bundleId: string;
+  displayName?: string;
+  hasIcon: boolean;
+  appSleepDisabled?: boolean;
 }): string {
-  const name = options.displayName ?? APP_NAME
-  const iconLine = options.hasIcon ? '  <key>CFBundleIconFile</key><string>AppIcon</string>\n' : ''
-  const napLine = options.appSleepDisabled
-    ? '  <key>NSAppSleepDisabled</key><true/>\n'
-    : ''
+  const name = options.displayName ?? APP_NAME;
+  const iconLine = options.hasIcon ? "  <key>CFBundleIconFile</key><string>AppIcon</string>\n" : "";
+  const napLine = options.appSleepDisabled ? "  <key>NSAppSleepDisabled</key><true/>\n" : "";
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -68,41 +86,64 @@ export function renderInfoPlist(options: {
 ${napLine}  <key>LSApplicationCategoryType</key><string>public.app-category.video</string>
 ${iconLine}</dict>
 </plist>
-`
+`;
 }
 
 export function needsCompile(entry: string, output: string): boolean {
-  if (!existsSync(output)) return true
-  return statSync(entry).mtimeMs > statSync(output).mtimeMs
+  if (!existsSync(output)) return true;
+  return statSync(entry).mtimeMs > statSync(output).mtimeMs;
 }
 
-export async function compileApp(entry: string, output: string): Promise<void> {
-  mkdirSync(dirname(output), { recursive: true })
-  const proc = Bun.spawn(
-    ['bun', 'build', '--compile', '--external', 'web-audio-api', entry, '--outfile', output],
+export type CompileSpawn = (
+  args: string[],
+  options: { cwd: string; stdout: "inherit"; stderr: "inherit" },
+) => { exited: Promise<number> };
+
+export async function compileApp(
+  entry: string,
+  output: string,
+  options: {
+    spawn?: CompileSpawn;
+    exit?: (code: number) => never;
+    cwd?: string;
+  } = {},
+): Promise<void> {
+  const spawnCompile = options.spawn ?? ((args, spawnOpts) => Bun.spawn(args, spawnOpts));
+  const exit = options.exit ?? ((code) => process.exit(code));
+  const cwd = options.cwd ?? ROOT;
+  mkdirSync(dirname(output), { recursive: true });
+  const proc = spawnCompile(
+    ["bun", "build", "--compile", "--external", "web-audio-api", entry, "--outfile", output],
     {
-      cwd: ROOT,
-      stdout: 'inherit',
-      stderr: 'inherit',
+      cwd,
+      stdout: "inherit",
+      stderr: "inherit",
     },
-  )
-  if ((await proc.exited) !== 0) process.exit(1)
+  );
+  if ((await proc.exited) !== 0) exit(1);
 }
 
 export async function ensureBundleMetadata(appPath: string, bundleId: string): Promise<boolean> {
-  const resources = join(appPath, 'Contents', 'Resources')
-  mkdirSync(resources, { recursive: true })
-  const hasIcon = await buildAppIcon(join(resources, 'AppIcon.icns'))
-  await Bun.write(join(appPath, 'Contents', 'Info.plist'), renderInfoPlist({ bundleId, hasIcon, appSleepDisabled: true }))
-  return hasIcon
+  const resources = join(appPath, "Contents", "Resources");
+  mkdirSync(resources, { recursive: true });
+  const hasIcon = await buildAppIcon(join(resources, "AppIcon.icns"));
+  await Bun.write(
+    join(appPath, "Contents", "Info.plist"),
+    renderInfoPlist({ bundleId, hasIcon, appSleepDisabled: true }),
+  );
+  return hasIcon;
 }
 
-export async function writeReleaseBundle(appPath: string, binaryPath: string): Promise<boolean> {
-  const macos = join(appPath, 'Contents', 'MacOS')
-  const executable = join(macos, APP_NAME)
-  rmSync(appPath, { recursive: true, force: true })
-  mkdirSync(macos, { recursive: true })
-  await Bun.write(executable, Bun.file(binaryPath))
-  await run('chmod', ['+x', executable])
-  return ensureBundleMetadata(appPath, RELEASE_BUNDLE_ID)
+export async function writeReleaseBundle(
+  appPath: string,
+  binaryPath: string,
+  runCommand: CommandRunner = run,
+): Promise<boolean> {
+  const macos = join(appPath, "Contents", "MacOS");
+  const executable = join(macos, APP_NAME);
+  rmSync(appPath, { recursive: true, force: true });
+  mkdirSync(macos, { recursive: true });
+  await Bun.write(executable, Bun.file(binaryPath));
+  await runCommand("chmod", ["+x", executable]);
+  return ensureBundleMetadata(appPath, RELEASE_BUNDLE_ID);
 }

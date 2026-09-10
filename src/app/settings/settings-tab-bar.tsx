@@ -1,12 +1,18 @@
-import { SETTINGS_TABS, type SettingsTab } from '../../settings/app-settings'
-import { C, FONT } from '../theme'
+import { SETTINGS_TABS, type SettingsTab } from "../../settings/app-settings";
+import { C, FONT } from "../theme";
 
-export function SettingsTabBar({ tab, onTab }: { tab: SettingsTab; onTab: (tab: SettingsTab) => void }) {
+export function SettingsTabBar({
+  tab,
+  onTab,
+}: {
+  tab: SettingsTab;
+  onTab: (tab: SettingsTab) => void;
+}) {
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'row',
+        display: "flex",
+        flexDirection: "row",
         gap: 2,
         padding: 3,
         borderRadius: 10,
@@ -16,7 +22,7 @@ export function SettingsTabBar({ tab, onTab }: { tab: SettingsTab; onTab: (tab: 
       }}
     >
       {SETTINGS_TABS.map((entry) => {
-        const active = entry.id === tab
+        const active = entry.id === tab;
         return (
           <div
             key={entry.id}
@@ -26,10 +32,10 @@ export function SettingsTabBar({ tab, onTab }: { tab: SettingsTab; onTab: (tab: 
               flexGrow: 1,
               height: 28,
               borderRadius: 7,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
               backgroundColor: active ? C.overlayStrong : undefined,
               hover: active ? undefined : { backgroundColor: C.overlay },
             }}
@@ -38,15 +44,15 @@ export function SettingsTabBar({ tab, onTab }: { tab: SettingsTab; onTab: (tab: 
               style={{
                 fontSize: 12,
                 fontFamily: FONT,
-                fontWeight: active ? '600' : '500',
+                fontWeight: active ? "600" : "500",
                 color: active ? C.text : C.tertiary,
               }}
             >
               {entry.label}
             </text>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

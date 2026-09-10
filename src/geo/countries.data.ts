@@ -1,1012 +1,1012 @@
 /** Country and region data from iptv-org (ISO 3166-2 + region codes). */
 
-export type CountryInfo = { code: string; name: string; flag: string; label: string }
+export type CountryInfo = { code: string; name: string; flag: string; label: string };
 
 export const COUNTRIES: Record<string, { name: string; flag: string }> = {
-  "AF": {
-    "name": "Afghanistan",
-    "flag": "🇦🇫"
-  },
-  "AX": {
-    "name": "Aland",
-    "flag": "🇦🇽"
-  },
-  "AL": {
-    "name": "Albania",
-    "flag": "🇦🇱"
-  },
-  "DZ": {
-    "name": "Algeria",
-    "flag": "🇩🇿"
-  },
-  "AS": {
-    "name": "American Samoa",
-    "flag": "🇦🇸"
-  },
-  "AD": {
-    "name": "Andorra",
-    "flag": "🇦🇩"
-  },
-  "AO": {
-    "name": "Angola",
-    "flag": "🇦🇴"
-  },
-  "AI": {
-    "name": "Anguilla",
-    "flag": "🇦🇮"
-  },
-  "AQ": {
-    "name": "Antarctica",
-    "flag": "🇦🇶"
-  },
-  "AG": {
-    "name": "Antigua and Barbuda",
-    "flag": "🇦🇬"
-  },
-  "AR": {
-    "name": "Argentina",
-    "flag": "🇦🇷"
-  },
-  "AM": {
-    "name": "Armenia",
-    "flag": "🇦🇲"
-  },
-  "AW": {
-    "name": "Aruba",
-    "flag": "🇦🇼"
-  },
-  "AU": {
-    "name": "Australia",
-    "flag": "🇦🇺"
-  },
-  "AT": {
-    "name": "Austria",
-    "flag": "🇦🇹"
-  },
-  "AZ": {
-    "name": "Azerbaijan",
-    "flag": "🇦🇿"
-  },
-  "BS": {
-    "name": "Bahamas",
-    "flag": "🇧🇸"
-  },
-  "BH": {
-    "name": "Bahrain",
-    "flag": "🇧🇭"
-  },
-  "BD": {
-    "name": "Bangladesh",
-    "flag": "🇧🇩"
-  },
-  "BB": {
-    "name": "Barbados",
-    "flag": "🇧🇧"
-  },
-  "BY": {
-    "name": "Belarus",
-    "flag": "🇧🇾"
-  },
-  "BE": {
-    "name": "Belgium",
-    "flag": "🇧🇪"
-  },
-  "BZ": {
-    "name": "Belize",
-    "flag": "🇧🇿"
-  },
-  "BJ": {
-    "name": "Benin",
-    "flag": "🇧🇯"
-  },
-  "BM": {
-    "name": "Bermuda",
-    "flag": "🇧🇲"
-  },
-  "BT": {
-    "name": "Bhutan",
-    "flag": "🇧🇹"
-  },
-  "BO": {
-    "name": "Bolivia",
-    "flag": "🇧🇴"
-  },
-  "BQ": {
-    "name": "Bonaire",
-    "flag": "🇧🇶"
-  },
-  "BA": {
-    "name": "Bosnia and Herzegovina",
-    "flag": "🇧🇦"
-  },
-  "BW": {
-    "name": "Botswana",
-    "flag": "🇧🇼"
-  },
-  "BV": {
-    "name": "Bouvet Island",
-    "flag": "🇧🇻"
-  },
-  "BR": {
-    "name": "Brazil",
-    "flag": "🇧🇷"
-  },
-  "IO": {
-    "name": "British Indian Ocean Territory",
-    "flag": "🇮🇴"
-  },
-  "VG": {
-    "name": "British Virgin Islands",
-    "flag": "🇻🇬"
-  },
-  "BN": {
-    "name": "Brunei",
-    "flag": "🇧🇳"
-  },
-  "BG": {
-    "name": "Bulgaria",
-    "flag": "🇧🇬"
-  },
-  "BF": {
-    "name": "Burkina Faso",
-    "flag": "🇧🇫"
-  },
-  "BI": {
-    "name": "Burundi",
-    "flag": "🇧🇮"
-  },
-  "KH": {
-    "name": "Cambodia",
-    "flag": "🇰🇭"
-  },
-  "CM": {
-    "name": "Cameroon",
-    "flag": "🇨🇲"
-  },
-  "CA": {
-    "name": "Canada",
-    "flag": "🇨🇦"
-  },
-  "CV": {
-    "name": "Cape Verde",
-    "flag": "🇨🇻"
-  },
-  "KY": {
-    "name": "Cayman Islands",
-    "flag": "🇰🇾"
-  },
-  "CF": {
-    "name": "Central African Republic",
-    "flag": "🇨🇫"
-  },
-  "TD": {
-    "name": "Chad",
-    "flag": "🇹🇩"
-  },
-  "CL": {
-    "name": "Chile",
-    "flag": "🇨🇱"
-  },
-  "CN": {
-    "name": "China",
-    "flag": "🇨🇳"
-  },
-  "CX": {
-    "name": "Christmas Island",
-    "flag": "🇨🇽"
-  },
-  "CC": {
-    "name": "Cocos (Keeling) Islands",
-    "flag": "🇨🇨"
-  },
-  "CO": {
-    "name": "Colombia",
-    "flag": "🇨🇴"
-  },
-  "KM": {
-    "name": "Comoros",
-    "flag": "🇰🇲"
-  },
-  "CK": {
-    "name": "Cook Islands",
-    "flag": "🇨🇰"
-  },
-  "CR": {
-    "name": "Costa Rica",
-    "flag": "🇨🇷"
-  },
-  "HR": {
-    "name": "Croatia",
-    "flag": "🇭🇷"
-  },
-  "CU": {
-    "name": "Cuba",
-    "flag": "🇨🇺"
-  },
-  "CW": {
-    "name": "Curacao",
-    "flag": "🇨🇼"
-  },
-  "CY": {
-    "name": "Cyprus",
-    "flag": "🇨🇾"
-  },
-  "CZ": {
-    "name": "Czech Republic",
-    "flag": "🇨🇿"
-  },
-  "CD": {
-    "name": "Democratic Republic of the Congo",
-    "flag": "🇨🇩"
-  },
-  "DK": {
-    "name": "Denmark",
-    "flag": "🇩🇰"
-  },
-  "DJ": {
-    "name": "Djibouti",
-    "flag": "🇩🇯"
-  },
-  "DM": {
-    "name": "Dominica",
-    "flag": "🇩🇲"
-  },
-  "DO": {
-    "name": "Dominican Republic",
-    "flag": "🇩🇴"
-  },
-  "TL": {
-    "name": "East Timor",
-    "flag": "🇹🇱"
-  },
-  "EC": {
-    "name": "Ecuador",
-    "flag": "🇪🇨"
-  },
-  "EG": {
-    "name": "Egypt",
-    "flag": "🇪🇬"
-  },
-  "SV": {
-    "name": "El Salvador",
-    "flag": "🇸🇻"
-  },
-  "GQ": {
-    "name": "Equatorial Guinea",
-    "flag": "🇬🇶"
-  },
-  "ER": {
-    "name": "Eritrea",
-    "flag": "🇪🇷"
-  },
-  "EE": {
-    "name": "Estonia",
-    "flag": "🇪🇪"
-  },
-  "ET": {
-    "name": "Ethiopia",
-    "flag": "🇪🇹"
-  },
-  "FK": {
-    "name": "Falkland Islands",
-    "flag": "🇫🇰"
-  },
-  "FO": {
-    "name": "Faroe Islands",
-    "flag": "🇫🇴"
-  },
-  "FJ": {
-    "name": "Fiji",
-    "flag": "🇫🇯"
-  },
-  "FI": {
-    "name": "Finland",
-    "flag": "🇫🇮"
-  },
-  "FR": {
-    "name": "France",
-    "flag": "🇫🇷"
-  },
-  "GF": {
-    "name": "French Guiana",
-    "flag": "🇬🇫"
-  },
-  "PF": {
-    "name": "French Polynesia",
-    "flag": "🇵🇫"
-  },
-  "TF": {
-    "name": "French Southern Territories",
-    "flag": "🇹🇫"
-  },
-  "GA": {
-    "name": "Gabon",
-    "flag": "🇬🇦"
-  },
-  "GM": {
-    "name": "Gambia",
-    "flag": "🇬🇲"
-  },
-  "GE": {
-    "name": "Georgia",
-    "flag": "🇬🇪"
-  },
-  "DE": {
-    "name": "Germany",
-    "flag": "🇩🇪"
-  },
-  "GH": {
-    "name": "Ghana",
-    "flag": "🇬🇭"
-  },
-  "GI": {
-    "name": "Gibraltar",
-    "flag": "🇬🇮"
-  },
-  "GR": {
-    "name": "Greece",
-    "flag": "🇬🇷"
-  },
-  "GL": {
-    "name": "Greenland",
-    "flag": "🇬🇱"
-  },
-  "GD": {
-    "name": "Grenada",
-    "flag": "🇬🇩"
-  },
-  "GP": {
-    "name": "Guadeloupe",
-    "flag": "🇬🇵"
-  },
-  "GU": {
-    "name": "Guam",
-    "flag": "🇬🇺"
-  },
-  "GT": {
-    "name": "Guatemala",
-    "flag": "🇬🇹"
-  },
-  "GG": {
-    "name": "Guernsey",
-    "flag": "🇬🇬"
-  },
-  "GN": {
-    "name": "Guinea",
-    "flag": "🇬🇳"
-  },
-  "GW": {
-    "name": "Guinea-Bissau",
-    "flag": "🇬🇼"
-  },
-  "GY": {
-    "name": "Guyana",
-    "flag": "🇬🇾"
-  },
-  "HT": {
-    "name": "Haiti",
-    "flag": "🇭🇹"
-  },
-  "HM": {
-    "name": "Heard Island and McDonald Islands",
-    "flag": "🇭🇲"
-  },
-  "HN": {
-    "name": "Honduras",
-    "flag": "🇭🇳"
-  },
-  "HK": {
-    "name": "Hong Kong",
-    "flag": "🇭🇰"
-  },
-  "HU": {
-    "name": "Hungary",
-    "flag": "🇭🇺"
-  },
-  "IS": {
-    "name": "Iceland",
-    "flag": "🇮🇸"
-  },
-  "IN": {
-    "name": "India",
-    "flag": "🇮🇳"
-  },
-  "ID": {
-    "name": "Indonesia",
-    "flag": "🇮🇩"
-  },
-  "IR": {
-    "name": "Iran",
-    "flag": "🇮🇷"
-  },
-  "IQ": {
-    "name": "Iraq",
-    "flag": "🇮🇶"
-  },
-  "IE": {
-    "name": "Ireland",
-    "flag": "🇮🇪"
-  },
-  "IM": {
-    "name": "Isle of Man",
-    "flag": "🇮🇲"
-  },
-  "IL": {
-    "name": "Israel",
-    "flag": "🇮🇱"
-  },
-  "IT": {
-    "name": "Italy",
-    "flag": "🇮🇹"
-  },
-  "CI": {
-    "name": "Ivory Coast",
-    "flag": "🇨🇮"
-  },
-  "JM": {
-    "name": "Jamaica",
-    "flag": "🇯🇲"
-  },
-  "JP": {
-    "name": "Japan",
-    "flag": "🇯🇵"
-  },
-  "JE": {
-    "name": "Jersey",
-    "flag": "🇯🇪"
-  },
-  "JO": {
-    "name": "Jordan",
-    "flag": "🇯🇴"
-  },
-  "KZ": {
-    "name": "Kazakhstan",
-    "flag": "🇰🇿"
-  },
-  "KE": {
-    "name": "Kenya",
-    "flag": "🇰🇪"
-  },
-  "KI": {
-    "name": "Kiribati",
-    "flag": "🇰🇮"
-  },
-  "XK": {
-    "name": "Kosovo",
-    "flag": "🇽🇰"
-  },
-  "KW": {
-    "name": "Kuwait",
-    "flag": "🇰🇼"
-  },
-  "KG": {
-    "name": "Kyrgyzstan",
-    "flag": "🇰🇬"
-  },
-  "LA": {
-    "name": "Laos",
-    "flag": "🇱🇦"
-  },
-  "LV": {
-    "name": "Latvia",
-    "flag": "🇱🇻"
-  },
-  "LB": {
-    "name": "Lebanon",
-    "flag": "🇱🇧"
-  },
-  "LS": {
-    "name": "Lesotho",
-    "flag": "🇱🇸"
-  },
-  "LR": {
-    "name": "Liberia",
-    "flag": "🇱🇷"
-  },
-  "LY": {
-    "name": "Libya",
-    "flag": "🇱🇾"
-  },
-  "LI": {
-    "name": "Liechtenstein",
-    "flag": "🇱🇮"
-  },
-  "LT": {
-    "name": "Lithuania",
-    "flag": "🇱🇹"
-  },
-  "LU": {
-    "name": "Luxembourg",
-    "flag": "🇱🇺"
-  },
-  "MO": {
-    "name": "Macao",
-    "flag": "🇲🇴"
-  },
-  "MG": {
-    "name": "Madagascar",
-    "flag": "🇲🇬"
-  },
-  "MW": {
-    "name": "Malawi",
-    "flag": "🇲🇼"
-  },
-  "MY": {
-    "name": "Malaysia",
-    "flag": "🇲🇾"
-  },
-  "MV": {
-    "name": "Maldives",
-    "flag": "🇲🇻"
-  },
-  "ML": {
-    "name": "Mali",
-    "flag": "🇲🇱"
-  },
-  "MT": {
-    "name": "Malta",
-    "flag": "🇲🇹"
-  },
-  "MH": {
-    "name": "Marshall Islands",
-    "flag": "🇲🇭"
-  },
-  "MQ": {
-    "name": "Martinique",
-    "flag": "🇲🇶"
-  },
-  "MR": {
-    "name": "Mauritania",
-    "flag": "🇲🇷"
-  },
-  "MU": {
-    "name": "Mauritius",
-    "flag": "🇲🇺"
-  },
-  "YT": {
-    "name": "Mayotte",
-    "flag": "🇾🇹"
-  },
-  "MX": {
-    "name": "Mexico",
-    "flag": "🇲🇽"
-  },
-  "FM": {
-    "name": "Micronesia",
-    "flag": "🇫🇲"
-  },
-  "MD": {
-    "name": "Moldova",
-    "flag": "🇲🇩"
-  },
-  "MC": {
-    "name": "Monaco",
-    "flag": "🇲🇨"
-  },
-  "MN": {
-    "name": "Mongolia",
-    "flag": "🇲🇳"
-  },
-  "ME": {
-    "name": "Montenegro",
-    "flag": "🇲🇪"
-  },
-  "MS": {
-    "name": "Montserrat",
-    "flag": "🇲🇸"
-  },
-  "MA": {
-    "name": "Morocco",
-    "flag": "🇲🇦"
-  },
-  "MZ": {
-    "name": "Mozambique",
-    "flag": "🇲🇿"
-  },
-  "MM": {
-    "name": "Myanmar",
-    "flag": "🇲🇲"
-  },
-  "NA": {
-    "name": "Namibia",
-    "flag": "🇳🇦"
-  },
-  "NR": {
-    "name": "Nauru",
-    "flag": "🇳🇷"
-  },
-  "NP": {
-    "name": "Nepal",
-    "flag": "🇳🇵"
-  },
-  "NL": {
-    "name": "Netherlands",
-    "flag": "🇳🇱"
-  },
-  "NC": {
-    "name": "New Caledonia",
-    "flag": "🇳🇨"
-  },
-  "NZ": {
-    "name": "New Zealand",
-    "flag": "🇳🇿"
-  },
-  "NI": {
-    "name": "Nicaragua",
-    "flag": "🇳🇮"
-  },
-  "NE": {
-    "name": "Niger",
-    "flag": "🇳🇪"
-  },
-  "NG": {
-    "name": "Nigeria",
-    "flag": "🇳🇬"
-  },
-  "NU": {
-    "name": "Niue",
-    "flag": "🇳🇺"
-  },
-  "NF": {
-    "name": "Norfolk Island",
-    "flag": "🇳🇫"
-  },
-  "KP": {
-    "name": "North Korea",
-    "flag": "🇰🇵"
-  },
-  "MK": {
-    "name": "North Macedonia",
-    "flag": "🇲🇰"
-  },
-  "MP": {
-    "name": "Northern Mariana Islands",
-    "flag": "🇲🇵"
-  },
-  "NO": {
-    "name": "Norway",
-    "flag": "🇳🇴"
-  },
-  "OM": {
-    "name": "Oman",
-    "flag": "🇴🇲"
-  },
-  "PK": {
-    "name": "Pakistan",
-    "flag": "🇵🇰"
-  },
-  "PW": {
-    "name": "Palau",
-    "flag": "🇵🇼"
-  },
-  "PS": {
-    "name": "Palestine",
-    "flag": "🇵🇸"
-  },
-  "PA": {
-    "name": "Panama",
-    "flag": "🇵🇦"
-  },
-  "PG": {
-    "name": "Papua New Guinea",
-    "flag": "🇵🇬"
-  },
-  "PY": {
-    "name": "Paraguay",
-    "flag": "🇵🇾"
-  },
-  "PE": {
-    "name": "Peru",
-    "flag": "🇵🇪"
-  },
-  "PH": {
-    "name": "Philippines",
-    "flag": "🇵🇭"
-  },
-  "PN": {
-    "name": "Pitcairn Islands",
-    "flag": "🇵🇳"
-  },
-  "PL": {
-    "name": "Poland",
-    "flag": "🇵🇱"
-  },
-  "PT": {
-    "name": "Portugal",
-    "flag": "🇵🇹"
-  },
-  "PR": {
-    "name": "Puerto Rico",
-    "flag": "🇵🇷"
-  },
-  "QA": {
-    "name": "Qatar",
-    "flag": "🇶🇦"
-  },
-  "CG": {
-    "name": "Republic of the Congo",
-    "flag": "🇨🇬"
-  },
-  "RO": {
-    "name": "Romania",
-    "flag": "🇷🇴"
-  },
-  "RU": {
-    "name": "Russia",
-    "flag": "🇷🇺"
-  },
-  "RW": {
-    "name": "Rwanda",
-    "flag": "🇷🇼"
-  },
-  "RE": {
-    "name": "Reunion",
-    "flag": "🇷🇪"
-  },
-  "BL": {
-    "name": "Saint Barthélemy",
-    "flag": "🇧🇱"
-  },
-  "SH": {
-    "name": "Saint Helena",
-    "flag": "🇸🇭"
-  },
-  "KN": {
-    "name": "Saint Kitts and Nevis",
-    "flag": "🇰🇳"
-  },
-  "LC": {
-    "name": "Saint Lucia",
-    "flag": "🇱🇨"
-  },
-  "MF": {
-    "name": "Saint Martin",
-    "flag": "🇲🇫"
-  },
-  "PM": {
-    "name": "Saint Pierre and Miquelon",
-    "flag": "🇵🇲"
-  },
-  "VC": {
-    "name": "Saint Vincent and the Grenadines",
-    "flag": "🇻🇨"
-  },
-  "WS": {
-    "name": "Samoa",
-    "flag": "🇼🇸"
-  },
-  "SM": {
-    "name": "San Marino",
-    "flag": "🇸🇲"
-  },
-  "SA": {
-    "name": "Saudi Arabia",
-    "flag": "🇸🇦"
-  },
-  "SN": {
-    "name": "Senegal",
-    "flag": "🇸🇳"
-  },
-  "RS": {
-    "name": "Serbia",
-    "flag": "🇷🇸"
-  },
-  "SC": {
-    "name": "Seychelles",
-    "flag": "🇸🇨"
-  },
-  "SL": {
-    "name": "Sierra Leone",
-    "flag": "🇸🇱"
-  },
-  "SG": {
-    "name": "Singapore",
-    "flag": "🇸🇬"
-  },
-  "SX": {
-    "name": "Sint Maarten",
-    "flag": "🇸🇽"
-  },
-  "SK": {
-    "name": "Slovakia",
-    "flag": "🇸🇰"
-  },
-  "SI": {
-    "name": "Slovenia",
-    "flag": "🇸🇮"
-  },
-  "SB": {
-    "name": "Solomon Islands",
-    "flag": "🇸🇧"
-  },
-  "SO": {
-    "name": "Somalia",
-    "flag": "🇸🇴"
-  },
-  "ZA": {
-    "name": "South Africa",
-    "flag": "🇿🇦"
-  },
-  "GS": {
-    "name": "South Georgia and the South Sandwich Islands",
-    "flag": "🇬🇸"
-  },
-  "KR": {
-    "name": "South Korea",
-    "flag": "🇰🇷"
-  },
-  "SS": {
-    "name": "South Sudan",
-    "flag": "🇸🇸"
-  },
-  "ES": {
-    "name": "Spain",
-    "flag": "🇪🇸"
-  },
-  "LK": {
-    "name": "Sri Lanka",
-    "flag": "🇱🇰"
-  },
-  "SD": {
-    "name": "Sudan",
-    "flag": "🇸🇩"
-  },
-  "SR": {
-    "name": "Suriname",
-    "flag": "🇸🇷"
-  },
-  "SJ": {
-    "name": "Svalbard and Jan Mayen",
-    "flag": "🇸🇯"
-  },
-  "SZ": {
-    "name": "Swaziland",
-    "flag": "🇸🇿"
-  },
-  "SE": {
-    "name": "Sweden",
-    "flag": "🇸🇪"
-  },
-  "CH": {
-    "name": "Switzerland",
-    "flag": "🇨🇭"
-  },
-  "SY": {
-    "name": "Syria",
-    "flag": "🇸🇾"
-  },
-  "ST": {
-    "name": "Sao Tome and Principe",
-    "flag": "🇸🇹"
-  },
-  "TW": {
-    "name": "Taiwan",
-    "flag": "🇹🇼"
-  },
-  "TJ": {
-    "name": "Tajikistan",
-    "flag": "🇹🇯"
-  },
-  "TZ": {
-    "name": "Tanzania",
-    "flag": "🇹🇿"
-  },
-  "TH": {
-    "name": "Thailand",
-    "flag": "🇹🇭"
-  },
-  "TG": {
-    "name": "Togo",
-    "flag": "🇹🇬"
-  },
-  "TK": {
-    "name": "Tokelau",
-    "flag": "🇹🇰"
-  },
-  "TO": {
-    "name": "Tonga",
-    "flag": "🇹🇴"
-  },
-  "TT": {
-    "name": "Trinidad and Tobago",
-    "flag": "🇹🇹"
-  },
-  "TN": {
-    "name": "Tunisia",
-    "flag": "🇹🇳"
-  },
-  "TR": {
-    "name": "Turkiye",
-    "flag": "🇹🇷"
-  },
-  "TM": {
-    "name": "Turkmenistan",
-    "flag": "🇹🇲"
-  },
-  "TC": {
-    "name": "Turks and Caicos Islands",
-    "flag": "🇹🇨"
-  },
-  "TV": {
-    "name": "Tuvalu",
-    "flag": "🇹🇻"
-  },
-  "UM": {
-    "name": "U.S. Minor Outlying Islands",
-    "flag": "🇺🇲"
-  },
-  "VI": {
-    "name": "U.S. Virgin Islands",
-    "flag": "🇻🇮"
-  },
-  "UG": {
-    "name": "Uganda",
-    "flag": "🇺🇬"
-  },
-  "UA": {
-    "name": "Ukraine",
-    "flag": "🇺🇦"
-  },
-  "AE": {
-    "name": "United Arab Emirates",
-    "flag": "🇦🇪"
-  },
-  "UK": {
-    "name": "United Kingdom",
-    "flag": "🇬🇧"
-  },
-  "US": {
-    "name": "United States",
-    "flag": "🇺🇸"
-  },
-  "UY": {
-    "name": "Uruguay",
-    "flag": "🇺🇾"
-  },
-  "UZ": {
-    "name": "Uzbekistan",
-    "flag": "🇺🇿"
-  },
-  "VU": {
-    "name": "Vanuatu",
-    "flag": "🇻🇺"
-  },
-  "VA": {
-    "name": "Vatican City",
-    "flag": "🇻🇦"
-  },
-  "VE": {
-    "name": "Venezuela",
-    "flag": "🇻🇪"
-  },
-  "VN": {
-    "name": "Vietnam",
-    "flag": "🇻🇳"
-  },
-  "WF": {
-    "name": "Wallis and Futuna",
-    "flag": "🇼🇫"
-  },
-  "EH": {
-    "name": "Western Sahara",
-    "flag": "🇪🇭"
-  },
-  "YE": {
-    "name": "Yemen",
-    "flag": "🇾🇪"
-  },
-  "ZM": {
-    "name": "Zambia",
-    "flag": "🇿🇲"
-  },
-  "ZW": {
-    "name": "Zimbabwe",
-    "flag": "🇿🇼"
-  }
-}
+  AF: {
+    name: "Afghanistan",
+    flag: "🇦🇫",
+  },
+  AX: {
+    name: "Aland",
+    flag: "🇦🇽",
+  },
+  AL: {
+    name: "Albania",
+    flag: "🇦🇱",
+  },
+  DZ: {
+    name: "Algeria",
+    flag: "🇩🇿",
+  },
+  AS: {
+    name: "American Samoa",
+    flag: "🇦🇸",
+  },
+  AD: {
+    name: "Andorra",
+    flag: "🇦🇩",
+  },
+  AO: {
+    name: "Angola",
+    flag: "🇦🇴",
+  },
+  AI: {
+    name: "Anguilla",
+    flag: "🇦🇮",
+  },
+  AQ: {
+    name: "Antarctica",
+    flag: "🇦🇶",
+  },
+  AG: {
+    name: "Antigua and Barbuda",
+    flag: "🇦🇬",
+  },
+  AR: {
+    name: "Argentina",
+    flag: "🇦🇷",
+  },
+  AM: {
+    name: "Armenia",
+    flag: "🇦🇲",
+  },
+  AW: {
+    name: "Aruba",
+    flag: "🇦🇼",
+  },
+  AU: {
+    name: "Australia",
+    flag: "🇦🇺",
+  },
+  AT: {
+    name: "Austria",
+    flag: "🇦🇹",
+  },
+  AZ: {
+    name: "Azerbaijan",
+    flag: "🇦🇿",
+  },
+  BS: {
+    name: "Bahamas",
+    flag: "🇧🇸",
+  },
+  BH: {
+    name: "Bahrain",
+    flag: "🇧🇭",
+  },
+  BD: {
+    name: "Bangladesh",
+    flag: "🇧🇩",
+  },
+  BB: {
+    name: "Barbados",
+    flag: "🇧🇧",
+  },
+  BY: {
+    name: "Belarus",
+    flag: "🇧🇾",
+  },
+  BE: {
+    name: "Belgium",
+    flag: "🇧🇪",
+  },
+  BZ: {
+    name: "Belize",
+    flag: "🇧🇿",
+  },
+  BJ: {
+    name: "Benin",
+    flag: "🇧🇯",
+  },
+  BM: {
+    name: "Bermuda",
+    flag: "🇧🇲",
+  },
+  BT: {
+    name: "Bhutan",
+    flag: "🇧🇹",
+  },
+  BO: {
+    name: "Bolivia",
+    flag: "🇧🇴",
+  },
+  BQ: {
+    name: "Bonaire",
+    flag: "🇧🇶",
+  },
+  BA: {
+    name: "Bosnia and Herzegovina",
+    flag: "🇧🇦",
+  },
+  BW: {
+    name: "Botswana",
+    flag: "🇧🇼",
+  },
+  BV: {
+    name: "Bouvet Island",
+    flag: "🇧🇻",
+  },
+  BR: {
+    name: "Brazil",
+    flag: "🇧🇷",
+  },
+  IO: {
+    name: "British Indian Ocean Territory",
+    flag: "🇮🇴",
+  },
+  VG: {
+    name: "British Virgin Islands",
+    flag: "🇻🇬",
+  },
+  BN: {
+    name: "Brunei",
+    flag: "🇧🇳",
+  },
+  BG: {
+    name: "Bulgaria",
+    flag: "🇧🇬",
+  },
+  BF: {
+    name: "Burkina Faso",
+    flag: "🇧🇫",
+  },
+  BI: {
+    name: "Burundi",
+    flag: "🇧🇮",
+  },
+  KH: {
+    name: "Cambodia",
+    flag: "🇰🇭",
+  },
+  CM: {
+    name: "Cameroon",
+    flag: "🇨🇲",
+  },
+  CA: {
+    name: "Canada",
+    flag: "🇨🇦",
+  },
+  CV: {
+    name: "Cape Verde",
+    flag: "🇨🇻",
+  },
+  KY: {
+    name: "Cayman Islands",
+    flag: "🇰🇾",
+  },
+  CF: {
+    name: "Central African Republic",
+    flag: "🇨🇫",
+  },
+  TD: {
+    name: "Chad",
+    flag: "🇹🇩",
+  },
+  CL: {
+    name: "Chile",
+    flag: "🇨🇱",
+  },
+  CN: {
+    name: "China",
+    flag: "🇨🇳",
+  },
+  CX: {
+    name: "Christmas Island",
+    flag: "🇨🇽",
+  },
+  CC: {
+    name: "Cocos (Keeling) Islands",
+    flag: "🇨🇨",
+  },
+  CO: {
+    name: "Colombia",
+    flag: "🇨🇴",
+  },
+  KM: {
+    name: "Comoros",
+    flag: "🇰🇲",
+  },
+  CK: {
+    name: "Cook Islands",
+    flag: "🇨🇰",
+  },
+  CR: {
+    name: "Costa Rica",
+    flag: "🇨🇷",
+  },
+  HR: {
+    name: "Croatia",
+    flag: "🇭🇷",
+  },
+  CU: {
+    name: "Cuba",
+    flag: "🇨🇺",
+  },
+  CW: {
+    name: "Curacao",
+    flag: "🇨🇼",
+  },
+  CY: {
+    name: "Cyprus",
+    flag: "🇨🇾",
+  },
+  CZ: {
+    name: "Czech Republic",
+    flag: "🇨🇿",
+  },
+  CD: {
+    name: "Democratic Republic of the Congo",
+    flag: "🇨🇩",
+  },
+  DK: {
+    name: "Denmark",
+    flag: "🇩🇰",
+  },
+  DJ: {
+    name: "Djibouti",
+    flag: "🇩🇯",
+  },
+  DM: {
+    name: "Dominica",
+    flag: "🇩🇲",
+  },
+  DO: {
+    name: "Dominican Republic",
+    flag: "🇩🇴",
+  },
+  TL: {
+    name: "East Timor",
+    flag: "🇹🇱",
+  },
+  EC: {
+    name: "Ecuador",
+    flag: "🇪🇨",
+  },
+  EG: {
+    name: "Egypt",
+    flag: "🇪🇬",
+  },
+  SV: {
+    name: "El Salvador",
+    flag: "🇸🇻",
+  },
+  GQ: {
+    name: "Equatorial Guinea",
+    flag: "🇬🇶",
+  },
+  ER: {
+    name: "Eritrea",
+    flag: "🇪🇷",
+  },
+  EE: {
+    name: "Estonia",
+    flag: "🇪🇪",
+  },
+  ET: {
+    name: "Ethiopia",
+    flag: "🇪🇹",
+  },
+  FK: {
+    name: "Falkland Islands",
+    flag: "🇫🇰",
+  },
+  FO: {
+    name: "Faroe Islands",
+    flag: "🇫🇴",
+  },
+  FJ: {
+    name: "Fiji",
+    flag: "🇫🇯",
+  },
+  FI: {
+    name: "Finland",
+    flag: "🇫🇮",
+  },
+  FR: {
+    name: "France",
+    flag: "🇫🇷",
+  },
+  GF: {
+    name: "French Guiana",
+    flag: "🇬🇫",
+  },
+  PF: {
+    name: "French Polynesia",
+    flag: "🇵🇫",
+  },
+  TF: {
+    name: "French Southern Territories",
+    flag: "🇹🇫",
+  },
+  GA: {
+    name: "Gabon",
+    flag: "🇬🇦",
+  },
+  GM: {
+    name: "Gambia",
+    flag: "🇬🇲",
+  },
+  GE: {
+    name: "Georgia",
+    flag: "🇬🇪",
+  },
+  DE: {
+    name: "Germany",
+    flag: "🇩🇪",
+  },
+  GH: {
+    name: "Ghana",
+    flag: "🇬🇭",
+  },
+  GI: {
+    name: "Gibraltar",
+    flag: "🇬🇮",
+  },
+  GR: {
+    name: "Greece",
+    flag: "🇬🇷",
+  },
+  GL: {
+    name: "Greenland",
+    flag: "🇬🇱",
+  },
+  GD: {
+    name: "Grenada",
+    flag: "🇬🇩",
+  },
+  GP: {
+    name: "Guadeloupe",
+    flag: "🇬🇵",
+  },
+  GU: {
+    name: "Guam",
+    flag: "🇬🇺",
+  },
+  GT: {
+    name: "Guatemala",
+    flag: "🇬🇹",
+  },
+  GG: {
+    name: "Guernsey",
+    flag: "🇬🇬",
+  },
+  GN: {
+    name: "Guinea",
+    flag: "🇬🇳",
+  },
+  GW: {
+    name: "Guinea-Bissau",
+    flag: "🇬🇼",
+  },
+  GY: {
+    name: "Guyana",
+    flag: "🇬🇾",
+  },
+  HT: {
+    name: "Haiti",
+    flag: "🇭🇹",
+  },
+  HM: {
+    name: "Heard Island and McDonald Islands",
+    flag: "🇭🇲",
+  },
+  HN: {
+    name: "Honduras",
+    flag: "🇭🇳",
+  },
+  HK: {
+    name: "Hong Kong",
+    flag: "🇭🇰",
+  },
+  HU: {
+    name: "Hungary",
+    flag: "🇭🇺",
+  },
+  IS: {
+    name: "Iceland",
+    flag: "🇮🇸",
+  },
+  IN: {
+    name: "India",
+    flag: "🇮🇳",
+  },
+  ID: {
+    name: "Indonesia",
+    flag: "🇮🇩",
+  },
+  IR: {
+    name: "Iran",
+    flag: "🇮🇷",
+  },
+  IQ: {
+    name: "Iraq",
+    flag: "🇮🇶",
+  },
+  IE: {
+    name: "Ireland",
+    flag: "🇮🇪",
+  },
+  IM: {
+    name: "Isle of Man",
+    flag: "🇮🇲",
+  },
+  IL: {
+    name: "Israel",
+    flag: "🇮🇱",
+  },
+  IT: {
+    name: "Italy",
+    flag: "🇮🇹",
+  },
+  CI: {
+    name: "Ivory Coast",
+    flag: "🇨🇮",
+  },
+  JM: {
+    name: "Jamaica",
+    flag: "🇯🇲",
+  },
+  JP: {
+    name: "Japan",
+    flag: "🇯🇵",
+  },
+  JE: {
+    name: "Jersey",
+    flag: "🇯🇪",
+  },
+  JO: {
+    name: "Jordan",
+    flag: "🇯🇴",
+  },
+  KZ: {
+    name: "Kazakhstan",
+    flag: "🇰🇿",
+  },
+  KE: {
+    name: "Kenya",
+    flag: "🇰🇪",
+  },
+  KI: {
+    name: "Kiribati",
+    flag: "🇰🇮",
+  },
+  XK: {
+    name: "Kosovo",
+    flag: "🇽🇰",
+  },
+  KW: {
+    name: "Kuwait",
+    flag: "🇰🇼",
+  },
+  KG: {
+    name: "Kyrgyzstan",
+    flag: "🇰🇬",
+  },
+  LA: {
+    name: "Laos",
+    flag: "🇱🇦",
+  },
+  LV: {
+    name: "Latvia",
+    flag: "🇱🇻",
+  },
+  LB: {
+    name: "Lebanon",
+    flag: "🇱🇧",
+  },
+  LS: {
+    name: "Lesotho",
+    flag: "🇱🇸",
+  },
+  LR: {
+    name: "Liberia",
+    flag: "🇱🇷",
+  },
+  LY: {
+    name: "Libya",
+    flag: "🇱🇾",
+  },
+  LI: {
+    name: "Liechtenstein",
+    flag: "🇱🇮",
+  },
+  LT: {
+    name: "Lithuania",
+    flag: "🇱🇹",
+  },
+  LU: {
+    name: "Luxembourg",
+    flag: "🇱🇺",
+  },
+  MO: {
+    name: "Macao",
+    flag: "🇲🇴",
+  },
+  MG: {
+    name: "Madagascar",
+    flag: "🇲🇬",
+  },
+  MW: {
+    name: "Malawi",
+    flag: "🇲🇼",
+  },
+  MY: {
+    name: "Malaysia",
+    flag: "🇲🇾",
+  },
+  MV: {
+    name: "Maldives",
+    flag: "🇲🇻",
+  },
+  ML: {
+    name: "Mali",
+    flag: "🇲🇱",
+  },
+  MT: {
+    name: "Malta",
+    flag: "🇲🇹",
+  },
+  MH: {
+    name: "Marshall Islands",
+    flag: "🇲🇭",
+  },
+  MQ: {
+    name: "Martinique",
+    flag: "🇲🇶",
+  },
+  MR: {
+    name: "Mauritania",
+    flag: "🇲🇷",
+  },
+  MU: {
+    name: "Mauritius",
+    flag: "🇲🇺",
+  },
+  YT: {
+    name: "Mayotte",
+    flag: "🇾🇹",
+  },
+  MX: {
+    name: "Mexico",
+    flag: "🇲🇽",
+  },
+  FM: {
+    name: "Micronesia",
+    flag: "🇫🇲",
+  },
+  MD: {
+    name: "Moldova",
+    flag: "🇲🇩",
+  },
+  MC: {
+    name: "Monaco",
+    flag: "🇲🇨",
+  },
+  MN: {
+    name: "Mongolia",
+    flag: "🇲🇳",
+  },
+  ME: {
+    name: "Montenegro",
+    flag: "🇲🇪",
+  },
+  MS: {
+    name: "Montserrat",
+    flag: "🇲🇸",
+  },
+  MA: {
+    name: "Morocco",
+    flag: "🇲🇦",
+  },
+  MZ: {
+    name: "Mozambique",
+    flag: "🇲🇿",
+  },
+  MM: {
+    name: "Myanmar",
+    flag: "🇲🇲",
+  },
+  NA: {
+    name: "Namibia",
+    flag: "🇳🇦",
+  },
+  NR: {
+    name: "Nauru",
+    flag: "🇳🇷",
+  },
+  NP: {
+    name: "Nepal",
+    flag: "🇳🇵",
+  },
+  NL: {
+    name: "Netherlands",
+    flag: "🇳🇱",
+  },
+  NC: {
+    name: "New Caledonia",
+    flag: "🇳🇨",
+  },
+  NZ: {
+    name: "New Zealand",
+    flag: "🇳🇿",
+  },
+  NI: {
+    name: "Nicaragua",
+    flag: "🇳🇮",
+  },
+  NE: {
+    name: "Niger",
+    flag: "🇳🇪",
+  },
+  NG: {
+    name: "Nigeria",
+    flag: "🇳🇬",
+  },
+  NU: {
+    name: "Niue",
+    flag: "🇳🇺",
+  },
+  NF: {
+    name: "Norfolk Island",
+    flag: "🇳🇫",
+  },
+  KP: {
+    name: "North Korea",
+    flag: "🇰🇵",
+  },
+  MK: {
+    name: "North Macedonia",
+    flag: "🇲🇰",
+  },
+  MP: {
+    name: "Northern Mariana Islands",
+    flag: "🇲🇵",
+  },
+  NO: {
+    name: "Norway",
+    flag: "🇳🇴",
+  },
+  OM: {
+    name: "Oman",
+    flag: "🇴🇲",
+  },
+  PK: {
+    name: "Pakistan",
+    flag: "🇵🇰",
+  },
+  PW: {
+    name: "Palau",
+    flag: "🇵🇼",
+  },
+  PS: {
+    name: "Palestine",
+    flag: "🇵🇸",
+  },
+  PA: {
+    name: "Panama",
+    flag: "🇵🇦",
+  },
+  PG: {
+    name: "Papua New Guinea",
+    flag: "🇵🇬",
+  },
+  PY: {
+    name: "Paraguay",
+    flag: "🇵🇾",
+  },
+  PE: {
+    name: "Peru",
+    flag: "🇵🇪",
+  },
+  PH: {
+    name: "Philippines",
+    flag: "🇵🇭",
+  },
+  PN: {
+    name: "Pitcairn Islands",
+    flag: "🇵🇳",
+  },
+  PL: {
+    name: "Poland",
+    flag: "🇵🇱",
+  },
+  PT: {
+    name: "Portugal",
+    flag: "🇵🇹",
+  },
+  PR: {
+    name: "Puerto Rico",
+    flag: "🇵🇷",
+  },
+  QA: {
+    name: "Qatar",
+    flag: "🇶🇦",
+  },
+  CG: {
+    name: "Republic of the Congo",
+    flag: "🇨🇬",
+  },
+  RO: {
+    name: "Romania",
+    flag: "🇷🇴",
+  },
+  RU: {
+    name: "Russia",
+    flag: "🇷🇺",
+  },
+  RW: {
+    name: "Rwanda",
+    flag: "🇷🇼",
+  },
+  RE: {
+    name: "Reunion",
+    flag: "🇷🇪",
+  },
+  BL: {
+    name: "Saint Barthélemy",
+    flag: "🇧🇱",
+  },
+  SH: {
+    name: "Saint Helena",
+    flag: "🇸🇭",
+  },
+  KN: {
+    name: "Saint Kitts and Nevis",
+    flag: "🇰🇳",
+  },
+  LC: {
+    name: "Saint Lucia",
+    flag: "🇱🇨",
+  },
+  MF: {
+    name: "Saint Martin",
+    flag: "🇲🇫",
+  },
+  PM: {
+    name: "Saint Pierre and Miquelon",
+    flag: "🇵🇲",
+  },
+  VC: {
+    name: "Saint Vincent and the Grenadines",
+    flag: "🇻🇨",
+  },
+  WS: {
+    name: "Samoa",
+    flag: "🇼🇸",
+  },
+  SM: {
+    name: "San Marino",
+    flag: "🇸🇲",
+  },
+  SA: {
+    name: "Saudi Arabia",
+    flag: "🇸🇦",
+  },
+  SN: {
+    name: "Senegal",
+    flag: "🇸🇳",
+  },
+  RS: {
+    name: "Serbia",
+    flag: "🇷🇸",
+  },
+  SC: {
+    name: "Seychelles",
+    flag: "🇸🇨",
+  },
+  SL: {
+    name: "Sierra Leone",
+    flag: "🇸🇱",
+  },
+  SG: {
+    name: "Singapore",
+    flag: "🇸🇬",
+  },
+  SX: {
+    name: "Sint Maarten",
+    flag: "🇸🇽",
+  },
+  SK: {
+    name: "Slovakia",
+    flag: "🇸🇰",
+  },
+  SI: {
+    name: "Slovenia",
+    flag: "🇸🇮",
+  },
+  SB: {
+    name: "Solomon Islands",
+    flag: "🇸🇧",
+  },
+  SO: {
+    name: "Somalia",
+    flag: "🇸🇴",
+  },
+  ZA: {
+    name: "South Africa",
+    flag: "🇿🇦",
+  },
+  GS: {
+    name: "South Georgia and the South Sandwich Islands",
+    flag: "🇬🇸",
+  },
+  KR: {
+    name: "South Korea",
+    flag: "🇰🇷",
+  },
+  SS: {
+    name: "South Sudan",
+    flag: "🇸🇸",
+  },
+  ES: {
+    name: "Spain",
+    flag: "🇪🇸",
+  },
+  LK: {
+    name: "Sri Lanka",
+    flag: "🇱🇰",
+  },
+  SD: {
+    name: "Sudan",
+    flag: "🇸🇩",
+  },
+  SR: {
+    name: "Suriname",
+    flag: "🇸🇷",
+  },
+  SJ: {
+    name: "Svalbard and Jan Mayen",
+    flag: "🇸🇯",
+  },
+  SZ: {
+    name: "Swaziland",
+    flag: "🇸🇿",
+  },
+  SE: {
+    name: "Sweden",
+    flag: "🇸🇪",
+  },
+  CH: {
+    name: "Switzerland",
+    flag: "🇨🇭",
+  },
+  SY: {
+    name: "Syria",
+    flag: "🇸🇾",
+  },
+  ST: {
+    name: "Sao Tome and Principe",
+    flag: "🇸🇹",
+  },
+  TW: {
+    name: "Taiwan",
+    flag: "🇹🇼",
+  },
+  TJ: {
+    name: "Tajikistan",
+    flag: "🇹🇯",
+  },
+  TZ: {
+    name: "Tanzania",
+    flag: "🇹🇿",
+  },
+  TH: {
+    name: "Thailand",
+    flag: "🇹🇭",
+  },
+  TG: {
+    name: "Togo",
+    flag: "🇹🇬",
+  },
+  TK: {
+    name: "Tokelau",
+    flag: "🇹🇰",
+  },
+  TO: {
+    name: "Tonga",
+    flag: "🇹🇴",
+  },
+  TT: {
+    name: "Trinidad and Tobago",
+    flag: "🇹🇹",
+  },
+  TN: {
+    name: "Tunisia",
+    flag: "🇹🇳",
+  },
+  TR: {
+    name: "Turkiye",
+    flag: "🇹🇷",
+  },
+  TM: {
+    name: "Turkmenistan",
+    flag: "🇹🇲",
+  },
+  TC: {
+    name: "Turks and Caicos Islands",
+    flag: "🇹🇨",
+  },
+  TV: {
+    name: "Tuvalu",
+    flag: "🇹🇻",
+  },
+  UM: {
+    name: "U.S. Minor Outlying Islands",
+    flag: "🇺🇲",
+  },
+  VI: {
+    name: "U.S. Virgin Islands",
+    flag: "🇻🇮",
+  },
+  UG: {
+    name: "Uganda",
+    flag: "🇺🇬",
+  },
+  UA: {
+    name: "Ukraine",
+    flag: "🇺🇦",
+  },
+  AE: {
+    name: "United Arab Emirates",
+    flag: "🇦🇪",
+  },
+  UK: {
+    name: "United Kingdom",
+    flag: "🇬🇧",
+  },
+  US: {
+    name: "United States",
+    flag: "🇺🇸",
+  },
+  UY: {
+    name: "Uruguay",
+    flag: "🇺🇾",
+  },
+  UZ: {
+    name: "Uzbekistan",
+    flag: "🇺🇿",
+  },
+  VU: {
+    name: "Vanuatu",
+    flag: "🇻🇺",
+  },
+  VA: {
+    name: "Vatican City",
+    flag: "🇻🇦",
+  },
+  VE: {
+    name: "Venezuela",
+    flag: "🇻🇪",
+  },
+  VN: {
+    name: "Vietnam",
+    flag: "🇻🇳",
+  },
+  WF: {
+    name: "Wallis and Futuna",
+    flag: "🇼🇫",
+  },
+  EH: {
+    name: "Western Sahara",
+    flag: "🇪🇭",
+  },
+  YE: {
+    name: "Yemen",
+    flag: "🇾🇪",
+  },
+  ZM: {
+    name: "Zambia",
+    flag: "🇿🇲",
+  },
+  ZW: {
+    name: "Zimbabwe",
+    flag: "🇿🇼",
+  },
+};
 
 export const REGIONS: Record<string, readonly string[]> = {
-  "AFR": [
+  AFR: [
     "AO",
     "BF",
     "BI",
@@ -1065,9 +1065,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "YT",
     "ZA",
     "ZM",
-    "ZW"
+    "ZW",
   ],
-  "AMER": [
+  AMER: [
     "AG",
     "AI",
     "AR",
@@ -1123,9 +1123,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "VC",
     "VE",
     "VG",
-    "VI"
+    "VI",
   ],
-  "APAC": [
+  APAC: [
     "AF",
     "AS",
     "AU",
@@ -1175,9 +1175,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "VN",
     "VU",
     "WF",
-    "WS"
+    "WS",
   ],
-  "ARAB": [
+  ARAB: [
     "AE",
     "BH",
     "DJ",
@@ -1199,21 +1199,10 @@ export const REGIONS: Record<string, readonly string[]> = {
     "SO",
     "SY",
     "TN",
-    "YE"
+    "YE",
   ],
-  "ASEAN": [
-    "BN",
-    "KH",
-    "ID",
-    "LA",
-    "MY",
-    "MM",
-    "PH",
-    "SG",
-    "TH",
-    "VN"
-  ],
-  "ASIA": [
+  ASEAN: ["BN", "KH", "ID", "LA", "MY", "MM", "PH", "SG", "TH", "VN"],
+  ASIA: [
     "AE",
     "AF",
     "AM",
@@ -1263,28 +1252,11 @@ export const REGIONS: Record<string, readonly string[]> = {
     "TW",
     "UZ",
     "VN",
-    "YE"
+    "YE",
   ],
-  "BALKAN": [
-    "AL",
-    "BA",
-    "BG",
-    "HR",
-    "GR",
-    "XK",
-    "ME",
-    "MK",
-    "RO",
-    "RS",
-    "SI",
-    "TR"
-  ],
-  "BENELUX": [
-    "BE",
-    "LU",
-    "NL"
-  ],
-  "CARIB": [
+  BALKAN: ["AL", "BA", "BG", "HR", "GR", "XK", "ME", "MK", "RO", "RS", "SI", "TR"],
+  BENELUX: ["BE", "LU", "NL"],
+  CARIB: [
     "AG",
     "AI",
     "AW",
@@ -1311,16 +1283,10 @@ export const REGIONS: Record<string, readonly string[]> = {
     "TT",
     "VC",
     "VG",
-    "VI"
+    "VI",
   ],
-  "CAS": [
-    "KG",
-    "KZ",
-    "TJ",
-    "TM",
-    "UZ"
-  ],
-  "CEE": [
+  CAS: ["KG", "KZ", "TJ", "TM", "UZ"],
+  CEE: [
     "AL",
     "AM",
     "AZ",
@@ -1341,40 +1307,12 @@ export const REGIONS: Record<string, readonly string[]> = {
     "RO",
     "RS",
     "SK",
-    "SI"
+    "SI",
   ],
-  "CENAMER": [
-    "BZ",
-    "CR",
-    "SV",
-    "GT",
-    "HN",
-    "NI",
-    "PA"
-  ],
-  "CEU": [
-    "AT",
-    "HR",
-    "CZ",
-    "DE",
-    "HU",
-    "IT",
-    "PL",
-    "SK",
-    "SI"
-  ],
-  "CIS": [
-    "AM",
-    "AZ",
-    "BY",
-    "KG",
-    "KZ",
-    "MD",
-    "RU",
-    "TJ",
-    "UZ"
-  ],
-  "EAF": [
+  CENAMER: ["BZ", "CR", "SV", "GT", "HN", "NI", "PA"],
+  CEU: ["AT", "HR", "CZ", "DE", "HU", "IT", "PL", "SK", "SI"],
+  CIS: ["AM", "AZ", "BY", "KG", "KZ", "MD", "RU", "TJ", "UZ"],
+  EAF: [
     "BI",
     "KE",
     "TZ",
@@ -1394,20 +1332,11 @@ export const REGIONS: Record<string, readonly string[]> = {
     "MW",
     "MZ",
     "ZM",
-    "ZW"
+    "ZW",
   ],
-  "EAS": [
-    "CN",
-    "HK",
-    "MO",
-    "JP",
-    "MN",
-    "KP",
-    "KR",
-    "TW"
-  ],
-  "EMEA": [
-    " the Middle East and Africa\",AD",
+  EAS: ["CN", "HK", "MO", "JP", "MN", "KP", "KR", "TW"],
+  EMEA: [
+    ' the Middle East and Africa",AD',
     "AE",
     "AL",
     "AM",
@@ -1528,9 +1457,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "YT",
     "ZA",
     "ZM",
-    "ZW"
+    "ZW",
   ],
-  "EU": [
+  EU: [
     "AT",
     "BE",
     "BG",
@@ -1557,9 +1486,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "RO",
     "SE",
     "SI",
-    "SK"
+    "SK",
   ],
-  "EUR": [
+  EUR: [
     "AD",
     "AL",
     "AM",
@@ -1609,17 +1538,10 @@ export const REGIONS: Record<string, readonly string[]> = {
     "TR",
     "UA",
     "UK",
-    "VA"
+    "VA",
   ],
-  "GCC": [
-    "AE",
-    "BH",
-    "KW",
-    "OM",
-    "QA",
-    "SA"
-  ],
-  "HISPAM": [
+  GCC: ["AE", "BH", "KW", "OM", "QA", "SA"],
+  HISPAM: [
     "AR",
     "BO",
     "CL",
@@ -1638,9 +1560,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "PY",
     "SV",
     "UY",
-    "VE"
+    "VE",
   ],
-  "LAC": [
+  LAC: [
     "AG",
     "AI",
     "AR",
@@ -1685,9 +1607,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "VC",
     "VE",
     "VG",
-    "VI"
+    "VI",
   ],
-  "LATAM": [
+  LATAM: [
     "AR",
     "BL",
     "BO",
@@ -1713,16 +1635,10 @@ export const REGIONS: Record<string, readonly string[]> = {
     "PY",
     "SV",
     "UY",
-    "VE"
+    "VE",
   ],
-  "MAGHREB": [
-    "DZ",
-    "LY",
-    "MA",
-    "MR",
-    "TN"
-  ],
-  "MENA": [
+  MAGHREB: ["DZ", "LY", "MA", "MR", "TN"],
+  MENA: [
     "AE",
     "BH",
     "CY",
@@ -1746,9 +1662,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "SY",
     "TN",
     "TR",
-    "YE"
+    "YE",
   ],
-  "MIDEAST": [
+  MIDEAST: [
     "AE",
     "BH",
     "CY",
@@ -1765,26 +1681,11 @@ export const REGIONS: Record<string, readonly string[]> = {
     "SA",
     "SY",
     "TR",
-    "YE"
+    "YE",
   ],
-  "NAM": [
-    "BM",
-    "CA",
-    "GL",
-    "PM",
-    "US"
-  ],
-  "NEU": [
-    "DK",
-    "EE",
-    "LV",
-    "LT",
-    "FI",
-    "IS",
-    "NO",
-    "SE"
-  ],
-  "NORAM": [
+  NAM: ["BM", "CA", "GL", "PM", "US"],
+  NEU: ["DK", "EE", "LV", "LT", "FI", "IS", "NO", "SE"],
+  NORAM: [
     "AG",
     "AI",
     "AW",
@@ -1824,18 +1725,10 @@ export const REGIONS: Record<string, readonly string[]> = {
     "US",
     "VC",
     "VG",
-    "VI"
+    "VI",
   ],
-  "NORD": [
-    "AX",
-    "DK",
-    "FO",
-    "FI",
-    "IS",
-    "NO",
-    "SE"
-  ],
-  "OCE": [
+  NORD: ["AX", "DK", "FO", "FI", "IS", "NO", "SE"],
+  OCE: [
     "AS",
     "AU",
     "CK",
@@ -1860,51 +1753,13 @@ export const REGIONS: Record<string, readonly string[]> = {
     "TV",
     "VU",
     "WF",
-    "WS"
+    "WS",
   ],
-  "SAF": [
-    "BW",
-    "SZ",
-    "LS",
-    "NA",
-    "ZA"
-  ],
-  "SAS": [
-    "AF",
-    "BD",
-    "BT",
-    "IN",
-    "LK",
-    "MV",
-    "NP",
-    "PK"
-  ],
-  "SEA": [
-    "BN",
-    "KH",
-    "TL",
-    "ID",
-    "LA",
-    "MY",
-    "MM",
-    "PH",
-    "SG",
-    "TH",
-    "VN"
-  ],
-  "SER": [
-    "CY",
-    "GR",
-    "IT",
-    "VA",
-    "IT",
-    "MT",
-    "PT",
-    "SM",
-    "ES",
-    "TR"
-  ],
-  "SOUTHAM": [
+  SAF: ["BW", "SZ", "LS", "NA", "ZA"],
+  SAS: ["AF", "BD", "BT", "IN", "LK", "MV", "NP", "PK"],
+  SEA: ["BN", "KH", "TL", "ID", "LA", "MY", "MM", "PH", "SG", "TH", "VN"],
+  SER: ["CY", "GR", "IT", "VA", "IT", "MT", "PT", "SM", "ES", "TR"],
+  SOUTHAM: [
     "AR",
     "BO",
     "BR",
@@ -1920,9 +1775,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "GF",
     "GY",
     "GS",
-    "SR"
+    "SR",
   ],
-  "SSA": [
+  SSA: [
     "AO",
     "BF",
     "BI",
@@ -1971,9 +1826,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "UG",
     "ZA",
     "ZM",
-    "ZW"
+    "ZW",
   ],
-  "UN": [
+  UN: [
     "AF",
     "AL",
     "DZ",
@@ -2166,9 +2021,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "VN",
     "YE",
     "ZM",
-    "ZW"
+    "ZW",
   ],
-  "WAF": [
+  WAF: [
     "BF",
     "BJ",
     "CI",
@@ -2185,9 +2040,9 @@ export const REGIONS: Record<string, readonly string[]> = {
     "SH",
     "SL",
     "SN",
-    "TG"
+    "TG",
   ],
-  "WAS": [
+  WAS: [
     "AM",
     "AZ",
     "BH",
@@ -2207,23 +2062,10 @@ export const REGIONS: Record<string, readonly string[]> = {
     "SY",
     "TR",
     "AE",
-    "YE"
+    "YE",
   ],
-  "WER": [
-    "AD",
-    "AT",
-    "BE",
-    "FR",
-    "DE",
-    "IE",
-    "LI",
-    "LU",
-    "MC",
-    "NL",
-    "CH",
-    "UK"
-  ],
-  "WW": [
+  WER: ["AD", "AT", "BE", "FR", "DE", "IE", "LI", "LU", "MC", "NL", "CH", "UK"],
+  WW: [
     "AD",
     "AE",
     "AF",
@@ -2473,12 +2315,17 @@ export const REGIONS: Record<string, readonly string[]> = {
     "YT",
     "ZA",
     "ZM",
-    "ZW"
-  ]
-}
+    "ZW",
+  ],
+};
 
-export const WORLDWIDE_CODES = new Set(["INT", "WW", "UN"])
+export const WORLDWIDE_CODES = new Set(["INT", "WW", "UN"]);
 
 export const COUNTRY_OPTIONS: CountryInfo[] = Object.entries(COUNTRIES)
-  .map(([code, info]) => ({ code, name: info.name, flag: info.flag, label: `${info.flag} ${info.name}` }))
-  .sort((a, b) => a.name.localeCompare(b.name))
+  .map(([code, info]) => ({
+    code,
+    name: info.name,
+    flag: info.flag,
+    label: `${info.flag} ${info.name}`,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));

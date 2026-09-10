@@ -7,28 +7,73 @@
  * the bun identity, use `bun run dev:hot`.
  */
 
-import { existsSync, mkdirSync } from 'node:fs'
-import { join } from 'node:path'
-import { APP_NAME, compileApp, ensureBundleMetadata, RELEASE_BUNDLE_ID, ROOT } from './lib/mac-app'
+import { existsSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
+import { APP_NAME, compileApp, ensureBundleMetadata, RELEASE_BUNDLE_ID, ROOT } from "./lib/mac-app";
+import { runCliEntry } from "./lib/entry";
 
-const DEV_APP = join(ROOT, 'dist', 'streameriux.app')
-const EXEC = join(DEV_APP, 'Contents', 'MacOS', APP_NAME)
-const ENTRY = join(ROOT, 'app.tsx')
+const DEV_APP = join(ROOT, "dist", "streameriux.app");
+const EXEC = join(DEV_APP, "Contents", "MacOS", APP_NAME);
+const ENTRY = join(ROOT, "src/app/app.tsx");
 
-mkdirSync(join(DEV_APP, 'Contents', 'MacOS'), { recursive: true })
+export type RunDevMacDeps = {
+  mkdirSync: typeof mkdirSync;
+  existsSync: typeof existsSync;
+  compileApp: typeof compileApp;
+  ensureBundleMetadata: typeof ensureBundleMetadata;
+  spawn: (command: string[], options: { cwd: string; stdio: ["inherit", "inherit", "inherit"] }) => {
+    exited: Promise<number>;
+  };
+  log: (message: string) => void;
+  error: (message: string) => void;
+  exit: (code: number) => never;
+  devApp: string;
+  execPath: string;
+  entry: string;
+  root: string;
+  bundleId: string;
+};
 
-console.log('Compiling streameriux for macOS dev…')
-await compileApp(ENTRY, EXEC)
+export async function runDevMac(deps: RunDevMacDeps): Promise<void> {
+  deps.mkdirSync(join(deps.devApp, "Contents", "MacOS"), { recursive: true });
 
-const hasIcon = await ensureBundleMetadata(DEV_APP, RELEASE_BUNDLE_ID)
-console.log(
-  `Launching ${DEV_APP}${hasIcon ? '' : ' (without a custom Dock icon — QuickLook could not rasterise the SVG)'}`,
-)
+  deps.log("Compiling streameriux for macOS dev…");
+  await deps.compileApp(deps.entry, deps.execPath);
 
-if (!existsSync(EXEC)) {
-  console.error(`Missing ${EXEC} after compile.`)
-  process.exit(1)
+  const hasIcon = await deps.ensureBundleMetadata(deps.devApp, deps.bundleId);
+  deps.log(
+    `Launching ${deps.devApp}${hasIcon ? "" : " (without a custom Dock icon — QuickLook could not rasterise the SVG)"}`,
+  );
+
+  if (!deps.existsSync(deps.execPath)) {
+    deps.error(`Missing ${deps.execPath} after compile.`);
+    deps.exit(1);
+  }
+
+  const app = deps.spawn([deps.execPath], { cwd: deps.root, stdio: ["inherit", "inherit", "inherit"] });
+  deps.exit(await app.exited);
 }
 
-const app = Bun.spawn([EXEC], { cwd: ROOT, stdio: ['inherit', 'inherit', 'inherit'] })
-process.exit(await app.exited)
+export function createRunDevMacDeps(): RunDevMacDeps {
+  return {
+    mkdirSync,
+    existsSync,
+    compileApp,
+    ensureBundleMetadata,
+    spawn: (command, options) => Bun.spawn(command, options),
+    log: (message) => console.log(message),
+    error: (message) => console.error(message),
+    exit: (code) => process.exit(code),
+    devApp: DEV_APP,
+    execPath: EXEC,
+    entry: ENTRY,
+    root: ROOT,
+    bundleId: RELEASE_BUNDLE_ID,
+  };
+}
+
+export async function main(deps: RunDevMacDeps = createRunDevMacDeps()): Promise<void> {
+  await runDevMac(deps);
+}
+
+void runCliEntry(import.meta, main);

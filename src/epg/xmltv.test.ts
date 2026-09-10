@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { parseXmltv, parseXmltvTime } from './xmltv'
+import { describe, expect, it } from "vitest";
+import { gunzipXmltv, parseXmltv, parseXmltvTime } from "./xmltv";
 
 const FIXTURE = `<?xml version="1.0" encoding="UTF-8"?>
 <tv>
@@ -17,29 +17,44 @@ const FIXTURE = `<?xml version="1.0" encoding="UTF-8"?>
   <programme start="20260908023000 +0000" stop="20260908040000 +0000" channel="ACME.1.HD.us">
     <title>Film &amp; Show</title>
   </programme>
-</tv>`
+</tv>`;
 
-describe('parseXmltvTime', () => {
-  it('parses XMLTV datetime with UTC offset', () => {
-    const ms = parseXmltvTime('20260908010000 +0000')
-    expect(new Date(ms).toISOString()).toBe('2026-09-08T01:00:00.000Z')
-  })
-})
+describe("parseXmltvTime", () => {
+  it("parses XMLTV datetime with UTC offset", () => {
+    const ms = parseXmltvTime("20260908010000 +0000");
+    expect(new Date(ms).toISOString()).toBe("2026-09-08T01:00:00.000Z");
+  });
+});
 
-describe('parseXmltv', () => {
-  it('extracts channels and programmes', () => {
-    const parsed = parseXmltv(FIXTURE)
-    expect(parsed.channels).toHaveLength(2)
-    expect(parsed.channels[0]).toMatchObject({ id: 'ONE.us', displayNames: ['One'] })
-    const one = parsed.programmes.get('ONE.us')
-    expect(one).toHaveLength(1)
+describe("parseXmltv", () => {
+  it("extracts channels and programmes", () => {
+    const parsed = parseXmltv(FIXTURE);
+    expect(parsed.channels).toHaveLength(2);
+    expect(parsed.channels[0]).toMatchObject({ id: "ONE.us", displayNames: ["One"] });
+    const one = parsed.programmes.get("ONE.us");
+    expect(one).toHaveLength(1);
     expect(one![0]).toMatchObject({
-      title: 'Evening News',
-      desc: 'Nightly news bulletin',
-      category: 'News',
-    })
-    expect(one![0]!.title).toBe('Evening News')
-    const acme = parsed.programmes.get('ACME.1.HD.us')!
-    expect(acme[0]!.title).toBe('Film & Show')
-  })
-})
+      title: "Evening News",
+      desc: "Nightly news bulletin",
+      category: "News",
+    });
+    expect(one![0]!.title).toBe("Evening News");
+    const acme = parsed.programmes.get("ACME.1.HD.us")!;
+    expect(acme[0]!.title).toBe("Film & Show");
+  });
+});
+
+describe("gunzipXmltv", () => {
+  it("decodes gzip-compressed XML", () => {
+    const raw = new TextEncoder().encode("<tv/>");
+    const gz = Bun.gzipSync(raw);
+    expect(gunzipXmltv(gz)).toBe("<tv/>");
+  });
+
+  it("throws when Bun gunzip is unavailable", () => {
+    const saved = globalThis.Bun;
+    Object.defineProperty(globalThis, "Bun", { value: {}, configurable: true });
+    expect(() => gunzipXmltv(new Uint8Array([1, 2, 3]))).toThrow(/requires Bun runtime/);
+    Object.defineProperty(globalThis, "Bun", { value: saved, configurable: true });
+  });
+});

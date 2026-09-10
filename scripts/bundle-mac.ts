@@ -6,22 +6,53 @@
  *   bun run bundle:mac     # wraps it into dist/streameriux.app
  */
 
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
-import { APP_NAME, ROOT, writeReleaseBundle } from './lib/mac-app'
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { APP_NAME, ROOT, writeReleaseBundle } from "./lib/mac-app";
+import { runCliEntry } from "./lib/entry";
 
-const dist = join(ROOT, 'dist')
-const binary = join(dist, 'streameriux')
-const app = join(dist, `${APP_NAME}.app`)
+const dist = join(ROOT, "dist");
+const binary = join(dist, "streameriux");
+const app = join(dist, `${APP_NAME}.app`);
 
-if (process.platform !== 'darwin') {
-  console.error('bundle:mac only runs on macOS.')
-  process.exit(1)
+export type BundleMacDeps = {
+  platform: NodeJS.Platform;
+  existsSync: (path: string) => boolean;
+  writeReleaseBundle: (appPath: string, binaryPath: string) => Promise<boolean>;
+  log: (message: string) => void;
+  error: (message: string) => void;
+  exit: (code: number) => never;
+};
+
+export async function runBundleMac(deps: BundleMacDeps): Promise<void> {
+  if (deps.platform !== "darwin") {
+    deps.error("bundle:mac only runs on macOS.");
+    deps.exit(1);
+  }
+  if (!deps.existsSync(binary)) {
+    deps.error(`Missing ${binary}. Run \`bun run build\` first.`);
+    deps.exit(1);
+  }
+
+  const hasIcon = await deps.writeReleaseBundle(app, binary);
+  deps.log(
+    `bundle:mac wrote ${app}${hasIcon ? "" : " (without a custom icon — QuickLook could not rasterise the SVG)"}`,
+  );
 }
-if (!existsSync(binary)) {
-  console.error(`Missing ${binary}. Run \`bun run build\` first.`)
-  process.exit(1)
+
+export function createBundleMacDeps(): BundleMacDeps {
+  return {
+    platform: process.platform,
+    existsSync,
+    writeReleaseBundle,
+    log: (message) => console.log(message),
+    error: (message) => console.error(message),
+    exit: (code) => process.exit(code),
+  };
 }
 
-const hasIcon = await writeReleaseBundle(app, binary)
-console.log(`bundle:mac wrote ${app}${hasIcon ? '' : ' (without a custom icon — QuickLook could not rasterise the SVG)'}`)
+export async function main(deps: BundleMacDeps = createBundleMacDeps()): Promise<void> {
+  await runBundleMac(deps);
+}
+
+void runCliEntry(import.meta, main);

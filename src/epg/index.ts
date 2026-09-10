@@ -1,6 +1,13 @@
-export { readEpgConfig, writeEpgConfig, type EpgConfig } from './config'
-export { feedsForChannel, feedsForCountries, selectFeedUrls, splitEpgUrls, countriesInCatalog, isAllSourcesFeed } from './feeds'
-export { buildDisplayNameIndex, resolveEpgChannelId } from './match'
-export { EpgStore, findProgrammeAt, type EpgFeedIndex, type EpgStatus } from './store'
-export { collectHeaderUrls, loadCachedFeeds, syncEpg, syncFeed, urlsToSync } from './sync'
-export { useEpg, type UseEpgResult } from './use-epg'
+export { readEpgConfig, writeEpgConfig, type EpgConfig } from "./config";
+export {
+  feedsForChannel,
+  feedsForCountries,
+  selectFeedUrls,
+  splitEpgUrls,
+  countriesInCatalog,
+  isAllSourcesFeed,
+} from "./feeds";
+export { buildDisplayNameIndex, resolveEpgChannelId } from "./match";
+export { EpgStore, findProgrammeAt, type EpgFeedIndex, type EpgStatus } from "./store";
+export { collectHeaderUrls, loadCachedFeeds, syncEpg, syncFeed, urlsToSync } from "./sync";
+export { useEpg, type UseEpgResult } from "./use-epg";

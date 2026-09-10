@@ -29,18 +29,18 @@ bun run dev
 - **Live + DVR playback.** Live streams start pinned to the live edge (the **LIVE** chip glows red); seek backwards into a DVR window when the source keeps one, jump back with the chip or **L**, and skip with **−15s / +15s**.
 - **Software A/V pipeline.** Mediabunny's `VideoSampleSink` decodes frames; audio plays through a Web Audio backend buffered several seconds ahead, so picture and sound ride through network and CPU jitter.
 - **EPG (XMLTV).** Optional program guide: fetches and caches XMLTV feeds, matches them to channels, shows now/next in the sidebar and a full guide panel. Parsing runs in a worker thread.
-- **System integration.** macOS *Now Playing* / media keys (and the web MediaSession API), native fullscreen, and a resizable window whose picture fills any size.
+- **System integration.** macOS _Now Playing_ / media keys (and the web MediaSession API), native fullscreen, and a resizable window whose picture fills any size.
 - **Packaging.** Compile to a standalone binary, or wrap it into a macOS `.app` with a Dock icon and background-playback entitlement. There is also an experimental browser/WASM target.
 
 ### Controls
 
-| Key | Action | | Key | Action |
-|---|---|---|---|---|
-| `Space` / `K` | Play / pause | | `M` | Mute |
-| `L` | Jump to live | | `F` | Toggle fullscreen |
-| `←` / `→` | Skip −15s / +15s | | `↑` / `↓` | Volume |
-| `[` / `]` (`P` / `N`) | Previous / next channel | | `G` | Program guide |
-| `Esc` | Close dialog / exit fullscreen | | | |
+| Key                   | Action                         |     | Key       | Action            |
+| --------------------- | ------------------------------ | --- | --------- | ----------------- |
+| `Space` / `K`         | Play / pause                   |     | `M`       | Mute              |
+| `L`                   | Jump to live                   |     | `F`       | Toggle fullscreen |
+| `←` / `→`             | Skip −15s / +15s               |     | `↑` / `↓` | Volume            |
+| `[` / `]` (`P` / `N`) | Previous / next channel        |     | `G`       | Program guide     |
+| `Esc`                 | Close dialog / exit fullscreen |     |           |                   |
 
 **Settings** has tabs for **Library**, **Playlists**, **Channels**, **Groups**, and **EPG** — add sources, edit channel metadata, create custom groups, and configure guide feeds.
 
@@ -51,23 +51,29 @@ bun run dev
 GPUIX is young and has no media primitives, so most of the interesting code is a workaround for something the renderer can't do yet. The notable ones:
 
 ### Video: no canvas, no `<video>`
+
 There is no canvas element and no video surface. Mediabunny decodes each frame to raw pixels; `src/frame.ts` encodes a 32-bit BMP and hands it to GPUI's `<img>` as an inline **`data:image/bmp;base64,…`** URL.
 
-Why a data URL and not a temp file? A **file-path** `<img>` is loaded through GPUI's `RetainAllImageCache`, which keys decoded bitmaps by their source string and **never evicts** them (no eviction API is exposed). A fresh path per frame (needed because reusing one replays the cached stale bitmap) therefore leaks one decoded bitmap *every frame* — tens of MB per second while playing. A `data:` URL takes GPUIX's other decode path (`decode_image_data_url` → `platform::Image::from_bytes`): the image is owned by the `<img>` element and freed the moment its `src` changes or it unmounts, so only the frames currently on screen stay resident.
+Why a data URL and not a temp file? A **file-path** `<img>` is loaded through GPUI's `RetainAllImageCache`, which keys decoded bitmaps by their source string and **never evicts** them (no eviction API is exposed). A fresh path per frame (needed because reusing one replays the cached stale bitmap) therefore leaks one decoded bitmap _every frame_ — tens of MB per second while playing. A `data:` URL takes GPUIX's other decode path (`decode_image_data_url` → `platform::Image::from_bytes`): the image is owned by the `<img>` element and freed the moment its `src` changes or it unmounts, so only the frames currently on screen stay resident.
 
 ### `<img>` has no `onLoad`
-A single `<img>` re-decodes on every `src` change and paints its empty background in the gap — a black flicker. `VideoPicture` in `app.tsx` keeps **two stacked `<img>` layers** and only ever repoints the *back* one before promoting it to front, so a decoded frame is always on screen. The same missing-load problem means remote channel logos must be **downloaded and cached to disk first** (`src/icon.ts`) before GPUI can render them, or the asset cache throws a missing-file error.
+
+A single `<img>` re-decodes on every `src` change and paints its empty background in the gap — a black flicker. `VideoPicture` in `app.tsx` keeps **two stacked `<img>` layers** and only ever repoints the _back_ one before promoting it to front, so a decoded frame is always on screen. The same missing-load problem means remote channel logos must be **downloaded and cached to disk first** (`src/icon.ts`) before GPUI can render them, or the asset cache throws a missing-file error.
 
 ### No runtime fullscreen API
-`WindowOptions.fullscreen` is only read at window creation. `src/fullscreen.ts` drives the platform window manager directly — AppleScript/Accessibility (`AXFullScreen`) on macOS, `wmctrl`/`xdotool` on Linux, `ShowWindow` on Windows — always targeting *this* process by PID, never "the frontmost app". The app polls the real state so it re-syncs if you exit fullscreen another way.
+
+`WindowOptions.fullscreen` is only read at window creation. `src/fullscreen.ts` drives the platform window manager directly — AppleScript/Accessibility (`AXFullScreen`) on macOS, `wmctrl`/`xdotool` on Linux, `ShowWindow` on Windows — always targeting _this_ process by PID, never "the frontmost app". The app polls the real state so it re-syncs if you exit fullscreen another way.
 
 ### No z-index
+
 GPUI layers strictly by paint order; `StyleDesc` has no `zIndex`. (A few `zIndex` props remain in `app.tsx` and are ignored — see TODOs.)
 
 ### HTTP quirks for live playlists
+
 Mediabunny's `UrlSource` always sends `Range` and trusts `Content-Length`, which breaks on CDNs that gzip playlists or answer `204`/`206` oddly (the M3U8 gets truncated). `src/http.ts` wraps fetch to strip `Range` on playlists, negotiate encoding, keep a cookie jar, and retry.
 
 ### Dock icon, app name, background playback
+
 A bare `bun`/binary process can't set a Dock icon or app name and gets throttled by macOS App Nap when backgrounded. `scripts/bundle-mac.ts` wraps the binary into a `.app` that names the process and sets `NSAppSleepDisabled` for uninterrupted background audio/video.
 
 ---
@@ -117,15 +123,15 @@ Add files from the sidebar (native file picker or a pasted path), or drop anothe
 
 ## Scripts
 
-| Script | What it does |
-|---|---|
-| `bun run dev` | Desktop app with hot remount (builds `dist/streameriux.app`) |
-| `bun run build` | Standalone binary in `dist/streameriux` |
+| Script               | What it does                                                   |
+| -------------------- | -------------------------------------------------------------- |
+| `bun run dev`        | Desktop app with hot remount (builds `dist/streameriux.app`)   |
+| `bun run build`      | Standalone binary in `dist/streameriux`                        |
 | `bun run bundle:mac` | Wrap the binary into `dist/streameriux.app` (name + Dock icon) |
-| `bun run web:dev` | Experimental browser/WASM build served with COOP/COEP |
-| `bun run test` | Catalog / M3U / EPG / player tests plus a GPU shell check |
-| `bun run typecheck` | `tsc --noEmit` |
-| `bun run screenshot` | Automation screenshot of the idle window |
+| `bun run web:dev`    | Experimental browser/WASM build served with COOP/COEP          |
+| `bun run test`       | Catalog / M3U / EPG / player tests plus a GPU shell check      |
+| `bun run typecheck`  | `tsc --noEmit`                                                 |
+| `bun run screenshot` | Automation screenshot of the idle window                       |
 
 Run the app from the project root so it can find `channels/`.
 
@@ -135,7 +141,7 @@ Run the app from the project root so it can find `channels/`.
 
 Upstream GPUIX features that would remove whole categories of workaround here:
 
-- [x] **Native hardware-composited video (macOS, default on).** Decoded frames go to an `AVSampleBufferDisplayLayer` in the app's window (`native/video-layer.swift`, `src/native-video.ts`, `src/use-native-video.ts`) instead of the `<img>` — the window server composites the picture on the GPU, so frame memory stays **flat at full resolution** (measured ~170–280 MB for 1280×720 vs 1–2.5 GB via `<img>`). On by default on macOS; toggle in **Settings → General** (or `STREAMER_NATIVE_VIDEO=0` to force off). The Swift dylib compiles automatically on first `bun run dev`. This is the real fix for the memory behaviour below. Controls and the loading spinner stay visible via a transparent punch-through (video composites *below* GPUI). App Nap is disabled while playing so a minimized window keeps decoding. Currently requires running from source (the Swift dylib compiles automatically on first `bun run dev`). See [`docs/video-memory.md`](docs/video-memory.md).
+- [x] **Native hardware-composited video (macOS, default on).** Decoded frames go to an `AVSampleBufferDisplayLayer` in the app's window (`native/darwin/video-layer.swift`, `src/media/native-video.ts`, `src/media/use-native-video.ts`) instead of the `<img>` — the window server composites the picture on the GPU, so frame memory stays **flat at full resolution** (measured ~170–280 MB for 1280×720 vs 1–2.5 GB via `<img>`). On by default on macOS; toggle in **Settings → General** (or `STREAMER_NATIVE_VIDEO=0` to force off). The Swift dylib compiles automatically on first `bun run dev`. This is the real fix for the memory behaviour below. Controls and the loading spinner stay visible via a transparent punch-through (video composites _below_ GPUI). App Nap is disabled while playing so a minimized window keeps decoding. Currently requires running from source (the Swift dylib compiles automatically on first `bun run dev`). See [`docs/video-memory.md`](docs/video-memory.md).
 - [ ] **Proper canvas / GPU video surface (cross-platform / upstream).** The macOS layer above is Option A; a GPUIX-native updatable-texture element (Option C) would replace the `<img>` pipeline on every platform and keep controls compositing normally. Still the single biggest renderer limitation off macOS.
 - [ ] **`<img>` `onLoad` / `onError` events** and a **bounded, evictable image-cache API.** Either one would let us drop the double-buffered-layer flicker workaround and the disk-caching of remote logos.
 - [ ] **Runtime fullscreen API** in GPUIX — remove the AppleScript / `wmctrl` / `ShowWindow` hacks in `src/lib/fullscreen.ts`.
@@ -158,7 +164,7 @@ Packaging / distribution:
 
 - [ ] **Only macOS packaging exists** (`bundle:mac`); no Linux or Windows installers/bundles.
 - [ ] **Background playback** requires the bundled `.app`; under `bun run dev`, macOS App Nap can still throttle a fully backgrounded process.
-- [ ] **The Dock `.icns` is single-appearance.** The app icon (`assets/app-icon.svg` / `app-icon-light.svg`) switches light/dark for the *in-app* sidebar mark, but the macOS Dock icon is baked from the dark variant — a true light/dark/tinted Dock icon needs Apple's Icon Composer (`.icon`) format, which the lightweight Bun bundler doesn't build.
+- [ ] **The Dock `.icns` is single-appearance.** The app icon (`assets/app-icon.svg` / `app-icon-light.svg`) switches light/dark for the _in-app_ sidebar mark, but the macOS Dock icon is baked from the dark variant — a true light/dark/tinted Dock icon needs Apple's Icon Composer (`.icon`) format, which the lightweight Bun bundler doesn't build.
 - [ ] **The icon rasterises with AppKit `NSImage`, which needs a window-server session.** `src/lib/rasterize-svg.ts` (used for both the `.icns` and the in-app PNG) renders a transparent squircle via `swift`; in a headless context (no GUI session, or no `swift`) it falls back — the bundle builds without a custom icon and the sidebar shows a flat accent square.
 
 ---

@@ -1,38 +1,41 @@
-import { createHash } from 'node:crypto'
-import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import darkIconSvg from '../../assets/app-icon.svg' with { type: 'text' }
-import lightIconSvg from '../../assets/app-icon-light.svg' with { type: 'text' }
-import { rasterizeSvgToPng } from './rasterize-svg'
-import { useExternalSnapshot } from './react-sync'
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import darkIconSvg from "../../assets/app-icon.svg" with { type: "text" };
+import lightIconSvg from "../../assets/app-icon-light.svg" with { type: "text" };
+import { rasterizeSvgToPng } from "./rasterize-svg";
+import { inlineSvgMarkup } from "./svg-source";
 
-export type MacAppearance = 'light' | 'dark'
+export type MacAppearance = "light" | "dark";
 
-const ICON_DIR = join(tmpdir(), 'gpiux-streamer-app-icons')
-mkdirSync(ICON_DIR, { recursive: true })
+const ICON_DIR = join(tmpdir(), "gpiux-streamer-app-icons");
+mkdirSync(ICON_DIR, { recursive: true });
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 export function appIconAsset(appearance: MacAppearance): string {
-  return join(ROOT, 'assets', appearance === 'light' ? 'app-icon-light.svg' : 'app-icon.svg')
+  return join(ROOT, "assets", appearance === "light" ? "app-icon-light.svg" : "app-icon.svg");
 }
 
 /** The appearance-specific icon SVG, bundled as text so it is available in the compiled binary. */
 export function appIconSvgSource(appearance: MacAppearance): string {
-  return appearance === 'light' ? lightIconSvg : darkIconSvg
+  const raw = appearance === "light" ? lightIconSvg : darkIconSvg;
+  return inlineSvgMarkup(raw);
 }
 
 /** Reads macOS menu-bar appearance (Light when the key is unset). */
 export function readMacAppearance(): MacAppearance {
-  if (typeof process === 'undefined' || process.platform !== 'darwin') return 'dark'
+  if (typeof process === "undefined" || process.platform !== "darwin") return "dark";
   try {
-    const value = execFileSync('defaults', ['read', '-g', 'AppleInterfaceStyle'], { encoding: 'utf8' }).trim()
-    return value === 'Dark' ? 'dark' : 'light'
+    const value = execFileSync("defaults", ["read", "-g", "AppleInterfaceStyle"], {
+      encoding: "utf8",
+    }).trim();
+    return value === "Dark" ? "dark" : "light";
   } catch {
-    return 'light'
+    return "light";
   }
 }
 
@@ -45,39 +48,21 @@ export function readMacAppearance(): MacAppearance {
  * so the squircle's rounded corners never show as a white tile.
  */
 export function ensureAppIconPng(appearance: MacAppearance, size = 56): string | undefined {
-  const source = appIconSvgSource(appearance)
-  const key = createHash('sha1').update(source).update(String(size)).digest('hex').slice(0, 16)
-  const png = join(ICON_DIR, `app-icon-${appearance}-${key}.png`)
-  if (existsSync(png)) return png
+  const source = appIconSvgSource(appearance);
+  const key = createHash("sha1").update(source).update(String(size)).digest("hex").slice(0, 16);
+  const png = join(ICON_DIR, `app-icon-${appearance}-${key}.png`);
+  if (existsSync(png)) return png;
 
-  if (typeof process === 'undefined' || process.platform !== 'darwin') return undefined
+  if (typeof process === "undefined" || process.platform !== "darwin") return undefined;
 
   // Materialise the bundled SVG to a temp file so the rasteriser (which reads a
   // path) works even when assets/ is not on disk beside the compiled binary.
-  const svgPath = join(ICON_DIR, `app-icon-${appearance}-${key}.svg`)
+  const svgPath = join(ICON_DIR, `app-icon-${appearance}-${key}.svg`);
   try {
-    if (!existsSync(svgPath)) writeFileSync(svgPath, source)
+    if (!existsSync(svgPath)) writeFileSync(svgPath, source);
   } catch {
-    return undefined
+    return undefined;
   }
-  return rasterizeSvgToPng(svgPath, png, size) ? png : undefined
+  return rasterizeSvgToPng(svgPath, png, size) ? png : undefined;
 }
 
-/** Poll macOS appearance so the sidebar icon tracks system light/dark changes. */
-export function useMacAppearance(pollMs = 1000): MacAppearance {
-  return useExternalSnapshot(
-    (onChange) => {
-      if (typeof process === 'undefined' || process.platform !== 'darwin') return () => {}
-      let last = readMacAppearance()
-      const timer = setInterval(() => {
-        const next = readMacAppearance()
-        if (next === last) return
-        last = next
-        onChange()
-      }, Math.max(250, pollMs))
-      return () => clearInterval(timer)
-    },
-    readMacAppearance,
-    () => 'dark' as MacAppearance,
-  )
-}

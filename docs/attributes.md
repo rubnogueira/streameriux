@@ -11,31 +11,31 @@ aliases (`group`, `icon`, `chno`, `category`) continue to work too.
 
 ## Attributes
 
-| M3U8 attribute | TOML key | Meaning |
-|---|---|---|
-| `tvg-id` | `tvg-id` | EPG channel id used to match guide data. |
-| `tvg-name` | `tvg-name` | Guide display name (falls back to the `#EXTINF` title). |
-| `tvg-logo` | `tvg-logo` | Channel logo. Local path (relative to the TOML file or `channels/`, or absolute) or an `http(s)` URL. Alias: `icon` / `logo`. |
-| `tvg-country` | `tvg-country` | Country code(s). |
-| `tvg-language` | `tvg-language` | Language(s). |
-| `tvg-chno` / `ch-number` | `tvg-chno` | Channel number. Alias: `chno`. |
-| `group-title` (first of `;`) / `tvg-group` | `group-title` | Category/group. Alias: `group`, `category`. |
-| `tvg-shift` | `tvg-shift` | EPG time shift, in hours. |
-| `radio` | `radio` | `true` for audio-only stations. |
-| `catchup` / `catchup-type` | `catchup` | Catch-up/timeshift type. |
-| `catchup-source` | `catchup-source` | Catch-up URL template. |
-| `catchup-days` / `catchup-back` | `catchup-days` | How many days of catch-up are available. |
+| M3U8 attribute                             | TOML key         | Meaning                                                                                                                       |
+| ------------------------------------------ | ---------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `tvg-id`                                   | `tvg-id`         | EPG channel id used to match guide data.                                                                                      |
+| `tvg-name`                                 | `tvg-name`       | Guide display name (falls back to the `#EXTINF` title).                                                                       |
+| `tvg-logo`                                 | `tvg-logo`       | Channel logo. Local path (relative to the TOML file or `channels/`, or absolute) or an `http(s)` URL. Alias: `icon` / `logo`. |
+| `tvg-country`                              | `tvg-country`    | Country code(s).                                                                                                              |
+| `tvg-language`                             | `tvg-language`   | Language(s).                                                                                                                  |
+| `tvg-chno` / `ch-number`                   | `tvg-chno`       | Channel number. Alias: `chno`.                                                                                                |
+| `group-title` (first of `;`) / `tvg-group` | `group-title`    | Category/group. Alias: `group`, `category`.                                                                                   |
+| `tvg-shift`                                | `tvg-shift`      | EPG time shift, in hours.                                                                                                     |
+| `radio`                                    | `radio`          | `true` for audio-only stations.                                                                                               |
+| `catchup` / `catchup-type`                 | `catchup`        | Catch-up/timeshift type.                                                                                                      |
+| `catchup-source`                           | `catchup-source` | Catch-up URL template.                                                                                                        |
+| `catchup-days` / `catchup-back`            | `catchup-days`   | How many days of catch-up are available.                                                                                      |
 
 ## Stream headers (`#EXTVLCOPT`)
 
 `#EXTVLCOPT` lines carry HTTP options rather than playlist attributes, so their
 TOML keys keep readable names:
 
-| M3U8 (`#EXTVLCOPT:…`) | TOML key | Meaning |
-|---|---|---|
-| `http-user-agent` | `user_agent` | `User-Agent` header for the stream request. |
-| `http-referrer` | `referrer` | `Referer` header. |
-| `http-user` + `http-pwd` | `[channel.headers]` | Combined into an HTTP `Authorization` header. |
+| M3U8 (`#EXTVLCOPT:…`)     | TOML key                              | Meaning                                                                                     |
+| ------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `http-user-agent`         | `user_agent`                          | `User-Agent` header for the stream request.                                                 |
+| `http-referrer`           | `referrer`                            | `Referer` header.                                                                           |
+| `http-user` + `http-pwd`  | `[channel.headers]`                   | Combined into an HTTP `Authorization` header.                                               |
 | Other `#EXTVLCOPT:` names | `[channel.vlc_options]` / `extvlcopt` | Stored as `vlcOptions` — see the [EXTVLCOPT specification](#extvlcopt-specification) below. |
 
 You can also set arbitrary request headers directly:
@@ -84,11 +84,11 @@ There is **no closed catalog**: VLC accepts any module option from `vlc -H`. GPI
 #EXTVLCOPT:<option>
 ```
 
-| Form | Example | Meaning |
-|---|---|---|
-| Assignment | `#EXTVLCOPT:http-user-agent=Mozilla/5.0` | Option with value |
-| Flag (enable) | `#EXTVLCOPT:rtsp-tcp` | Boolean on |
-| Flag (disable) | `#EXTVLCOPT:no-video` | Boolean off (`no-<name>`) |
+| Form           | Example                                  | Meaning                   |
+| -------------- | ---------------------------------------- | ------------------------- |
+| Assignment     | `#EXTVLCOPT:http-user-agent=Mozilla/5.0` | Option with value         |
+| Flag (enable)  | `#EXTVLCOPT:rtsp-tcp`                    | Boolean on                |
+| Flag (disable) | `#EXTVLCOPT:no-video`                    | Boolean off (`no-<name>`) |
 
 Grammar (after the tag):
 
@@ -110,20 +110,20 @@ Rules (from [VLC `m3u.c`](https://github.com/videolan/vlc/blob/master/modules/de
 
 Equivalent encodings:
 
-| Format | Example |
-|---|---|
-| M3U | `#EXTVLCOPT:http-referrer=https://example.com/` |
-| MRL | `http://host/stream.m3u8 :http-referrer=https://example.com/` |
-| XSPF | `<vlc:option>http-referrer=https://example.com/</vlc:option>` |
-| TOML | see [TOML mapping](#toml-mapping) |
+| Format | Example                                                       |
+| ------ | ------------------------------------------------------------- |
+| M3U    | `#EXTVLCOPT:http-referrer=https://example.com/`               |
+| MRL    | `http://host/stream.m3u8 :http-referrer=https://example.com/` |
+| XSPF   | `<vlc:option>http-referrer=https://example.com/</vlc:option>` |
+| TOML   | see [TOML mapping](#toml-mapping)                             |
 
 ## M3U / M3U8 compatibility
 
-| Context | EXTVLCOPT handling |
-|---|---|
-| **IPTV channel list** (`#EXTM3U` + `#EXTINF`, no `#EXT-X-*`) | Parsed; options attach to each channel URL. |
-| **HLS media/master manifest** (`#EXT-X-TARGETDURATION`, `#EXT-X-STREAM-INF`, …) | **Ignored** — treated as a single stream, not a catalog import. |
-| **Bare `.m3u` / `.m3u8` file extension** | Same as above: content decides playlist vs stream (`isM3uPlaylistText` in `src/catalog/m3u.ts`). |
+| Context                                                                         | EXTVLCOPT handling                                                                               |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **IPTV channel list** (`#EXTM3U` + `#EXTINF`, no `#EXT-X-*`)                    | Parsed; options attach to each channel URL.                                                      |
+| **HLS media/master manifest** (`#EXT-X-TARGETDURATION`, `#EXT-X-STREAM-INF`, …) | **Ignored** — treated as a single stream, not a catalog import.                                  |
+| **Bare `.m3u` / `.m3u8` file extension**                                        | Same as above: content decides playlist vs stream (`isM3uPlaylistText` in `src/catalog/m3u.ts`). |
 
 HLS parsers that are not importing IPTV catalogs should treat unknown `#` lines as comments. GPIUX Streamer follows that split.
 
@@ -150,100 +150,100 @@ Source: VLC module config (`vlc -H`, `vlc --longhelp --advanced`). The table bel
 
 ### HTTP / network
 
-| Name | Type | Supported | Meaning |
-|---|---|---|---|
-| `http-user-agent` | string | yes | HTTP `User-Agent` |
-| `http-referrer` | url | yes | HTTP `Referer` (VLC spelling) |
-| `http-reconnect` | bool | | Reconnect HTTP on drop |
-| `http-user` | string | yes | HTTP basic auth user |
-| `http-pwd` | string | yes | HTTP basic auth password |
-| `http-proxy` | url | | HTTP proxy URL |
-| `http-proxy-pwd` | string | | Proxy password |
-| `http-forward-cookies` | bool | | Forward cookies |
-| `http-caching` | ms | | Legacy HTTP cache |
-| `network-caching` | ms | | Network cache (VLC 2+) |
-| `file-caching` | ms | | Local file cache |
-| `live-caching` | ms | | Live capture cache |
-| `disc-caching` | ms | | Disc cache |
-| `rtsp-tcp` | bool | | RTSP over TCP |
-| `rtsp-frame-buffer-size` | int | | RTSP frame buffer |
-| `rtsp-user` / `rtsp-pwd` | string | | RTSP credentials |
-| `rtmp-caching` | ms | | RTMP cache |
-| `mms-caching` / `udp-caching` | ms | | Legacy caches |
-| `mtu` | int | | Network MTU |
-| `ipv4` / `ipv6` | bool | | Force IP family |
-| `socks` / `socks-user` / `socks-pwd` | string | | SOCKS proxy |
-| `http-host` | string | | HTTP bind/host |
+| Name                                 | Type   | Supported | Meaning                       |
+| ------------------------------------ | ------ | --------- | ----------------------------- |
+| `http-user-agent`                    | string | yes       | HTTP `User-Agent`             |
+| `http-referrer`                      | url    | yes       | HTTP `Referer` (VLC spelling) |
+| `http-reconnect`                     | bool   |           | Reconnect HTTP on drop        |
+| `http-user`                          | string | yes       | HTTP basic auth user          |
+| `http-pwd`                           | string | yes       | HTTP basic auth password      |
+| `http-proxy`                         | url    |           | HTTP proxy URL                |
+| `http-proxy-pwd`                     | string |           | Proxy password                |
+| `http-forward-cookies`               | bool   |           | Forward cookies               |
+| `http-caching`                       | ms     |           | Legacy HTTP cache             |
+| `network-caching`                    | ms     |           | Network cache (VLC 2+)        |
+| `file-caching`                       | ms     |           | Local file cache              |
+| `live-caching`                       | ms     |           | Live capture cache            |
+| `disc-caching`                       | ms     |           | Disc cache                    |
+| `rtsp-tcp`                           | bool   |           | RTSP over TCP                 |
+| `rtsp-frame-buffer-size`             | int    |           | RTSP frame buffer             |
+| `rtsp-user` / `rtsp-pwd`             | string |           | RTSP credentials              |
+| `rtmp-caching`                       | ms     |           | RTMP cache                    |
+| `mms-caching` / `udp-caching`        | ms     |           | Legacy caches                 |
+| `mtu`                                | int    |           | Network MTU                   |
+| `ipv4` / `ipv6`                      | bool   |           | Force IP family               |
+| `socks` / `socks-user` / `socks-pwd` | string |           | SOCKS proxy                   |
+| `http-host`                          | string |           | HTTP bind/host                |
 
 ### Playback / input
 
-| Name | Type | Meaning |
-|---|---|---|
-| `start-time` / `stop-time` / `run-time` | float | Clip bounds (seconds) |
-| `rate` | float | Playback speed |
-| `input-repeat` | int | Repeat count (`-1` = forever) |
-| `input-slave` | url | Extra audio/subs input |
-| `input-title-format` | string | Title format |
-| `bookmarks` | string | Bookmark list |
-| `access` / `demux` / `codec` / `stream-filter` | string | Force modules |
-| `clock-synchro` / `clock-jitter` / `cr-average` | int/ms | Clock tuning |
-| `network-synchronisation` | bool | Net sync |
-| `file-cat` | bool | Truncated files (legacy) |
+| Name                                            | Type   | Meaning                       |
+| ----------------------------------------------- | ------ | ----------------------------- |
+| `start-time` / `stop-time` / `run-time`         | float  | Clip bounds (seconds)         |
+| `rate`                                          | float  | Playback speed                |
+| `input-repeat`                                  | int    | Repeat count (`-1` = forever) |
+| `input-slave`                                   | url    | Extra audio/subs input        |
+| `input-title-format`                            | string | Title format                  |
+| `bookmarks`                                     | string | Bookmark list                 |
+| `access` / `demux` / `codec` / `stream-filter`  | string | Force modules                 |
+| `clock-synchro` / `clock-jitter` / `cr-average` | int/ms | Clock tuning                  |
+| `network-synchronisation`                       | bool   | Net sync                      |
+| `file-cat`                                      | bool   | Truncated files (legacy)      |
 
 ### Audio / video / subtitles
 
-| Name | Type | Meaning |
-|---|---|---|
-| `audio` / `no-audio` / `video` / `no-video` | bool | Enable/disable tracks |
-| `audio-track` / `audio-track-id` | int | Audio selection |
-| `audio-language` | csv | Preferred languages |
-| `audio-desync` | ms | Audio delay |
-| `volume` | int | Legacy volume scale |
-| `aout` / `audio-filter` | string | Audio output/filter |
-| `video-track` / `video-track-id` | int | Video selection |
-| `aspect-ratio` | string | Display aspect |
-| `deinterlace` / `deinterlace-mode` | enum | Deinterlace |
-| `video-filter` / `vout` | string | Video filter/output |
-| `sub-track` / `sub-track-id` | int | Subtitle selection |
-| `sub-file` / `sub-language` | string/csv | External / preferred subs |
-| `sub-autodetect-file` | bool | Sidecar autodetect |
-| `sub-delay` / `sub-fps` | float | Subtitle timing |
-| `subsdec-encoding` / `subsdec-align` | string/int | Subtitle decode |
-| `freetype-rel-fontsize` | int | Relative font size |
-| `spu` / `no-spu` | bool | Subpictures |
+| Name                                        | Type       | Meaning                   |
+| ------------------------------------------- | ---------- | ------------------------- |
+| `audio` / `no-audio` / `video` / `no-video` | bool       | Enable/disable tracks     |
+| `audio-track` / `audio-track-id`            | int        | Audio selection           |
+| `audio-language`                            | csv        | Preferred languages       |
+| `audio-desync`                              | ms         | Audio delay               |
+| `volume`                                    | int        | Legacy volume scale       |
+| `aout` / `audio-filter`                     | string     | Audio output/filter       |
+| `video-track` / `video-track-id`            | int        | Video selection           |
+| `aspect-ratio`                              | string     | Display aspect            |
+| `deinterlace` / `deinterlace-mode`          | enum       | Deinterlace               |
+| `video-filter` / `vout`                     | string     | Video filter/output       |
+| `sub-track` / `sub-track-id`                | int        | Subtitle selection        |
+| `sub-file` / `sub-language`                 | string/csv | External / preferred subs |
+| `sub-autodetect-file`                       | bool       | Sidecar autodetect        |
+| `sub-delay` / `sub-fps`                     | float      | Subtitle timing           |
+| `subsdec-encoding` / `subsdec-align`        | string/int | Subtitle decode           |
+| `freetype-rel-fontsize`                     | int        | Relative font size        |
+| `spu` / `no-spu`                            | bool       | Subpictures               |
 
 ### MPEG-TS
 
-| Name | Type | Meaning |
-|---|---|---|
-| `program` / `programs` | int/csv | Program number(s) |
-| `ts-es-id-pid` | bool | ES id = PID |
-| `ts-out` / `ts-csa-*` / `ts-split-es` / `ts-seek-percent` / `ts-out-mtu` | various | TS tooling |
-| `sout-ts-pid-*` / `sout-ts-es-id-pid` / `sout-ts-dts-delay` | various | TS stream output |
+| Name                                                                     | Type    | Meaning           |
+| ------------------------------------------------------------------------ | ------- | ----------------- |
+| `program` / `programs`                                                   | int/csv | Program number(s) |
+| `ts-es-id-pid`                                                           | bool    | ES id = PID       |
+| `ts-out` / `ts-csa-*` / `ts-split-es` / `ts-seek-percent` / `ts-out-mtu` | various | TS tooling        |
+| `sout-ts-pid-*` / `sout-ts-es-id-pid` / `sout-ts-dts-delay`              | various | TS stream output  |
 
 ### DVB / capture
 
-| Name | Type | Meaning |
-|---|---|---|
-| `dvb-adapter` / `dvb-device` / `dvb-frequency` / `dvb-bandwidth` | int | Tuner params |
-| `dvb-srate` / `dvb-voltage` / `dvb-satno` / `dvb-tone` / `dvb-fec` | int | Satellite/cable tuning |
-| `dvb-modulation` / `dvb-transmission` / `dvb-guard` / `dvb-hierarchy` / `dvb-inversion` | various | Signal params |
-| `dvb-probe` / `dvb-caching` / `dvb-high-voltage` / `dvb-budget-mode` | bool/ms | Card behaviour |
-| `dvb-lnb-lof1` / `dvb-lnb-lof2` / `dvb-lnb-slof` | int | LNB frequencies |
-| `dvb-code-rate-hp` / `dvb-code-rate-lp` | int | Code rates |
-| `screen-fps` / `screen-caching` / `screen-left|top|width|height` | various | Desktop capture |
-| `fake-file-reload` | int | fake:// reload |
+| Name                                                                                    | Type    | Meaning                |
+| --------------------------------------------------------------------------------------- | ------- | ---------------------- |
+| `dvb-adapter` / `dvb-device` / `dvb-frequency` / `dvb-bandwidth`                        | int     | Tuner params           |
+| `dvb-srate` / `dvb-voltage` / `dvb-satno` / `dvb-tone` / `dvb-fec`                      | int     | Satellite/cable tuning |
+| `dvb-modulation` / `dvb-transmission` / `dvb-guard` / `dvb-hierarchy` / `dvb-inversion` | various | Signal params          |
+| `dvb-probe` / `dvb-caching` / `dvb-high-voltage` / `dvb-budget-mode`                    | bool/ms | Card behaviour         |
+| `dvb-lnb-lof1` / `dvb-lnb-lof2` / `dvb-lnb-slof`                                        | int     | LNB frequencies        |
+| `dvb-code-rate-hp` / `dvb-code-rate-lp`                                                 | int     | Code rates             |
+| `screen-fps` / `screen-caching` / `screen-left                                          | top     | width                  | height` | various | Desktop capture |
+| `fake-file-reload`                                                                      | int     | fake:// reload         |
 
 ### Stream output (unsafe on untrusted playlists)
 
-| Name | Type | Meaning |
-|---|---|---|
-| `sout` | string | Stream output chain |
-| `sout-keep` / `sout-all` / `sout-audio` / `sout-video` / `sout-spu` | bool | Sout routing |
-| `sout-transcode-*` | various | Transcode params |
-| `sout-standard-mux` / `sout-standard-access` / `sout-standard-dst` | string | Sout destination |
-| `sout-mux-caching` / `sout-udp-caching` / `sout-rtp-caching` | ms | Sout caches |
-| `sout-livehttp-caching` | bool | Live HTTP sout cache |
+| Name                                                                | Type    | Meaning              |
+| ------------------------------------------------------------------- | ------- | -------------------- |
+| `sout`                                                              | string  | Stream output chain  |
+| `sout-keep` / `sout-all` / `sout-audio` / `sout-video` / `sout-spu` | bool    | Sout routing         |
+| `sout-transcode-*`                                                  | various | Transcode params     |
+| `sout-standard-mux` / `sout-standard-access` / `sout-standard-dst`  | string  | Sout destination     |
+| `sout-mux-caching` / `sout-udp-caching` / `sout-rtp-caching`        | ms      | Sout caches          |
+| `sout-livehttp-caching`                                             | bool    | Live HTTP sout cache |
 
 VLC historically gated `sout*` behind `--m3u-extvlcopt`; modern VLC parses them by default. GPIUX Streamer **stores** but does **not execute** sout options.
 
@@ -251,11 +251,11 @@ VLC historically gated `sout*` behind `--m3u-extvlcopt`; modern VLC parses them 
 
 ### Applied at playback (HTTP fetch)
 
-| EXTVLCOPT | Channel field / effect |
-|---|---|
-| `http-user-agent` | `userAgent` → `User-Agent` header |
+| EXTVLCOPT                | Channel field / effect                |
+| ------------------------ | ------------------------------------- |
+| `http-user-agent`        | `userAgent` → `User-Agent` header     |
 | `http-user` + `http-pwd` | `Authorization: Basic …` in `headers` |
-| `http-referrer` | `referrer` → `Referer` header |
+| `http-referrer`          | `referrer` → `Referer` header         |
 
 Aliases accepted when parsing: `user-agent`, `http-referer`, `referrer`.
 
@@ -341,12 +341,12 @@ Invalid (do not parse):
 
 ## Implementation files
 
-| File | Role |
-|---|---|
-| [`src/catalog/extvlcopt.ts`](../src/catalog/extvlcopt.ts) | Catalog, parse, apply |
-| [`src/catalog/m3u.ts`](../src/catalog/m3u.ts) | `#EXTVLCOPT` in M3U/M3U8 IPTV lists |
-| [`src/catalog/index.ts`](../src/catalog/index.ts) | TOML `vlc_options` / `extvlcopt` |
-| [`src/lib/http.ts`](../src/lib/http.ts) | Headers on fetch |
-| [`src/catalog/extvlcopt.test.ts`](../src/catalog/extvlcopt.test.ts) | Unit tests |
+| File                                                                | Role                                |
+| ------------------------------------------------------------------- | ----------------------------------- |
+| [`src/catalog/extvlcopt.ts`](../src/catalog/extvlcopt.ts)           | Catalog, parse, apply               |
+| [`src/catalog/m3u.ts`](../src/catalog/m3u.ts)                       | `#EXTVLCOPT` in M3U/M3U8 IPTV lists |
+| [`src/catalog/index.ts`](../src/catalog/index.ts)                   | TOML `vlc_options` / `extvlcopt`    |
+| [`src/lib/http.ts`](../src/lib/http.ts)                             | Headers on fetch                    |
+| [`src/catalog/extvlcopt.test.ts`](../src/catalog/extvlcopt.test.ts) | Unit tests                          |
 
 For the literal full namespace on a given VLC build, run `vlc -H` / `vlc --longhelp --advanced`.

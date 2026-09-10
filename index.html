@@ -6,12 +6,28 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" />
     <title>streameriux</title>
     <style>
-      * { box-sizing: border-box; }
-      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #1a1a1a; }
-      canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #1a1a1a;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
       /* The app draws every glyph itself, so the page must not behave like a
          document: a long press would select the body and pop the iOS callout. */
-      html, body, canvas {
+      html,
+      body,
+      canvas {
         -webkit-user-select: none;
         user-select: none;
         -webkit-touch-callout: none;

@@ -9,21 +9,21 @@ proper hardware-accelerated video path, since the current "decode → bitmap →
 All numbers are RSS from `process.memoryUsage()`, most with **forced GC each
 sample** (`Bun.gc(true)`) so a true leak keeps climbing while GC lag flattens.
 
-| Scenario | Frames | Result |
-|---|---|---|
-| JS pipeline only, headless (VOD) | 4,760 over ~4 min | **Flat** ~350 MB (heap/ext plateau) |
-| JS pipeline only, headless (live) | 2,666 over ~2 min | **Flat** ~150 MB |
-| GPUI window, unique data-URL frames, max speed | 15,000 | Rate-driven spike to ~1.4 GB, **recovers**; no monotonic climb |
-| GPUI window, burst-then-idle cycle | 6,474 then idle | Returns to **~114 MB** (near baseline) |
-| Real app, focused, live stream, ~4 min | thousands | Sawtooth 60–600 MB, **recovers**; no monotonic climb |
-| 1280 px vs 640 px unique frames | matched | 1280 → 1–2.5 GB; **640 → flat ~250 MB** |
+| Scenario                                       | Frames            | Result                                                         |
+| ---------------------------------------------- | ----------------- | -------------------------------------------------------------- |
+| JS pipeline only, headless (VOD)               | 4,760 over ~4 min | **Flat** ~350 MB (heap/ext plateau)                            |
+| JS pipeline only, headless (live)              | 2,666 over ~2 min | **Flat** ~150 MB                                               |
+| GPUI window, unique data-URL frames, max speed | 15,000            | Rate-driven spike to ~1.4 GB, **recovers**; no monotonic climb |
+| GPUI window, burst-then-idle cycle             | 6,474 then idle   | Returns to **~114 MB** (near baseline)                         |
+| Real app, focused, live stream, ~4 min         | thousands         | Sawtooth 60–600 MB, **recovers**; no monotonic climb           |
+| 1280 px vs 640 px unique frames                | matched           | 1280 → 1–2.5 GB; **640 → flat ~250 MB**                        |
 
 ### Ruled out (bounded in testing)
 
 - **The JS decode/encode pipeline** — mediabunny decode, our BMP+base64, the
   retained double-buffer. Flat over thousands of frames, VOD and live.
 - **GPUI image rendering itself** — 15,000 unique images produced no monotonic
-  growth; memory tracks the *rate* of production and is reclaimed on idle.
+  growth; memory tracks the _rate_ of production and is reclaimed on idle.
 - **The live path** — `scheduleLiveRefresh`, continuous segment ingestion, the
   growing DVR window: flat headless.
 - **EPG store** — each sync/hydrate calls `load()` which resets the store before
@@ -31,7 +31,7 @@ sample** (`Bun.gc(true)`) so a true leak keeps climbing while GC lag flattens.
 - **Now Playing artwork** — the native bridge only reloads the image when the
   artwork URL changes (guarded).
 
-### Root cause of the *large, fast* growth (already mitigated)
+### Root cause of the _large, fast_ growth (already mitigated)
 
 GPUIX has no video surface, so each frame is a full-resolution bitmap the
 renderer decodes and uploads to a GPU texture, reclaimed only in periodic
@@ -43,7 +43,7 @@ dropping decode-burst frames). Measured flat at 640 px.
 
 ### The slow residual (not reproduced here)
 
-A continued *slow* climb to ~10 GB over a long real session was **not
+A continued _slow_ climb to ~10 GB over a long real session was **not
 reproducible** in minutes-long tests on this hardware/streams. Its size is
 consistent with a small per-frame native residual (a few percent of each frame
 not fully reclaimed — GPU atlas fragmentation, or a driver-side texture the
@@ -70,7 +70,7 @@ hardware-decoded video layer positioned over the GPUIX window.
 ### Option A — native video layer composited over the window (recommended)
 
 Render video into a dedicated native surface that the OS window server
-composites *on top of* the GPUIX window's video region:
+composites _on top of_ the GPUIX window's video region:
 
 - **macOS:** `AVSampleBufferDisplayLayer` (or a `CAMetalLayer`) fed
   `CMSampleBuffer`s. Decoded `CVPixelBuffer`s (ideally from **VideoToolbox**
@@ -81,7 +81,7 @@ composites *on top of* the GPUIX window's video region:
 - **Linux:** a subsurface (Wayland `wl_subsurface`) or an X11 child window with a
   GL/VA-API surface.
 
-The GPUIX window draws everything *except* the video rectangle (leave it
+The GPUIX window draws everything _except_ the video rectangle (leave it
 transparent or a punch-through region); the native layer shows through. Controls
 still render in GPUIX on top by keeping the video layer below the chrome, or by
 drawing chrome in a second overlay layer.
@@ -97,7 +97,7 @@ drawing chrome in a second overlay layer.
 ### Option B — hardware decode now, same blit path
 
 Mediabunny decodes via **WebCodecs** where available, which can use the
-platform hardware decoder (VideoToolbox on macOS). That offloads *decode* from
+platform hardware decoder (VideoToolbox on macOS). That offloads _decode_ from
 the CPU but does **not** fix memory — the bottleneck here is the blit/upload and
 the renderer's image lifecycle, not decode. Worth confirming hardware decode is
 actually engaged (fewer CPU-bound stalls), but it is not the memory fix.
@@ -146,15 +146,15 @@ App Nap is disabled while playing (`ProcessInfo.beginActivity`,
 `gpiux_video_set_playing`) so a minimized/backgrounded window keeps decoding
 instead of stalling under `bun run dev`.
 
-- `native/video-layer.swift` — an `AVSampleBufferDisplayLayer` inserted into the
+- `native/darwin/video-layer.swift` — an `AVSampleBufferDisplayLayer` inserted into the
   app's `NSWindow`. C ABI (`@_cdecl`): `attach`, `detach`, `set_rect`,
   `set_hidden`, `present(ptr, w, h, stride)`. Fresh IOSurface-backed
   `CVPixelBuffer` per frame (a pool would block the frame loop when buffers are
   still enqueued), enqueued for immediate display.
-- `src/native-video.ts` — compiles the dylib once (cached in tmpdir, keyed by
+- `src/media/native-video.ts` — compiles the dylib once (cached in tmpdir, keyed by
   source hash) and loads it via `bun:ffi`; frames pass by pointer (zero copy
   across the boundary). Inert off macOS or without the env flag.
-- `src/use-native-video.ts` — attaches on mount, points `StreamPlayer`'s frame
+- `src/media/use-native-video.ts` — attaches on mount, points `StreamPlayer`'s frame
   sink at the layer, keeps it positioned over the player pane
   (`useWindowSize` + sidebar inset) and shown only while a channel is active.
 - `src/player.ts` (`setNativeSink`) + `src/frame.ts` (`sampleToBgra`) — when the
@@ -171,7 +171,7 @@ and at full resolution rather than downscaled.
 punch-through described above (video below, transparent pane, GPUI on top). The
 whole window is transparent, so any surface that should be opaque must paint its
 own background — the sidebar, dialogs, and (when native video is off) the player
-pane already do. The dylib is compiled from `native/video-layer.swift` at
+pane already do. The dylib is compiled from `native/darwin/video-layer.swift` at
 runtime, so this currently requires running from the repo (source present); a
 `bun build --compile` binary would need the Swift source embedded or shipped
 alongside.

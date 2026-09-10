@@ -1,0 +1,3 @@
+[test]
+# Co-located suites use Vitest (`bun run test`). `bun test` runs the delegate below.
+pathIgnorePatterns = ["src/**", "scripts/**", "native/**"]
