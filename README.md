@@ -62,7 +62,7 @@ A single `<img>` re-decodes on every `src` change and paints its empty backgroun
 
 ### No runtime fullscreen API
 
-`WindowOptions.fullscreen` is only read at window creation. `src/fullscreen.ts` drives the platform window manager directly — AppleScript/Accessibility (`AXFullScreen`) on macOS, `wmctrl`/`xdotool` on Linux, `ShowWindow` on Windows — always targeting _this_ process by PID, never "the frontmost app". The app polls the real state so it re-syncs if you exit fullscreen another way.
+`WindowOptions.fullscreen` is only read at window creation. `src/lib/fullscreen.ts` drives the platform window manager directly — an in-process AppKit dylib on macOS, `wmctrl`/`xdotool` on Linux, `ShowWindow` on Windows. The app polls the real state on macOS so it re-syncs if you exit fullscreen another way.
 
 ### No z-index
 
@@ -144,7 +144,7 @@ Upstream GPUIX features that would remove whole categories of workaround here:
 - [x] **Native hardware-composited video (macOS, default on).** Decoded frames go to an `AVSampleBufferDisplayLayer` in the app's window (`native/darwin/video-layer.swift`, `src/media/native-video.ts`, `src/media/use-native-video.ts`) instead of the `<img>` — the window server composites the picture on the GPU, so frame memory stays **flat at full resolution** (measured ~170–280 MB for 1280×720 vs 1–2.5 GB via `<img>`). On by default on macOS; toggle in **Settings → General** (or `STREAMER_NATIVE_VIDEO=0` to force off). The Swift dylib compiles automatically on first `bun run dev`. This is the real fix for the memory behaviour below. Controls and the loading spinner stay visible via a transparent punch-through (video composites _below_ GPUI). App Nap is disabled while playing so a minimized window keeps decoding. Currently requires running from source (the Swift dylib compiles automatically on first `bun run dev`). See [`docs/video-memory.md`](docs/video-memory.md).
 - [ ] **Proper canvas / GPU video surface (cross-platform / upstream).** The macOS layer above is Option A; a GPUIX-native updatable-texture element (Option C) would replace the `<img>` pipeline on every platform and keep controls compositing normally. Still the single biggest renderer limitation off macOS.
 - [ ] **`<img>` `onLoad` / `onError` events** and a **bounded, evictable image-cache API.** Either one would let us drop the double-buffered-layer flicker workaround and the disk-caching of remote logos.
-- [ ] **Runtime fullscreen API** in GPUIX — remove the AppleScript / `wmctrl` / `ShowWindow` hacks in `src/lib/fullscreen.ts`.
+- [ ] **Runtime fullscreen API** in GPUIX — remove the AppKit dylib / `wmctrl` / `ShowWindow` workarounds in `src/lib/fullscreen.ts`.
 - [ ] **`z-index` in `StyleDesc`** — GPUIX layers strictly by paint order, so overlays are ordered by DOM position rather than an explicit stacking index.
 
 Bugs / cleanup in this repo:

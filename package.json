@@ -2,6 +2,7 @@
   "name": "streameriux",
   "version": "0.0.3",
   "private": true,
+  "license": "GPL-3.0-or-later",
   "type": "module",
   "scripts": {
     "dev": "bun scripts/dev.ts",
