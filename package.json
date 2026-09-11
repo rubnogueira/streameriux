@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "bun scripts/dev.ts",
     "dev:hot": "bun --hot src/app/app.tsx",
-    "build": "bun build --compile --external web-audio-api src/app/app.tsx --outfile dist/streameriux",
+    "build": "bun scripts/build.ts",
     "bundle:mac": "bun scripts/bundle-mac.ts",
     "web:dev": "bun web.ts",
     "screenshot": "bun screenshot.ts",

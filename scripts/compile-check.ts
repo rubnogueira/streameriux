@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runCliEntry } from "./lib/entry";
+import { compileArgs } from "./lib/mac-app";
 
 export type CompileRunner = (
   args: string[],
@@ -16,16 +17,7 @@ export async function runCompileCheck(runner: CompileRunner, root = projectRoot)
   const outfile = join(dir, "streameriux-check");
   try {
     const { exitCode, stderr } = await runner(
-      [
-        "bun",
-        "build",
-        "--compile",
-        "--external",
-        "web-audio-api",
-        join(root, "src/app/app.tsx"),
-        "--outfile",
-        outfile,
-      ],
+      compileArgs(join(root, "src/app/app.tsx"), outfile),
       root,
     );
     if (exitCode !== 0) {

@@ -9,7 +9,15 @@
 
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { APP_NAME, compileApp, ensureBundleMetadata, RELEASE_BUNDLE_ID, ROOT } from "./lib/mac-app";
+import {
+  APP_NAME,
+  bundleNodePath,
+  compileApp,
+  ensureBundleMetadata,
+  RELEASE_BUNDLE_ID,
+  ROOT,
+  stageNativeAddons,
+} from "./lib/mac-app";
 import { runCliEntry } from "./lib/entry";
 
 const DEV_APP = join(ROOT, "dist", "streameriux.app");
@@ -21,9 +29,14 @@ export type RunDevMacDeps = {
   existsSync: typeof existsSync;
   compileApp: typeof compileApp;
   ensureBundleMetadata: typeof ensureBundleMetadata;
+  stageNativeAddons: typeof stageNativeAddons;
   spawn: (
     command: string[],
-    options: { cwd: string; stdio: ["inherit", "inherit", "inherit"] },
+    options: {
+      cwd: string;
+      stdio: ["inherit", "inherit", "inherit"];
+      env: Record<string, string | undefined>;
+    },
   ) => {
     exited: Promise<number>;
   };
@@ -53,9 +66,16 @@ export async function runDevMac(deps: RunDevMacDeps): Promise<void> {
     deps.exit(1);
   }
 
+  // Stage the native addons and point NODE_PATH at them, exactly as the release
+  // launcher does — otherwise the bundled bun binary can't resolve them (bare
+  // `.node`-main requires don't resolve from cwd), and e.g. audio output is lost.
+  // skipIfPresent keeps dev re-runs fast by not recopying unchanged binaries.
+  deps.stageNativeAddons(deps.devApp, deps.root, { skipIfPresent: true });
+
   const app = deps.spawn([deps.execPath], {
     cwd: deps.root,
     stdio: ["inherit", "inherit", "inherit"],
+    env: { ...process.env, NODE_PATH: bundleNodePath(deps.devApp) },
   });
   deps.exit(await app.exited);
 }
@@ -66,6 +86,7 @@ export function createRunDevMacDeps(): RunDevMacDeps {
     existsSync,
     compileApp,
     ensureBundleMetadata,
+    stageNativeAddons,
     spawn: (command, options) => Bun.spawn(command, options),
     log: (message) => console.log(message),
     error: (message) => console.error(message),
