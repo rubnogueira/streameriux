@@ -26,6 +26,7 @@ function baseDeps(
   return {
     platform: "darwin",
     hasBun: true,
+    prebuiltDylib: null,
     swiftPath: "/fake/window-fullscreen.swift",
     swiftExists: true,
     compile: () => "/tmp/lib.dylib",
@@ -173,6 +174,24 @@ describe("loadDarwinWindowFullscreenWithDeps", () => {
       ),
     );
     expect(result?.isFullscreen()).toBeNull();
+  });
+
+  it("prefers the prebuilt dylib and does not compile", () => {
+    const compile = vi.fn(() => "/unused.dylib");
+    const dlopen = vi.fn((_path: string) => ({
+      symbols: {
+        gpiux_window_is_fullscreen: () => 0,
+        gpiux_window_set_fullscreen: (on: number) => on,
+      },
+    }));
+    const result = withoutVitestEnv(() =>
+      loadDarwinWindowFullscreenWithDeps(
+        baseDeps({ prebuiltDylib: "/bundle/window-fullscreen.dylib", compile, dlopen }),
+      ),
+    );
+    expect(result).not.toBeNull();
+    expect(compile).not.toHaveBeenCalled();
+    expect(dlopen).toHaveBeenCalledWith("/bundle/window-fullscreen.dylib");
   });
 
   it("returns null when compilation throws", () => {

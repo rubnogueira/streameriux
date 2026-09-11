@@ -15,6 +15,7 @@ import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { prebuiltDylibPath, swiftcArgs, VIDEO_LAYER_DYLIB } from "../lib/native-prebuilt";
 
 /** How the picture fills the player: normal (letterbox), zoomed (crop), stretch. */
 export type VideoFit = "contain" | "cover" | "fill";
@@ -74,27 +75,9 @@ export function compileDylib(
   const dylib = join(dir, `libvideolayer-${key}.dylib`);
   if (exists(dylib)) return dylib;
   mkdir(dir, { recursive: true });
-  exec(
-    "swiftc",
-    [
-      "-O",
-      "-swift-version",
-      "5",
-      "-emit-library",
-      "-o",
-      dylib,
-      swift,
-      "-framework",
-      "AppKit",
-      "-framework",
-      "AVFoundation",
-      "-framework",
-      "CoreVideo",
-      "-framework",
-      "QuartzCore",
-    ],
-    { stdio: ["ignore", "ignore", "ignore"] },
-  );
+  exec("swiftc", swiftcArgs(swift, dylib, VIDEO_LAYER_DYLIB.frameworks), {
+    stdio: ["ignore", "ignore", "ignore"],
+  });
   return dylib;
 }
 
@@ -112,20 +95,23 @@ export type NativeVideoSymbols = {
 export type NativeVideoLoadDeps = {
   platform: NodeJS.Platform | undefined;
   hasBun: boolean;
+  /** Shipped prebuilt dylib (release), or null to compile from source (dev). */
+  prebuiltDylib: string | null;
   swiftPath: string;
   swiftExists: boolean;
   compile: (swift: string) => string;
   dlopen: (path: string) => { symbols: NativeVideoSymbols };
 };
 
-/** Load the native video surface, compiling the dylib once. Null if unavailable. */
+/** Load the native video surface, preferring the prebuilt dylib. Null if unavailable. */
 export function loadNativeVideoWithDeps(deps: NativeVideoLoadDeps): NativeVideo | null {
   if (deps.platform !== "darwin") return null;
   if (!deps.hasBun) return null;
-  if (!deps.swiftExists) return null;
 
   try {
-    const dylib = deps.compile(deps.swiftPath);
+    // Prefer the shipped dylib; only compile from source when it is absent (dev).
+    const dylib = deps.prebuiltDylib ?? (deps.swiftExists ? deps.compile(deps.swiftPath) : null);
+    if (!dylib) return null;
     const s = deps.dlopen(dylib).symbols;
     return {
       attach: () => s.gpiux_video_attach() === 1,
@@ -172,6 +158,7 @@ export function loadNativeVideo(): NativeVideo | null {
   cached = loadNativeVideoWithDeps({
     platform: typeof process !== "undefined" ? process.platform : undefined,
     hasBun: typeof Bun !== "undefined",
+    prebuiltDylib: prebuiltDylibPath(VIDEO_LAYER_DYLIB.dylib),
     swiftPath: sourcePath(),
     swiftExists: existsSync(sourcePath()),
     compile: compileDylib,

@@ -57,6 +57,7 @@ describe("loadNativeVideoWithDeps", () => {
       loadNativeVideoWithDeps({
         platform: "linux",
         hasBun: true,
+        prebuiltDylib: null,
         swiftPath: "/x.swift",
         swiftExists: true,
         compile: () => "/x.dylib",
@@ -79,6 +80,7 @@ describe("loadNativeVideoWithDeps", () => {
     const surface = loadNativeVideoWithDeps({
       platform: "darwin",
       hasBun: true,
+      prebuiltDylib: null,
       swiftPath: "/x.swift",
       swiftExists: true,
       compile: () => "/x.dylib",
@@ -95,11 +97,43 @@ describe("loadNativeVideoWithDeps", () => {
     expect(symbols.gpiux_video_set_hidden).toHaveBeenCalledWith(1);
   });
 
+  it("prefers the prebuilt dylib and does not compile", () => {
+    const compile = vi.fn(() => "/should-not-be-used.dylib");
+    const dlopen = vi.fn((path: string) => {
+      expect(path).toBe("/bundle/video-layer.dylib");
+      return {
+        symbols: {
+          gpiux_video_attach: () => 1,
+          gpiux_video_detach: () => {},
+          gpiux_video_set_rect: () => {},
+          gpiux_video_set_hidden: () => {},
+          gpiux_video_set_fit: () => {},
+          gpiux_video_present: () => {},
+          gpiux_video_set_playing: () => {},
+          gpiux_video_debug: () => "ok",
+        },
+      };
+    });
+    const surface = loadNativeVideoWithDeps({
+      platform: "darwin",
+      hasBun: true,
+      prebuiltDylib: "/bundle/video-layer.dylib",
+      swiftPath: "/x.swift",
+      swiftExists: true,
+      compile,
+      dlopen,
+    });
+    expect(surface?.attach()).toBe(true);
+    expect(compile).not.toHaveBeenCalled();
+    expect(dlopen).toHaveBeenCalledWith("/bundle/video-layer.dylib");
+  });
+
   it("returns null without Bun", () => {
     expect(
       loadNativeVideoWithDeps({
         platform: "darwin",
         hasBun: false,
+        prebuiltDylib: null,
         swiftPath: "/x.swift",
         swiftExists: true,
         compile: () => "/x.dylib",
@@ -113,6 +147,7 @@ describe("loadNativeVideoWithDeps", () => {
       loadNativeVideoWithDeps({
         platform: "darwin",
         hasBun: true,
+        prebuiltDylib: null,
         swiftPath: "/x.swift",
         swiftExists: true,
         compile: () => {
@@ -145,6 +180,7 @@ describe("loadNativeVideo cache", () => {
     const missing = loadNativeVideoWithDeps({
       platform: "darwin",
       hasBun: true,
+      prebuiltDylib: null,
       swiftPath: join(tmpdir(), "missing.swift"),
       swiftExists: false,
       compile: vi.fn(),

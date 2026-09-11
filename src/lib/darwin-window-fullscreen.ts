@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { prebuiltDylibPath, swiftcArgs, WINDOW_FULLSCREEN_DYLIB } from "./native-prebuilt";
 
 export type DarwinWindowFullscreen = {
   isFullscreen: () => boolean | null;
@@ -44,11 +45,9 @@ export function compileWindowFullscreenDylib(
   const dylib = join(dir, `libwindowfullscreen-${key}.dylib`);
   if (exists(dylib)) return dylib;
   mkdir(dir, { recursive: true });
-  exec(
-    "swiftc",
-    ["-O", "-swift-version", "5", "-emit-library", "-o", dylib, swift, "-framework", "AppKit"],
-    { stdio: ["ignore", "ignore", "ignore"] },
-  );
+  exec("swiftc", swiftcArgs(swift, dylib, WINDOW_FULLSCREEN_DYLIB.frameworks), {
+    stdio: ["ignore", "ignore", "ignore"],
+  });
   return dylib;
 }
 
@@ -60,6 +59,8 @@ type WindowFullscreenSymbols = {
 export type DarwinWindowFullscreenLoadDeps = {
   platform: NodeJS.Platform | undefined;
   hasBun: boolean;
+  /** Shipped prebuilt dylib (release), or null to compile from source (dev). */
+  prebuiltDylib: string | null;
   swiftPath: string;
   swiftExists: boolean;
   compile: (swift: string) => string;
@@ -77,11 +78,12 @@ export function loadDarwinWindowFullscreenWithDeps(
 ): DarwinWindowFullscreen | null {
   if (deps.platform !== "darwin") return null;
   if (!deps.hasBun) return null;
-  if (!deps.swiftExists) return null;
   if (process.env.VITEST === "true" || process.env.VITEST === "1") return null;
 
   try {
-    const dylib = deps.compile(deps.swiftPath);
+    // Prefer the shipped dylib; only compile from source when it is absent (dev).
+    const dylib = deps.prebuiltDylib ?? (deps.swiftExists ? deps.compile(deps.swiftPath) : null);
+    if (!dylib) return null;
     const s = deps.dlopen(dylib).symbols;
     return {
       isFullscreen: () => mapResult(s.gpiux_window_is_fullscreen()),
@@ -109,6 +111,7 @@ export function loadDarwinWindowFullscreen(): DarwinWindowFullscreen | null {
   cached = loadDarwinWindowFullscreenWithDeps({
     platform: typeof process !== "undefined" ? process.platform : undefined,
     hasBun: typeof Bun !== "undefined",
+    prebuiltDylib: prebuiltDylibPath(WINDOW_FULLSCREEN_DYLIB.dylib),
     swiftPath: swiftSourcePath(),
     swiftExists: existsSync(swiftSourcePath()),
     compile: compileWindowFullscreenDylib,

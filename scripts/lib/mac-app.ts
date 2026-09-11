@@ -11,6 +11,7 @@ import {
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { rasterizeSvgToPng } from "../../src/lib/rasterize-svg";
+import { NATIVE_DIR_ENV, NATIVE_DYLIBS, swiftcArgs } from "../../src/lib/native-prebuilt";
 import { APP_VERSION } from "../../src/version";
 
 const SCRIPTS = dirname(fileURLToPath(import.meta.url));
@@ -190,7 +191,7 @@ export async function codesignBundle(
   const innerBinary = join(appPath, "Contents", "MacOS", RELEASE_INNER_BINARY);
   const nested = [
     ...(existsSync(innerBinary) ? [innerBinary] : []),
-    ...findNodeBinaries(join(appPath, "Contents", "Resources", "node_modules")),
+    ...findNativeBinaries(join(appPath, "Contents", "Resources")),
   ];
 
   for (const path of nested) {
@@ -233,6 +234,7 @@ export function renderLauncherScript(): string {
 # See renderLauncherScript in scripts/lib/mac-app.ts for why this exists.
 DIR="$(cd "$(dirname "$0")" && pwd)"
 export NODE_PATH="$DIR/../Resources/node_modules"
+export ${NATIVE_DIR_ENV}="$DIR/../Resources/native"
 exec "$DIR/${RELEASE_INNER_BINARY}" "$@"
 `;
 }
@@ -350,16 +352,48 @@ export function bundleNodePath(appPath: string): string {
   return join(appPath, "Contents", "Resources", "node_modules");
 }
 
-/** Every `.node` file under a directory, recursively (for inside-out signing). */
-export function findNodeBinaries(dir: string): string[] {
+/** Every Mach-O binary (`.node`/`.dylib`) under a directory, recursively (for inside-out signing). */
+export function findNativeBinaries(dir: string): string[] {
   if (!existsSync(dir)) return [];
   const found: string[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
-    if (entry.isDirectory()) found.push(...findNodeBinaries(full));
-    else if (entry.name.endsWith(".node")) found.push(full);
+    if (entry.isDirectory()) found.push(...findNativeBinaries(full));
+    else if (entry.name.endsWith(".node") || entry.name.endsWith(".dylib")) found.push(full);
   }
   return found;
+}
+
+/** Directory inside the bundle holding the prebuilt Swift dylibs (the launcher's native dir). */
+export function bundleNativeDir(appPath: string): string {
+  return join(appPath, "Contents", "Resources", "native");
+}
+
+/**
+ * Precompile the macOS Swift dylibs into the bundle so the app never shells out
+ * to `swiftc` on a user's Mac (which has no Swift toolchain). Runs on the build
+ * machine (CI's macOS runner / a dev mac), both of which have swiftc. Without
+ * this the native video surface is unavailable at runtime and playback falls
+ * back to the `<img>` path, whose per-frame image churn grows memory.
+ */
+export async function compileNativeDylibs(
+  appPath: string,
+  root = ROOT,
+  runCommand: CommandRunner = run,
+): Promise<string[]> {
+  const destDir = bundleNativeDir(appPath);
+  mkdirSync(destDir, { recursive: true });
+  const built: string[] = [];
+  for (const spec of NATIVE_DYLIBS) {
+    const source = join(root, "native", "darwin", spec.source);
+    if (!existsSync(source)) throw new Error(`Missing native source ${source}`);
+    const out = join(destDir, spec.dylib);
+    if (!(await runCommand("swiftc", swiftcArgs(source, out, spec.frameworks)))) {
+      throw new Error(`swiftc failed for ${spec.source}. Is the Swift toolchain installed?`);
+    }
+    built.push(out);
+  }
+  return built;
 }
 
 export async function writeReleaseBundle(
@@ -374,13 +408,15 @@ export async function writeReleaseBundle(
   mkdirSync(macos, { recursive: true });
 
   // The compiled binary sits beside a launcher script that fixes up NODE_PATH
-  // before exec-ing it; the launcher is the bundle's CFBundleExecutable.
+  // and the native-dylib dir before exec-ing it; the launcher is the bundle's
+  // CFBundleExecutable.
   await Bun.write(innerBinary, Bun.file(binaryPath));
   await runCommand("chmod", ["+x", innerBinary]);
   await Bun.write(launcher, renderLauncherScript());
   await runCommand("chmod", ["+x", launcher]);
 
   stageNativeAddons(appPath);
+  await compileNativeDylibs(appPath, ROOT, runCommand);
 
   return ensureBundleMetadata(appPath, RELEASE_BUNDLE_ID);
 }
