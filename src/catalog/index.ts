@@ -612,6 +612,7 @@ async function readGroupsConfig(): Promise<GroupsConfig> {
 }
 
 async function writeGroupsConfig(config: GroupsConfig): Promise<void> {
+  mkdirSync(channelsDir(), { recursive: true });
   const names = [...new Set(config.names.map((name) => name.trim()).filter(Boolean))].sort((a, b) =>
     a.localeCompare(b),
   );
