@@ -123,6 +123,37 @@ export async function compileApp(
   if ((await proc.exited) !== 0) exit(1);
 }
 
+/**
+ * Ad-hoc code-sign the finished bundle. Bun's `--compile` only leaves a raw
+ * `linker-signed` signature on the executable (Identifier=a.out, Info.plist not
+ * bound, no sealed resources). Dropped into a .app that adds an Info.plist, that
+ * signature becomes inconsistent — and once a download stamps the quarantine
+ * attribute, Gatekeeper rejects it as "damaged and can't be opened" rather than
+ * showing the ordinary unsigned-app prompt. Re-signing seals the Info.plist and
+ * writes Contents/_CodeSignature/CodeResources so the bundle is coherent.
+ *
+ * Must run AFTER the Info.plist and icon are in place. This is ad-hoc, not
+ * notarised: users still get the standard "unidentified developer" prompt
+ * (right-click → Open, or System Settings → Privacy & Security → Open Anyway),
+ * but no longer the dead-end "damaged" dialog. Real notarisation needs a paid
+ * Apple Developer ID.
+ */
+export async function codesignBundle(
+  appPath: string,
+  bundleId: string,
+  runCommand: CommandRunner = run,
+): Promise<boolean> {
+  return runCommand("codesign", [
+    "--force",
+    "--deep",
+    "--sign",
+    "-",
+    "--identifier",
+    bundleId,
+    appPath,
+  ]);
+}
+
 export async function ensureBundleMetadata(appPath: string, bundleId: string): Promise<boolean> {
   const resources = join(appPath, "Contents", "Resources");
   mkdirSync(resources, { recursive: true });
@@ -131,6 +162,13 @@ export async function ensureBundleMetadata(appPath: string, bundleId: string): P
     join(appPath, "Contents", "Info.plist"),
     renderInfoPlist({ bundleId, hasIcon, appSleepDisabled: true }),
   );
+  // Seal the bundle last, once the Info.plist and icon exist. Without this the
+  // downloaded .app is reported as damaged; see codesignBundle for the details.
+  if (!(await codesignBundle(appPath, bundleId))) {
+    throw new Error(
+      `codesign failed for ${appPath}. The bundle would be reported as "damaged" once downloaded.`,
+    );
+  }
   return hasIcon;
 }
 

@@ -68,13 +68,22 @@ jobs:
       - name: Bundle macOS .app
         run: bun run bundle:mac
 
-      - name: Package artifacts
+      - name: Package DMG
         run: |
           cd dist
-          # ditto preserves the .app bundle structure and resource forks; a plain
-          # zip would mangle the icon resources.
-          ditto -c -k --keepParent streameriux.app "streameriux-${{ steps.version.outputs.version }}-macos.zip"
-          shasum -a 256 "streameriux-${{ steps.version.outputs.version }}-macos.zip" streameriux > "streameriux-${{ steps.version.outputs.version }}-checksums.txt"
+          # Stage the ad-hoc-signed .app next to an /Applications symlink so the
+          # DMG opens with the familiar drag-to-install layout. hdiutil ships with
+          # macOS, so no extra tooling is needed.
+          rm -rf dmg-stage
+          mkdir -p dmg-stage
+          cp -R streameriux.app dmg-stage/
+          ln -s /Applications dmg-stage/Applications
+          hdiutil create \
+            -volname "streameriux" \
+            -srcfolder dmg-stage \
+            -ov \
+            -format UDZO \
+            "streameriux-${{ steps.version.outputs.version }}-darwin-arm64.dmg"
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
@@ -85,6 +94,4 @@ jobs:
           prerelease: false
           fail_on_unmatched_files: true
           files: |
-            dist/streameriux-${{ steps.version.outputs.version }}-macos.zip
-            dist/streameriux
-            dist/streameriux-${{ steps.version.outputs.version }}-checksums.txt
+            dist/streameriux-${{ steps.version.outputs.version }}-darwin-arm64.dmg
