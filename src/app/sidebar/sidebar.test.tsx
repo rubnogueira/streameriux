@@ -52,6 +52,7 @@ describeNative("Sidebar", () => {
         onSettings={vi.fn()}
         onRefresh={vi.fn()}
         onToggleFavorite={vi.fn()}
+        onToggleCollapsed={vi.fn()}
         catalogError="broken"
         defaultSidebarView="all"
       />,
@@ -90,6 +91,7 @@ describeNative("Sidebar", () => {
         onSettings={vi.fn()}
         onRefresh={vi.fn()}
         onToggleFavorite={vi.fn()}
+        onToggleCollapsed={vi.fn()}
         catalogError={null}
         defaultSidebarView="all"
       />,
@@ -110,6 +112,7 @@ describeNative("Sidebar", () => {
         onSettings={vi.fn()}
         onRefresh={vi.fn()}
         onToggleFavorite={vi.fn()}
+        onToggleCollapsed={vi.fn()}
         catalogError={null}
         defaultSidebarView="favorites"
       />,
@@ -135,6 +138,7 @@ describeNative("Sidebar", () => {
         onSettings={() => {}}
         onRefresh={() => {}}
         onToggleFavorite={() => {}}
+        onToggleCollapsed={() => {}}
         catalogError={null}
         defaultSidebarView="groups"
       />,

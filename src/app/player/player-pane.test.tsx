@@ -82,7 +82,6 @@ function renderPane(
     onPrev: vi.fn(),
     onNext: vi.fn(),
     onFullscreen: vi.fn(),
-    onToggleSidebar: vi.fn(),
     onGuide: vi.fn(),
     onCycleVideoFit: vi.fn(),
   };
@@ -142,7 +141,6 @@ describeNative("PlayerPane", () => {
     await app.getByTestId("mute").click();
     await app.getByTestId("open-guide").click();
     await app.getByTestId("video-fit-contain").click();
-    await app.getByTestId("collapse-sidebar").click();
     await app.getByTestId("fullscreen").click();
     renderer.advanceTime(400);
     const track = renderer.findByTestId("seek-bar");
@@ -157,16 +155,7 @@ describeNative("PlayerPane", () => {
     }
     expect(handlers.onToggle).toHaveBeenCalled();
     expect(handlers.onSkip).toHaveBeenCalled();
-    expect(handlers.onToggleSidebar).toHaveBeenCalled();
     expect(handlers.onFullscreen).toHaveBeenCalled();
-    await app.close();
-  });
-
-  it("shows expand control when the sidebar is collapsed", async () => {
-    const { renderer, handlers } = renderPane(readyState(), { sidebarCollapsed: true });
-    const app = await connectTest(renderer);
-    await app.getByTestId("expand-sidebar").click();
-    expect(handlers.onToggleSidebar).toHaveBeenCalled();
     await app.close();
   });
 
@@ -199,7 +188,6 @@ describeNative("PlayerPane", () => {
       onPrev: vi.fn(),
       onNext: vi.fn(),
       onFullscreen: vi.fn(),
-      onToggleSidebar: vi.fn(),
       onGuide: vi.fn(),
       onCycleVideoFit: vi.fn(),
     };

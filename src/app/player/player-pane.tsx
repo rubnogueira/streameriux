@@ -19,7 +19,7 @@ import {
   FONT,
   LIVE_EDGE_SNAP,
   PLAYER_HEADER_LEFT,
-  PLAYER_HEADER_LEFT_FULLSCREEN,
+  PLAYER_HEADER_LEFT_COLLAPSED,
   PLAYER_HEADER_TOP,
 } from "../theme";
 
@@ -80,6 +80,7 @@ export function PlayerPane({
   player,
   nativeVideoActive,
   fullscreen,
+  sidebarCollapsed,
   programme,
   epgEnabled,
   onToggle,
@@ -91,8 +92,6 @@ export function PlayerPane({
   onPrev,
   onNext,
   onFullscreen,
-  onToggleSidebar,
-  sidebarCollapsed,
   onGuide,
   videoFit,
   onCycleVideoFit,
@@ -115,7 +114,6 @@ export function PlayerPane({
   onPrev: () => void;
   onNext: () => void;
   onFullscreen: () => void;
-  onToggleSidebar: () => void;
   onGuide: () => void;
   onCycleVideoFit: () => void;
 }) {
@@ -165,7 +163,11 @@ export function PlayerPane({
   };
 
   const showChrome = hovered || !autoHide;
-  const playerHeaderLeft = fullscreen ? PLAYER_HEADER_LEFT_FULLSCREEN : PLAYER_HEADER_LEFT;
+  // Only the collapsed-sidebar case needs the extra inset (to clear the corner
+  // expand hamburger and the traffic lights). Fullscreen keeps the normal inset
+  // so the title is spaced symmetrically with the right side of the chrome.
+  const playerHeaderLeft =
+    !fullscreen && sidebarCollapsed ? PLAYER_HEADER_LEFT_COLLAPSED : PLAYER_HEADER_LEFT;
   // Everything the seek bar shows (EPG programme window vs live DVR vs VOD, the
   // rewind circle, and how a dragged position maps back to a media timestamp).
   const seek = seekBarModel({
@@ -370,14 +372,6 @@ export function PlayerPane({
             {videoFitLabel(videoFit)}
           </text>
         </div>
-        {!fullscreen ? (
-          <IconButton
-            icon={sidebarCollapsed ? "chevronRight" : "chevronLeft"}
-            testId={sidebarCollapsed ? "expand-sidebar" : "collapse-sidebar"}
-            onClick={onToggleSidebar}
-            color={C.text}
-          />
-        ) : null}
         <IconButton
           icon={fullscreen ? "minimize" : "maximize"}
           testId={fullscreen ? "exit-fullscreen" : "fullscreen"}

@@ -10,7 +10,15 @@ import { setPlaybackActive } from "../media/native-video";
 import { useEpg } from "../epg/use-epg";
 import { StreamPlayer } from "../player";
 import { dragRouter, keyRouter, playerFocusedRef, textInputIsFocused } from "./focus";
-import { idlePlayer, C, SIDEBAR_WIDTH, IS_MAC } from "./theme";
+import {
+  idlePlayer,
+  C,
+  SIDEBAR_WIDTH,
+  SIDEBAR_TOP_INSET,
+  SIDEBAR_SIDE_INSET,
+  IS_MAC,
+} from "./theme";
+import { IconButton } from "./components/primitives";
 import { Sidebar } from "./sidebar/sidebar";
 import { PlayerPane } from "./player/player-pane";
 import { SettingsDialog } from "./settings/settings-dialog";
@@ -277,6 +285,7 @@ export function StreamerApp() {
           onSettings={openSettings}
           onRefresh={refreshCatalog}
           onToggleFavorite={(channel) => void catalog.toggleFavorite(channel)}
+          onToggleCollapsed={toggleSidebarCollapsed}
           catalogError={catalog.error}
           defaultSidebarView={appSettings.settings.defaultSidebarView}
         />
@@ -299,11 +308,24 @@ export function StreamerApp() {
         onPrev={() => step(-1)}
         onNext={() => step(1)}
         onFullscreen={toggleFullscreen}
-        onToggleSidebar={toggleSidebarCollapsed}
         onGuide={() => setDialog((current) => (current === "guide" ? null : "guide"))}
         videoFit={videoFit}
         onCycleVideoFit={() => setVideoFit((current) => cycleVideoFit(current))}
       />
+      {sidebarCollapsed && !fullscreen ? (
+        // The menu is hidden, so the expand control lives as a native hamburger
+        // pinned to the window's top-left (below the traffic lights). Rendered
+        // after the player pane so it paints on top of it, not behind.
+        <div style={{ position: "absolute", top: SIDEBAR_TOP_INSET, left: SIDEBAR_SIDE_INSET }}>
+          <IconButton
+            icon="menu"
+            testId="expand-sidebar"
+            onClick={toggleSidebarCollapsed}
+            color={C.text}
+            size={30}
+          />
+        </div>
+      ) : null}
       {dialog === "settings" ? (
         <SettingsDialog
           sources={catalog.sources}

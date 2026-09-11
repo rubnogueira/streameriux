@@ -11,7 +11,7 @@ describe("theme layout tokens", () => {
     const theme = await import("./theme");
     expect(theme.IS_MAC).toBe(true);
     expect(theme.SIDEBAR_TOP_INSET).toBe(46);
-    expect(theme.PLAYER_HEADER_LEFT_FULLSCREEN).toBe(84);
+    expect(theme.PLAYER_HEADER_LEFT_COLLAPSED).toBe(100);
   });
 
   it("falls back to Helvetica when window is unavailable", async () => {
@@ -33,6 +33,6 @@ describe("theme layout tokens", () => {
     const theme = await import("./theme");
     expect(theme.IS_MAC).toBe(false);
     expect(theme.SIDEBAR_TOP_INSET).toBe(16);
-    expect(theme.PLAYER_HEADER_LEFT_FULLSCREEN).toBe(theme.PLAYER_HEADER_LEFT);
+    expect(theme.PLAYER_HEADER_LEFT_COLLAPSED).toBe(58);
   });
 });

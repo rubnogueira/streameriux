@@ -7,6 +7,7 @@ import iconFolderPlus from "../../assets/icons/folder-plus.svg" with { type: "te
 import iconInbox from "../../assets/icons/inbox.svg" with { type: "text" };
 import iconLive from "../../assets/icons/live.svg" with { type: "text" };
 import iconMaximize from "../../assets/icons/maximize.svg" with { type: "text" };
+import iconMenu from "../../assets/icons/menu.svg" with { type: "text" };
 import iconMinimize from "../../assets/icons/minimize.svg" with { type: "text" };
 import iconPause from "../../assets/icons/pause.svg" with { type: "text" };
 import iconPlay from "../../assets/icons/play.svg" with { type: "text" };
@@ -39,6 +40,7 @@ export const ICONS = mapIcons({
   inbox: iconInbox,
   live: iconLive,
   maximize: iconMaximize,
+  menu: iconMenu,
   minimize: iconMinimize,
   pause: iconPause,
   play: iconPlay,

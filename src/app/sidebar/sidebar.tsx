@@ -82,6 +82,7 @@ export const Sidebar = memo(function Sidebar({
   onSettings,
   onRefresh,
   onToggleFavorite,
+  onToggleCollapsed,
   catalogError,
   defaultSidebarView,
 }: {
@@ -99,6 +100,7 @@ export const Sidebar = memo(function Sidebar({
   onSettings: () => void;
   onRefresh: () => void;
   onToggleFavorite: (channel: Channel) => void;
+  onToggleCollapsed: () => void;
   catalogError: string | null;
   defaultSidebarView: SidebarView;
 }) {
@@ -227,7 +229,16 @@ export const Sidebar = memo(function Sidebar({
           flexShrink: 0,
         }}
       >
-        <AppBrand />
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <IconButton
+            icon="menu"
+            testId="collapse-sidebar"
+            onClick={onToggleCollapsed}
+            color={C.secondary}
+            size={30}
+          />
+          <AppBrand />
+        </div>
         <div
           style={{
             display: "flex",

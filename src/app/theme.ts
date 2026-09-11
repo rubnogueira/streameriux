@@ -30,7 +30,11 @@ export const SIDEBAR_TOP_INSET = IS_MAC ? 46 : 16;
 export const SIDEBAR_SIDE_INSET = 16;
 export const PLAYER_HEADER_TOP = IS_MAC ? 22 : 16;
 export const PLAYER_HEADER_LEFT = 18;
-export const PLAYER_HEADER_LEFT_FULLSCREEN = IS_MAC ? 84 : PLAYER_HEADER_LEFT;
+// When the sidebar is collapsed the player reaches the window's left edge, so
+// the header must clear the corner expand hamburger (and the macOS traffic
+// lights). Fullscreen deliberately keeps PLAYER_HEADER_LEFT so the title is
+// inset symmetrically with the right side.
+export const PLAYER_HEADER_LEFT_COLLAPSED = IS_MAC ? 100 : 58;
 export const CHANNEL_MARK_ASPECT = 16 / 9;
 export const LIVE_EDGE_SNAP = LIVE_EDGE_BUFFER + 6;
 
