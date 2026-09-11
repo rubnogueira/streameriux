@@ -24,6 +24,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history + tags so the release notes can list every commit since
+          # the previous tag.
+          fetch-depth: 0
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
@@ -85,11 +89,33 @@ jobs:
             -format UDZO \
             "streameriux-${{ steps.version.outputs.version }}-darwin-arm64.dmg"
 
+      - name: Build release notes
+        id: notes
+        run: |
+          # List every commit since the previous tag. On the first release there
+          # is no previous tag, so fall back to the full history.
+          prev="$(git tag --sort=-creatordate | grep -v "^${{ steps.version.outputs.tag }}$" | head -n 1)"
+          if [ -n "$prev" ]; then
+            range="${prev}..HEAD"
+            echo "Commits since ${prev}:"
+          else
+            range="HEAD"
+            echo "Commits:"
+          fi
+          {
+            echo "## Commits"
+            echo
+            git log --no-merges --pretty=format:'- %s (%h)' "$range"
+            echo
+          } > dist/RELEASE_NOTES.md
+          cat dist/RELEASE_NOTES.md
+
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: streameriux ${{ steps.version.outputs.version }}
+          body_path: dist/RELEASE_NOTES.md
           draft: false
           prerelease: false
           fail_on_unmatched_files: true
