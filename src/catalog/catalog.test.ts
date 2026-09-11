@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   addCatalogSource,
   addCustomGroup,
@@ -535,11 +535,7 @@ describe("catalog persistence helpers", () => {
   });
 
   it("hides non-editable channels and toggles favorites", async () => {
-    writeFileSync(
-      join(dir, "sources.toml"),
-      'files = ["user.toml"]\nplaylists = []\n',
-      "utf8",
-    );
+    writeFileSync(join(dir, "sources.toml"), 'files = ["user.toml"]\nplaylists = []\n', "utf8");
     writeFileSync(
       join(dir, "user.toml"),
       `[[channel]]
@@ -593,9 +589,9 @@ url = "https://example.com/local.m3u8"
       addCatalogSource("https://example.com/not-a-list.m3u", { intent: "playlist" }),
     ).rejects.toThrow(/Could not load a channel playlist/);
 
-    await expect(
-      addCatalogSource("not-a-url", { intent: "playlist" }),
-    ).rejects.toThrow(/Enter a playlist URL/);
+    await expect(addCatalogSource("not-a-url", { intent: "playlist" })).rejects.toThrow(
+      /Enter a playlist URL/,
+    );
   });
 });
 

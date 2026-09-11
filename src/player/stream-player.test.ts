@@ -1,13 +1,19 @@
 import { EventEmitter } from "node:events";
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-  type Mock,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
+import type { AudioSampleSink, VideoSampleSink } from "mediabunny";
+
+function samplesThatThrow(message: string): AsyncGenerator<never, void, unknown> {
+  const iterator = {
+    next: async () => {
+      throw new Error(message);
+    },
+    return: async () => ({ done: true as const, value: undefined }),
+    [Symbol.asyncIterator]() {
+      return this;
+    },
+  };
+  return iterator as unknown as AsyncGenerator<never, void, unknown>;
+}
 
 const harness = vi.hoisted(() => {
   type Closable = { close: Mock<() => void> };
@@ -60,7 +66,6 @@ const harness = vi.hoisted(() => {
   };
 
   let plan: OpenPlan = {};
-  const inputs: Array<{ dispose: Mock<() => void> }> = [];
 
   function makeVideoTrack(overrides: Partial<VideoTrack> = {}): VideoTrack {
     return {
@@ -130,10 +135,13 @@ const harness = vi.hoisted(() => {
   class VideoSampleSink {
     getSample = vi.fn(async (_time: number) => plan.videoGetSample ?? null);
     samples = vi.fn((_time: number) => samplesFrom(plan.videoSamples ?? []));
+    samplesAtTimestamps = vi.fn(async () => []);
   }
 
   class AudioSampleSink {
+    getSample = vi.fn(async (_time: number) => null);
     samples = vi.fn((_time: number) => samplesFrom(plan.audioSamples ?? []));
+    samplesAtTimestamps = vi.fn(async () => []);
   }
 
   class Input {
@@ -187,13 +195,15 @@ const harness = vi.hoisted(() => {
     computeDuration = vi.fn(async () => plan.computeDuration ?? 120);
   }
 
+  const inputs: Input[] = [];
+
   const audioFlags = { shouldThrow: false };
   let audioCurrentTime = 0;
   const videoTracksGate = {
     blocked: false,
     release: null as (() => void) | null,
   };
-  const bufferSources: Array<{ onended: (() => void) | null }> = [];
+  const bufferSources: Array<{ onended: (() => void) | null; start: Mock }> = [];
   let audioContextState = "running";
   const audioResume = vi.fn(async () => {
     audioContextState = "running";
@@ -364,7 +374,10 @@ describe("StreamPlayer", () => {
     harness.sampleToBgra.mockClear();
     states = [];
     frames = [];
-    player = new StreamPlayer((s) => states.push({ ...s }), (f) => frames.push(f));
+    player = new StreamPlayer(
+      (s) => states.push({ ...s }),
+      (f) => frames.push(f),
+    );
   });
 
   afterEach(async () => {
@@ -937,7 +950,7 @@ describe("StreamPlayer", () => {
             yield second;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       const runPromise = player["runVideo"](generation);
       await vi.waitUntil(() => harness.sampleToFrameSrc.mock.calls.length > 0);
@@ -968,10 +981,7 @@ describe("StreamPlayer", () => {
 
   describe("runAudio loop", () => {
     it("queues audio buffers and waits when far ahead of the clock", async () => {
-      const audioSamples = [
-        harness.makeAudioSample(0),
-        harness.makeAudioSample(5),
-      ];
+      const audioSamples = [harness.makeAudioSample(0), harness.makeAudioSample(5)];
       const video = harness.makeVideoTrack();
       const audio = harness.makeAudioTrack();
       video.getPrimaryPairableAudioTrack.mockResolvedValue(audio);
@@ -1223,7 +1233,7 @@ describe("StreamPlayer", () => {
             yield sample;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       await player["runVideo"](player["generation"]);
       expect(sink).toHaveBeenCalled();
@@ -1251,7 +1261,7 @@ describe("StreamPlayer", () => {
           }),
           return: vi.fn(async () => ({ done: true, value: undefined })),
         })),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       await player["runVideo"](player["generation"]);
       expect(lastState(states).warning).toBe("video iterator exploded");
@@ -1278,7 +1288,7 @@ describe("StreamPlayer", () => {
             yield pending;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       await player["runAudio"](player["generation"]);
       expect(pending.close).toHaveBeenCalled();
@@ -1300,12 +1310,8 @@ describe("StreamPlayer", () => {
 
       player["clock"].play();
       player["audioSink"] = {
-        samples: vi.fn(() =>
-          (async function* () {
-            throw new Error("audio iterator exploded");
-          })(),
-        ),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+        samples: vi.fn(() => samplesThatThrow("audio iterator exploded")),
+      } as unknown as AudioSampleSink;
 
       await player["runAudio"](player["generation"]);
       expect(lastState(states).warning).toBe("audio iterator exploded");
@@ -1637,7 +1643,7 @@ describe("StreamPlayer", () => {
             yield sample;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       const runPromise = player["runVideo"](player["generation"]);
       await vi.advanceTimersByTimeAsync(2000);
@@ -1671,7 +1677,7 @@ describe("StreamPlayer", () => {
             .mockRejectedValueOnce(new Error("prefetch failed")),
           return: vi.fn(async () => ({ done: true, value: undefined })),
         })),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       player.pause();
       await player["runVideo"](generation);
@@ -1698,7 +1704,7 @@ describe("StreamPlayer", () => {
             throw new Error("return failed");
           }),
         })),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       await player["runVideo"](player["generation"]);
 
@@ -1714,7 +1720,7 @@ describe("StreamPlayer", () => {
             };
           },
         })),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       await player["runAudio"](player["generation"]);
     });
@@ -1741,7 +1747,7 @@ describe("StreamPlayer", () => {
             yield pending;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       const runPromise = player["runAudio"](generation);
       await flushMicrotasks(5);
@@ -1773,7 +1779,7 @@ describe("StreamPlayer", () => {
             yield far;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       const runPromise = player["runAudio"](generation);
       await flushMicrotasks(20);
@@ -1825,7 +1831,7 @@ describe("StreamPlayer", () => {
           }),
           return: vi.fn(async () => ({ done: true, value: undefined })),
         })),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       failFaultEmit = true;
       await fragile.play();
@@ -1849,7 +1855,9 @@ describe("StreamPlayer", () => {
 
       await openDefault(player);
       expect(lastState(states).live).toBe(true);
-      expect(lastState(states).time).toBeLessThanOrEqual(200 - Math.min(9, LIVE_EDGE_BUFFER) + 0.01);
+      expect(lastState(states).time).toBeLessThanOrEqual(
+        200 - Math.min(9, LIVE_EDGE_BUFFER) + 0.01,
+      );
     });
 
     it("schedules audio buffers in the past via offset start", async () => {
@@ -2185,7 +2193,7 @@ describe("StreamPlayer", () => {
             yield sample;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       const runPromise = player["runVideo"](generation);
       await vi.advanceTimersByTimeAsync(5);
@@ -2229,7 +2237,7 @@ describe("StreamPlayer", () => {
             yield sample;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       const generation = player["generation"];
       await player["runVideo"](generation);
@@ -2259,7 +2267,7 @@ describe("StreamPlayer", () => {
             yield second;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.VideoSampleSink>;
+      } as unknown as VideoSampleSink;
 
       const runPromise = player["runVideo"](generation);
       await flushMicrotasks(5);
@@ -2293,7 +2301,7 @@ describe("StreamPlayer", () => {
             yield pending;
           })(),
         ),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       await player["runAudio"](generation);
       expect(pending.close).toHaveBeenCalled();
@@ -2317,12 +2325,8 @@ describe("StreamPlayer", () => {
       fragile.pause();
 
       fragile["audioSink"] = {
-        samples: vi.fn(() =>
-          (async function* () {
-            throw new Error("audio fault for catch");
-          })(),
-        ),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+        samples: vi.fn(() => samplesThatThrow("audio fault for catch")),
+      } as unknown as AudioSampleSink;
 
       const faultSpy = vi
         .spyOn(fragile, "handlePlaybackFault")
@@ -2352,11 +2356,13 @@ describe("StreamPlayer", () => {
         yield pending;
       }
       const iterator = oneSample();
-      const returnSpy = vi.spyOn(iterator, "return").mockRejectedValueOnce(new Error("audio return failed"));
+      const returnSpy = vi
+        .spyOn(iterator, "return")
+        .mockRejectedValueOnce(new Error("audio return failed"));
       player["clock"].playing = true;
       player["audioSink"] = {
         samples: vi.fn(() => iterator),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       await player["runAudio"](player["generation"] - 1);
       expect(returnSpy).toHaveBeenCalled();
@@ -2382,7 +2388,7 @@ describe("StreamPlayer", () => {
       player["clock"].playing = true;
       player["audioSink"] = {
         samples: vi.fn(() => iterator),
-      } as unknown as InstanceType<typeof harness.AudioSampleSink>;
+      } as unknown as AudioSampleSink;
 
       await player["runAudio"](player["generation"]);
       player["audioIterator"] = null;

@@ -28,7 +28,11 @@ async function run(deps: FullscreenDeps, command: string, args: string[]): Promi
   }
 }
 
-async function output(deps: FullscreenDeps, command: string, args: string[]): Promise<string | null> {
+async function output(
+  deps: FullscreenDeps,
+  command: string,
+  args: string[],
+): Promise<string | null> {
   try {
     const proc = deps.spawn([command, ...args], { stdout: "pipe", stderr: "pipe" });
     const text = proc.stdout ? (await new Response(proc.stdout).text()).trim() : "";

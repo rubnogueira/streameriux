@@ -39,9 +39,7 @@ describeNative("streamer shell integration", () => {
     return { app, ui, ...root };
   }
 
-  it(
-    "lists channels and opens settings across tabs",
-    async () => {
+  it("lists channels and opens settings across tabs", async () => {
     const { app, ui, renderer } = await mountApp();
     await ui.waitFor("channel-acme");
     await ui.waitFor("player-empty");
@@ -61,13 +59,9 @@ describeNative("streamer shell integration", () => {
 
     expect(renderer.getPaintedText().join(" ")).toContain("Acme TV");
     await closeGpuixTest(app, renderer);
-    },
-    30_000,
-  );
+  }, 30_000);
 
-  it(
-    "selects channels, favorites, and sidebar views",
-    async () => {
+  it("selects channels, favorites, and sidebar views", async () => {
     const { app, ui, renderer } = await mountApp();
     await ui.waitFor("channel-acme");
     await ui.click("channel-acme");
@@ -83,13 +77,9 @@ describeNative("streamer shell integration", () => {
     await ui.click("channel-acme");
     await ui.click("refresh-catalog");
     await closeGpuixTest(app, renderer);
-    },
-    30_000,
-  );
+  }, 30_000);
 
-  it(
-    "drives player chrome, guide, and keyboard shortcuts",
-    async () => {
+  it("drives player chrome, guide, and keyboard shortcuts", async () => {
     const { app, ui, renderer } = await mountApp();
     await ui.waitFor("channel-acme");
     await ui.click("channel-acme");
@@ -130,7 +120,5 @@ describeNative("streamer shell integration", () => {
     });
     await settleGpuix(renderer);
     await closeGpuixTest(app, renderer);
-    },
-    30_000,
-  );
+  }, 30_000);
 });

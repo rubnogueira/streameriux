@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CatalogSource } from "../catalog/channel";
+import { catalogSource } from "../test-fixtures/catalog-source";
 import type { EpgConfig } from "./config";
 import {
   collectHeaderUrls,
@@ -40,8 +41,8 @@ const config: EpgConfig = {
 describe("collectHeaderUrls", () => {
   it("collects unique header EPG URLs", () => {
     const sources: CatalogSource[] = [
-      { name: "a", epgUrl: "https://a.com/1.xml, https://b.com/2.xml" },
-      { name: "b", epgUrl: "https://a.com/1.xml" },
+      catalogSource({ id: "a", epgUrl: "https://a.com/1.xml, https://b.com/2.xml" }),
+      catalogSource({ id: "b", epgUrl: "https://a.com/1.xml" }),
     ];
     expect(collectHeaderUrls(sources)).toEqual(["https://a.com/1.xml", "https://b.com/2.xml"]);
   });
@@ -50,7 +51,12 @@ describe("collectHeaderUrls", () => {
 describe("urlsToSync", () => {
   it("delegates to selectFeedUrls", () => {
     const urls = urlsToSync(
-      [{ name: "main", epgUrl: "https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz" }],
+      [
+        catalogSource({
+          id: "main",
+          epgUrl: "https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz",
+        }),
+      ],
       [],
       config,
     );
@@ -119,7 +125,7 @@ describe("syncFeed", () => {
     index.fetchedAt = new Date().toISOString();
     writeFileSync(join(dir, "cache", "epg", `${feedHash(url)}.json`), JSON.stringify(index));
 
-    globalThis.fetch = vi.fn();
+    globalThis.fetch = vi.fn() as unknown as typeof fetch;
     const loaded = await syncFeed(url, config.syncIntervalHours, false);
     expect(loaded.url).toBe(url);
     expect(globalThis.fetch).not.toHaveBeenCalled();
@@ -176,14 +182,16 @@ describe("syncEpg", () => {
 
   it("fetches feeds and records progress", async () => {
     const url = "https://example.com/epg.xml";
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(XML, { status: 200, headers: { "Content-Type": "application/xml" } }),
-    );
+    globalThis.fetch = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(XML, { status: 200, headers: { "Content-Type": "application/xml" } }),
+      ) as unknown as typeof fetch;
 
     const progress: string[] = [];
     const merged: string[] = [];
     const result = await syncEpg({
-      sources: [{ name: "main", epgUrl: url }],
+      sources: [catalogSource({ id: "main", epgUrl: url })],
       channels: [],
       config,
       force: true,
@@ -205,10 +213,14 @@ describe("syncEpg", () => {
     const cacheDir = join(dir, "cache", "epg");
     writeFileSync(join(cacheDir, `${feedHash(url)}.json`), JSON.stringify(index));
 
-    globalThis.fetch = vi.fn().mockResolvedValue(new Response("", { status: 500, statusText: "err" }));
+    globalThis.fetch = vi
+      .fn()
+      .mockResolvedValue(
+        new Response("", { status: 500, statusText: "err" }),
+      ) as unknown as typeof fetch;
 
     const result = await syncEpg({
-      sources: [{ name: "main", epgUrl: url }],
+      sources: [catalogSource({ id: "main", epgUrl: url })],
       channels: [],
       config,
       force: true,

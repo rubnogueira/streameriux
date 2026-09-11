@@ -23,7 +23,10 @@ describe("app settings IO", () => {
   });
 
   it("reads and writes sidebar view and native video flag", async () => {
-    writeFileSync(join(dir, "settings.toml"), "default_sidebar_view = \"favorites\"\nnative_video = false\n");
+    writeFileSync(
+      join(dir, "settings.toml"),
+      'default_sidebar_view = "favorites"\nnative_video = false\n',
+    );
     const loaded = await readAppSettings();
     expect(loaded.defaultSidebarView).toBe("favorites");
     expect(loaded.nativeVideo).toBe(false);

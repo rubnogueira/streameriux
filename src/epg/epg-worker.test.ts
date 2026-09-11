@@ -32,7 +32,7 @@ describe("epg-worker", () => {
 
     const handler = globalThis.onmessage;
     expect(handler).toBeTypeOf("function");
-    handler?.({
+    (handler as (event: MessageEvent) => void)({
       data: { id: 7, url: "https://example.com/epg.xml", cachePath, data },
     } as MessageEvent);
 
@@ -50,7 +50,7 @@ describe("epg-worker", () => {
     vi.resetModules();
     await import("./epg-worker");
 
-    globalThis.onmessage?.({
+    (globalThis.onmessage as (event: MessageEvent) => void)({
       data: {
         id: 2,
         url: "https://example.com/bad.xml.gz",

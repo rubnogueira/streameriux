@@ -17,7 +17,7 @@ vi.mock("node:fs", async (importOriginal) => {
     ...fs,
     watch: vi.fn((_path, _opts, listener) => {
       watchState.listener = listener as (event: string, filename: string | null) => void;
-      return { close: watchState.close } as ReturnType<typeof fs.watch>;
+      return { close: watchState.close } as unknown as ReturnType<typeof fs.watch>;
     }),
   };
 });
@@ -30,11 +30,7 @@ describe("useCatalog", () => {
 
   beforeEach(() => {
     mkdirSync(dir, { recursive: true });
-    writeFileSync(
-      join(dir, "sources.toml"),
-      'files = ["user.toml"]\nplaylists = []\n',
-      "utf8",
-    );
+    writeFileSync(join(dir, "sources.toml"), 'files = ["user.toml"]\nplaylists = []\n', "utf8");
     writeFileSync(
       join(dir, "user.toml"),
       `[[channel]]

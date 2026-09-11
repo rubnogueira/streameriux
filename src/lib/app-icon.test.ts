@@ -9,7 +9,6 @@ describe("readMacAppearance", () => {
     if (process.platform === "darwin") return;
     expect(readMacAppearance()).toBe("dark");
   });
-
 });
 
 describe("appIconAsset", () => {

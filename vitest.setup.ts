@@ -1,5 +1,4 @@
 import { copyFileSync, writeFileSync } from "node:fs";
-import { vi } from "vitest";
 import { gunzipSync, gzipSync } from "node:zlib";
 
 // React 19: allow act(...) in Vitest (jsdom and node environments).

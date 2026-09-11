@@ -147,9 +147,11 @@ describe("mediaFetch", () => {
   });
 
   it("treats smil playlists like m3u8", async () => {
-    const fetch = vi.fn().mockResolvedValueOnce(
-      new Response("#EXTM3U\n", { status: 200, headers: { "Content-Type": "text/plain" } }),
-    );
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response("#EXTM3U\n", { status: 200, headers: { "Content-Type": "text/plain" } }),
+      );
     installMockFetch(fetch);
     const response = await mediaFetch("https://example.com/live.smil/index");
     expect(response.status).toBe(200);

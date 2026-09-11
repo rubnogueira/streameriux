@@ -32,9 +32,9 @@ describe("epgProcessingInlineForMetaUrl", () => {
 
   it("is false for normal on-disk modules", () => {
     vi.stubEnv("VITEST", "");
-    expect(epgProcessingInlineForMetaUrl("file:///Users/dev/streameriux/src/epg/worker-client.ts")).toBe(
-      false,
-    );
+    expect(
+      epgProcessingInlineForMetaUrl("file:///Users/dev/streameriux/src/epg/worker-client.ts"),
+    ).toBe(false);
   });
 });
 
@@ -59,9 +59,8 @@ describe("processFeedInBackground", () => {
   it("delegates to a Worker outside Vitest", async () => {
     vi.stubEnv("VITEST", "");
     vi.resetModules();
-    const { processFeedInBackground: processInWorker, shutdownEpgWorker: shutdown } = await import(
-      "./worker-client"
-    );
+    const { processFeedInBackground: processInWorker, shutdownEpgWorker: shutdown } =
+      await import("./worker-client");
 
     const posted: { id: number; url: string; cachePath: string; data: ArrayBuffer }[] = [];
     let messageHandler: ((event: MessageEvent) => void) | null = null;
@@ -104,9 +103,8 @@ describe("processFeedInBackground", () => {
   it("rejects when the worker throws", async () => {
     vi.stubEnv("VITEST", "");
     vi.resetModules();
-    const { processFeedInBackground: processInWorker, shutdownEpgWorker: shutdown } = await import(
-      "./worker-client"
-    );
+    const { processFeedInBackground: processInWorker, shutdownEpgWorker: shutdown } =
+      await import("./worker-client");
 
     class MockWorker {
       addEventListener(type: string, handler: (event: ErrorEvent) => void) {
@@ -133,9 +131,8 @@ describe("processFeedInBackground", () => {
   it("rejects when the worker reports an error", async () => {
     vi.stubEnv("VITEST", "");
     vi.resetModules();
-    const { processFeedInBackground: processInWorker, shutdownEpgWorker: shutdown } = await import(
-      "./worker-client"
-    );
+    const { processFeedInBackground: processInWorker, shutdownEpgWorker: shutdown } =
+      await import("./worker-client");
 
     let messageHandler: ((event: MessageEvent) => void) | null = null;
     class MockWorker {

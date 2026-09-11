@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { isNativeFullscreen, setNativeFullscreen, type FullscreenSpawn } from "./fullscreen";
 
-function spawnSequence(
-  responses: { stdout: string; exitCode: number }[],
-): FullscreenSpawn {
+function spawnSequence(responses: { stdout: string; exitCode: number }[]): FullscreenSpawn {
   let index = 0;
   return () => {
     const next = responses[index++] ?? { stdout: "", exitCode: 1 };
@@ -68,7 +66,7 @@ describe("native wrappers", () => {
       exited: Promise.resolve(0),
     }));
     const previous = globalThis.Bun;
-    globalThis.Bun = { ...previous, spawn } as typeof Bun;
+    globalThis.Bun = { ...previous, spawn } as unknown as typeof Bun;
     const { isNativeFullscreenForProcess } = await import("./fullscreen");
     await expect(isNativeFullscreenForProcess()).resolves.toBe(false);
     globalThis.Bun = previous;
@@ -126,9 +124,9 @@ describe("setNativeFullscreen", () => {
   });
 
   it("returns the requested state on unknown platforms", async () => {
-    expect(
-      await setNativeFullscreen({ platform: "freebsd", pid: 1, spawn: vi.fn() }, true),
-    ).toBe(true);
+    expect(await setNativeFullscreen({ platform: "freebsd", pid: 1, spawn: vi.fn() }, true)).toBe(
+      true,
+    );
   });
 
   it("returns fallback when darwin re-read fails", async () => {

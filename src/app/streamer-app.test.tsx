@@ -106,31 +106,27 @@ describeNative("StreamerApp", () => {
     await closeGpuixTest(app, renderer);
   });
 
-  it(
-    "handles keyboard shortcuts and text-input guard",
-    async () => {
-      const { app, ui, renderer } = await mount();
-      await ui.waitFor("channel-acme");
-      await ui.click("channel-acme");
-      await ui.press("app", " ");
-      await ui.press("app", "l");
-      await ui.press("app", "ArrowLeft");
-      await ui.press("app", "ArrowRight");
-      await ui.press("app", "ArrowUp");
-      await ui.press("app", "ArrowDown");
-      await ui.press("app", "[");
-      await ui.press("app", "]");
-      await ui.press("app", "n");
-      await ui.fill("search", "a");
-      await ui.press("app", " ");
-      await ui.click("open-settings");
-      await ui.press("app", "g");
-      await ui.click("settings-close");
-      await ui.press("app", "escape");
-      await closeGpuixTest(app, renderer);
-    },
-    30_000,
-  );
+  it("handles keyboard shortcuts and text-input guard", async () => {
+    const { app, ui, renderer } = await mount();
+    await ui.waitFor("channel-acme");
+    await ui.click("channel-acme");
+    await ui.press("app", " ");
+    await ui.press("app", "l");
+    await ui.press("app", "ArrowLeft");
+    await ui.press("app", "ArrowRight");
+    await ui.press("app", "ArrowUp");
+    await ui.press("app", "ArrowDown");
+    await ui.press("app", "[");
+    await ui.press("app", "]");
+    await ui.press("app", "n");
+    await ui.fill("search", "a");
+    await ui.press("app", " ");
+    await ui.click("open-settings");
+    await ui.press("app", "g");
+    await ui.click("settings-close");
+    await ui.press("app", "escape");
+    await closeGpuixTest(app, renderer);
+  }, 30_000);
 
   it("unmount cleans up the player and media session", async () => {
     const { app, ui, unmount, renderer } = await mount();
@@ -189,24 +185,20 @@ describeNative("StreamerApp", () => {
     await closeGpuixTest(app, renderer);
   });
 
-  it(
-    "wires settings catalog callbacks",
-    async () => {
-      const { app, ui, renderer } = await mount();
-      await ui.click("open-settings");
-      await ui.click("settings-tab-playlists");
-      await ui.fill("settings-add-url", "https://example.com/from-test.m3u8");
-      await ui.click("settings-add-url-btn");
-      await ui.click("settings-tab-channels");
-      await ui.click("channels-add");
-      await ui.fill("channel-field-name", "Test");
-      await ui.fill("channel-field-url", "https://example.com/t.m3u8");
-      await ui.click("channel-editor-save");
-      await ui.click("settings-close");
-      await closeGpuixTest(app, renderer);
-    },
-    30_000,
-  );
+  it("wires settings catalog callbacks", async () => {
+    const { app, ui, renderer } = await mount();
+    await ui.click("open-settings");
+    await ui.click("settings-tab-playlists");
+    await ui.fill("settings-add-url", "https://example.com/from-test.m3u8");
+    await ui.click("settings-add-url-btn");
+    await ui.click("settings-tab-channels");
+    await ui.click("channels-add");
+    await ui.fill("channel-field-name", "Test");
+    await ui.fill("channel-field-url", "https://example.com/t.m3u8");
+    await ui.click("channel-editor-save");
+    await ui.click("settings-close");
+    await closeGpuixTest(app, renderer);
+  }, 30_000);
 
   it("opens and closes the programme guide", async () => {
     const { app, ui, renderer } = await mount();
@@ -218,22 +210,18 @@ describeNative("StreamerApp", () => {
     await closeGpuixTest(app, renderer);
   });
 
-  it(
-    "resets selection when the active channel disappears",
-    async () => {
-      const { app, ui, renderer } = await mount();
-      await ui.waitFor("channel-mine");
-      await ui.click("channel-mine");
-      await ui.click("open-settings");
-      await ui.click("settings-tab-channels");
-      await ui.waitFor("settings-channel-mine");
-      await ui.click("settings-channel-mine");
-      await ui.click("channel-editor-delete");
-      await ui.waitFor("settings-close");
-      await ui.click("settings-close");
-      await settleGpuix(renderer, 16);
-      await closeGpuixTest(app, renderer);
-    },
-    30_000,
-  );
+  it("resets selection when the active channel disappears", async () => {
+    const { app, ui, renderer } = await mount();
+    await ui.waitFor("channel-mine");
+    await ui.click("channel-mine");
+    await ui.click("open-settings");
+    await ui.click("settings-tab-channels");
+    await ui.waitFor("settings-channel-mine");
+    await ui.click("settings-channel-mine");
+    await ui.click("channel-editor-delete");
+    await ui.waitFor("settings-close");
+    await ui.click("settings-close");
+    await settleGpuix(renderer, 16);
+    await closeGpuixTest(app, renderer);
+  }, 30_000);
 });

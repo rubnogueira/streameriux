@@ -87,10 +87,12 @@ describeNative("PlaylistsPanel", () => {
         <PlaylistsPanel
           sources={sources}
           channels={channels}
-          counts={new Map([
-            ["default.toml", 1],
-            ["empty.toml", 0],
-          ])}
+          counts={
+            new Map([
+              ["default.toml", 1],
+              ["empty.toml", 0],
+            ])
+          }
           onAddLink={onAddLink}
           onPickFile={async () => "https://example.com/list.m3u8"}
           onDeleteSource={vi.fn(async () => {})}

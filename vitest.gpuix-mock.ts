@@ -34,22 +34,15 @@ vi.mock("@gpuix/react/automation", async (importOriginal) => {
             return {
               ...mouse,
               move: (position: { x: number; y: number }) => ui.mouseMove(position),
-              down: (
-                position: { x: number; y: number },
-                options?: { button?: number },
-              ) => ui.mouseDown(position, options),
-              up: (
-                position: { x: number; y: number },
-                options?: { button?: number },
-              ) => ui.mouseUp(position, options),
+              down: (position: { x: number; y: number }, options?: { button?: number }) =>
+                ui.mouseDown(position, options),
+              up: (position: { x: number; y: number }, options?: { button?: number }) =>
+                ui.mouseUp(position, options),
             };
           }
           if (prop === "close") {
             return async () => {
-              await closeGpuixTest(
-                { close: () => originalClose() },
-                renderer as TestRenderer,
-              );
+              await closeGpuixTest({ close: () => originalClose() }, renderer as TestRenderer);
             };
           }
           return Reflect.get(target, prop, receiver);

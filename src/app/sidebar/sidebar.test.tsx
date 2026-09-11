@@ -37,24 +37,24 @@ describeNative("Sidebar", () => {
     const onQuery = vi.fn();
     const { render, renderer } = createTestRoot({ width: 320, height: 720 });
     render(
-        <Sidebar
-          channels={channels}
-          selectedId="acme"
-          query=""
-          loading={false}
-          usePlaylistGroups
-          groupAssignments={{}}
-          epgEnabled={false}
-          epgSyncLabel="Synced 1m ago"
-          getNow={() => null}
-          onQuery={onQuery}
-          onSelect={onSelect}
-          onSettings={vi.fn()}
-          onRefresh={vi.fn()}
-          onToggleFavorite={vi.fn()}
-          catalogError="broken"
-          defaultSidebarView="all"
-        />
+      <Sidebar
+        channels={channels}
+        selectedId="acme"
+        query=""
+        loading={false}
+        usePlaylistGroups
+        groupAssignments={{}}
+        epgEnabled={false}
+        epgSyncLabel="Synced 1m ago"
+        getNow={() => null}
+        onQuery={onQuery}
+        onSelect={onSelect}
+        onSettings={vi.fn()}
+        onRefresh={vi.fn()}
+        onToggleFavorite={vi.fn()}
+        catalogError="broken"
+        defaultSidebarView="all"
+      />,
     );
     const app = await connectTest(renderer);
     await app.getByTestId("view-groups").click();

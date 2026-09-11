@@ -93,11 +93,7 @@ export function renderPlaylistRow(
           {row.open ? "▾" : "▸"}
         </text>
       </div>
-      <Icon
-        name={source.kind === "playlist" ? "radio" : "inbox"}
-        size={16}
-        color={C.secondary}
-      />
+      <Icon name={source.kind === "playlist" ? "radio" : "inbox"} size={16} color={C.secondary} />
       <div
         onClick={() => handlers.toggle(source.id)}
         style={{

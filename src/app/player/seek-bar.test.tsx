@@ -14,6 +14,7 @@ import {
   startSeekDrag,
   SCRUB_THUMB_SIZE,
 } from "./seek-bar";
+import { eventPayload } from "../../test-fixtures/event-payload";
 
 describe("seek-bar helpers", () => {
   it("readElementBounds returns null without element or API", () => {
@@ -43,10 +44,10 @@ describe("seek-bar helpers", () => {
   });
 
   it("ratioFromEvent maps x within bounds", () => {
-    expect(ratioFromEvent({ x: 60 }, [0, 0, 100, 10])).toBe(0.6);
-    expect(ratioFromEvent({ x: 200 }, [0, 0, 100, 10])).toBe(1);
-    expect(ratioFromEvent({}, [0, 0, 100, 10])).toBeNull();
-    expect(ratioFromEvent({ x: 5 }, null)).toBeNull();
+    expect(ratioFromEvent(eventPayload({ x: 60 }), [0, 0, 100, 10])).toBe(0.6);
+    expect(ratioFromEvent(eventPayload({ x: 200 }), [0, 0, 100, 10])).toBe(1);
+    expect(ratioFromEvent(eventPayload(), [0, 0, 100, 10])).toBeNull();
+    expect(ratioFromEvent(eventPayload({ x: 5 }), null)).toBeNull();
   });
 
   it("thumbLeftPx clamps within the track", () => {
@@ -60,7 +61,7 @@ describe("seek-bar helpers", () => {
     finishSeekDrag({
       dragging: { current: false },
       ratioAt: () => 0.5,
-      event: { x: 1 },
+      event: eventPayload({ x: 1 }),
       commit: true,
       start: 0,
       end: 1,
@@ -80,12 +81,12 @@ describe("seek-bar helpers", () => {
     const setScrub = vi.fn();
     const setPendingSeek = vi.fn();
     const bounds: [number, number, number, number] = [0, 0, 100, 10];
-    const ratioAt = (event: { x?: number }) => ratioFromEvent(event, bounds);
+    const ratioAt = (event: Parameters<typeof ratioFromEvent>[0]) => ratioFromEvent(event, bounds);
 
     finishSeekDrag({
       dragging,
       ratioAt,
-      event: { x: 50 },
+      event: eventPayload({ x: 50 }),
       commit: true,
       start: 0,
       end: 100,
@@ -103,7 +104,7 @@ describe("seek-bar helpers", () => {
     finishSeekDrag({
       dragging,
       ratioAt,
-      event: {},
+      event: eventPayload(),
       commit: true,
       start: 0,
       end: 100,
@@ -120,7 +121,7 @@ describe("seek-bar helpers", () => {
     finishSeekDrag({
       dragging,
       ratioAt,
-      event: { x: 50 },
+      event: eventPayload({ x: 50 }),
       commit: false,
       start: 0,
       end: 100,
@@ -135,10 +136,10 @@ describe("seek-bar helpers", () => {
 
   it("primarySeekPointerDown respects disabled state and buttons", () => {
     const beginDrag = vi.fn();
-    primarySeekPointerDown({ button: 2 }, false, beginDrag);
-    primarySeekPointerDown({ button: 0 }, true, beginDrag);
+    primarySeekPointerDown(eventPayload({ button: 2 }), false, beginDrag);
+    primarySeekPointerDown(eventPayload({ button: 0 }), true, beginDrag);
     expect(beginDrag).not.toHaveBeenCalled();
-    primarySeekPointerDown({ button: 0 }, false, beginDrag);
+    primarySeekPointerDown(eventPayload({ button: 0 }), false, beginDrag);
     expect(beginDrag).toHaveBeenCalled();
   });
 
@@ -148,7 +149,7 @@ describe("seek-bar helpers", () => {
       dragging: { current: true },
       disabled: true,
       ratioAt: () => 0.5,
-      event: { x: 1 },
+      event: eventPayload({ x: 1 }),
       start: 0,
       span: 100,
       setPendingSeek: vi.fn(),
@@ -159,7 +160,7 @@ describe("seek-bar helpers", () => {
       dragging: { current: true },
       disabled: false,
       ratioAt: () => null,
-      event: { x: 1 },
+      event: eventPayload({ x: 1 }),
       start: 0,
       span: 100,
       setPendingSeek: vi.fn(),
@@ -174,14 +175,14 @@ describe("seek-bar helpers", () => {
     const setPendingSeek = vi.fn();
     const endDrag = vi.fn();
     const bounds: [number, number, number, number] = [0, 0, 100, 10];
-    const ratioAt = (event: { x?: number }) => ratioFromEvent(event, bounds);
+    const ratioAt = (event: Parameters<typeof ratioFromEvent>[0]) => ratioFromEvent(event, bounds);
     const dragging = { current: true };
 
     startSeekDrag({
       dragging,
       disabled: false,
       ratioAt,
-      event: { x: 25 },
+      event: eventPayload({ x: 25 }),
       start: 0,
       span: 100,
       setPendingSeek,
@@ -189,10 +190,10 @@ describe("seek-bar helpers", () => {
       endDrag,
     });
     expect(setScrubValue).toHaveBeenCalledWith(25);
-    dragRouter.current?.move({ x: 75 });
+    dragRouter.current?.move(eventPayload({ x: 75 }));
     expect(setScrubValue).toHaveBeenCalledWith(75);
-    dragRouter.current?.move({});
-    dragRouter.current?.end({ x: 75 });
+    dragRouter.current?.move(eventPayload());
+    dragRouter.current?.end(eventPayload({ x: 75 }));
     expect(endDrag).toHaveBeenCalled();
   });
 
@@ -204,7 +205,7 @@ describe("seek-bar helpers", () => {
       dragging,
       disabled: true,
       ratioAt: (event) => ratioFromEvent(event, bounds),
-      event: { x: 10 },
+      event: eventPayload({ x: 10 }),
       start: 0,
       span: 100,
       setPendingSeek: vi.fn(),

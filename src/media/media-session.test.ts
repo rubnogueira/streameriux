@@ -246,9 +246,12 @@ describe("startMediaSession", () => {
         setPositionState: vi.fn(),
       },
     });
-    vi.stubGlobal("MediaMetadata", class {
-      constructor(_init: object) {}
-    });
+    vi.stubGlobal(
+      "MediaMetadata",
+      class {
+        constructor(_init: object) {}
+      },
+    );
     await startMediaSession(handlers);
     actionHandlers.play?.();
     actionHandlers.pause?.();
@@ -270,12 +273,15 @@ describe("startMediaSession", () => {
         setPositionState: vi.fn(),
       },
     });
-    vi.stubGlobal("MediaMetadata", class {
-      title = "";
-      constructor(init: { title?: string }) {
-        this.title = init.title ?? "";
-      }
-    });
+    vi.stubGlobal(
+      "MediaMetadata",
+      class {
+        title = "";
+        constructor(init: { title?: string }) {
+          this.title = init.title ?? "";
+        }
+      },
+    );
     const session = await startMediaSession({
       play: vi.fn(),
       pause: vi.fn(),

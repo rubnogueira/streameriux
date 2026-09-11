@@ -58,7 +58,7 @@ describe("native wrappers", () => {
       exited: Promise.resolve(0),
     }));
     const previous = globalThis.Bun;
-    globalThis.Bun = { ...previous, spawn } as typeof Bun;
+    globalThis.Bun = { ...previous, spawn } as unknown as typeof Bun;
     const { pickCatalogFileNative } = await import("./file-dialog");
     await expect(pickCatalogFileNative()).resolves.toBe("/tmp/a.m3u");
     globalThis.Bun = previous;
@@ -67,7 +67,10 @@ describe("native wrappers", () => {
 
 describe("pickCatalogFolder", () => {
   it("returns a darwin folder path", async () => {
-    const path = await pickCatalogFolder({ platform: "darwin", spawn: spawnWith("/tmp/catalogs/") });
+    const path = await pickCatalogFolder({
+      platform: "darwin",
+      spawn: spawnWith("/tmp/catalogs/"),
+    });
     expect(path).toBe("/tmp/catalogs/");
   });
 

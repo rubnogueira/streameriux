@@ -107,7 +107,9 @@ describe("useAsyncValue", () => {
     await hook.rerender();
     expect(hook.latest).toBe("value");
     hook.unmount();
-    const again = await renderHookProbe(() => useAsyncValue("once", async () => "other", undefined));
+    const again = await renderHookProbe(() =>
+      useAsyncValue("once", async () => "other", undefined),
+    );
     await again.rerender();
     expect(again.latest).toBe("other");
     again.unmount();
@@ -133,11 +135,11 @@ describe("server snapshots", () => {
       useBootstrap(() => () => {}, "snap");
       const asyncValue = useAsyncValue("srv", async () => "ok", undefined);
       return (
-        <span>
+        <text>
           {clock}
           {external}
           {asyncValue ?? "pending"}
-        </span>
+        </text>
       );
     }
     const html = renderToString(<Tree />);

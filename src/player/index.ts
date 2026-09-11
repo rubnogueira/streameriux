@@ -438,9 +438,7 @@ export class StreamPlayer {
       }
       if (audioTrack) {
         if (!(await audioTrack.canDecode())) {
-          warning = [warning, await whyUndecodable("Audio", audioTrack)]
-            .filter(Boolean)
-            .join(" ");
+          warning = [warning, await whyUndecodable("Audio", audioTrack)].filter(Boolean).join(" ");
           audioTrack = null;
         }
       }

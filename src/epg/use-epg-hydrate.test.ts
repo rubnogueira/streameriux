@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Channel } from "../catalog/channel";
+import { epgFeedIndex } from "../test-fixtures/epg-feed-index";
 import { EpgStore } from "./store";
 import { epgBackgroundSyncEnabled, hydrateCachedFeeds } from "./use-epg-hydrate";
 
@@ -36,11 +37,7 @@ describe("epgBackgroundSyncEnabled", () => {
 describe("hydrateCachedFeeds", () => {
   it("loads cached feeds and finishes merge", async () => {
     const { readCachedFeed } = await import("./sync");
-    vi.mocked(readCachedFeed).mockResolvedValueOnce({
-      url: "https://example.com/epg.xml",
-      programmes: [],
-      channels: [],
-    });
+    vi.mocked(readCachedFeed).mockResolvedValueOnce(epgFeedIndex("https://example.com/epg.xml"));
     const store = new EpgStore();
     const setStatus = vi.fn();
     const runSync = vi.fn(async () => {});
@@ -99,11 +96,7 @@ describe("hydrateCachedFeeds", () => {
     const hydrateGenerationRef = { current: 1 };
     vi.mocked(readCachedFeed).mockImplementation(async () => {
       hydrateGenerationRef.current = 2;
-      return {
-        url: "https://example.com/epg.xml",
-        programmes: [],
-        channels: [],
-      };
+      return epgFeedIndex("https://example.com/epg.xml");
     });
     const store = new EpgStore();
     await hydrateCachedFeeds({

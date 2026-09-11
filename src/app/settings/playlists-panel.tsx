@@ -106,9 +106,7 @@ export function PlaylistsPanel({
           listKey="settings-playlists"
           count={rows.length}
           estimatedItemHeight={56}
-          renderRow={(index) =>
-            renderPlaylistRow(rows[index]!, { toggle, onDeleteSource })
-          }
+          renderRow={(index) => renderPlaylistRow(rows[index]!, { toggle, onDeleteSource })}
         />
       )}
     </div>

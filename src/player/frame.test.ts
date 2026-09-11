@@ -2,11 +2,13 @@ import { describe, expect, it, vi } from "vitest";
 import { encodeBmp, sampleToBgra, sampleToFrameSrc } from "./frame";
 import type { VideoSample } from "mediabunny";
 
-function mockSample(overrides: Partial<VideoSample> & Pick<VideoSample, "displayWidth" | "displayHeight">): VideoSample {
+function mockSample(
+  overrides: Partial<VideoSample> & Pick<VideoSample, "displayWidth" | "displayHeight">,
+): VideoSample {
   const base = {
     rotation: 0,
     allocationSize: () => 16,
-    copyTo: vi.fn(async (pixels: Uint8Array) => [{ stride: overrides.displayWidth * 4 }]),
+    copyTo: vi.fn(async (_pixels: Uint8Array) => [{ stride: overrides.displayWidth * 4 }]),
     transform: vi.fn(async () => mockSample({ displayWidth: 2, displayHeight: 2 })),
     close: vi.fn(),
     ...overrides,
@@ -70,10 +72,12 @@ describe("sampleToFrameSrc", () => {
     const transformed = mockSample({ displayWidth: 640, displayHeight: 360 });
     const sample = mockSample({ displayWidth: 1920, displayHeight: 1080, rotation: 90 });
     (sample.transform as ReturnType<typeof vi.fn>).mockResolvedValue(transformed);
-    (transformed.copyTo as ReturnType<typeof vi.fn>).mockImplementation(async (pixels: Uint8Array) => {
-      pixels.fill(0);
-      return [{ stride: 640 * 4 }];
-    });
+    (transformed.copyTo as ReturnType<typeof vi.fn>).mockImplementation(
+      async (pixels: Uint8Array) => {
+        pixels.fill(0);
+        return [{ stride: 640 * 4 }];
+      },
+    );
     await sampleToFrameSrc(sample);
     expect(sample.transform).toHaveBeenCalled();
     expect(transformed.close).toHaveBeenCalled();

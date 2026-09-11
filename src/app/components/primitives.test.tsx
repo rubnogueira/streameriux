@@ -21,7 +21,9 @@ const describeNative = hasNativeTestRenderer ? describe : describe.skip;
 function renderSuite(node: React.ReactNode) {
   const { render, renderer } = createTestRoot({ width: 480, height: 320 });
   render(
-    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
+    <div
+      style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 8 }}
+    >
       {node}
     </div>,
   );
@@ -85,6 +87,4 @@ describeNative("primitives", () => {
     expect(onSubmit).toHaveBeenCalled();
     await app.close();
   });
-
 });
-

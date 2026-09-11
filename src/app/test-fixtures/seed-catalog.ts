@@ -53,7 +53,10 @@ url = "https://example.com/global.m3u8"
 
 /** Creates a temporary catalog directory and returns its path (does not set env). */
 export function createTestCatalogDir(options?: { empty?: boolean }): string {
-  const dir = join(tmpdir(), `streameriux-catalog-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  const dir = join(
+    tmpdir(),
+    `streameriux-catalog-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  );
   writeCatalog(dir, options?.empty ? "\n" : DEFAULT_CHANNELS);
   return dir;
 }

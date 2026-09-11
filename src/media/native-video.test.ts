@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -162,7 +162,7 @@ describe("loadNativeVideo cache", () => {
 
   it("reports support and playback when not in vitest", () => {
     const playing = vi.fn();
-    setNativeVideoCacheForTests({ setPlaying: playing } as NativeVideo);
+    setNativeVideoCacheForTests({ setPlaying: playing } as unknown as NativeVideo);
     vi.stubEnv("VITEST", "0");
     vi.stubEnv("STREAMER_NATIVE_VIDEO", "1");
     expect(nativeVideoSupported()).toBe(true);
@@ -183,10 +183,14 @@ describe("dlopenVideoLayer", () => {
       gpiux_video_set_playing: () => {},
       gpiux_video_debug: () => "ffi",
     };
-    const loaded = dlopenVideoLayer("/tmp/lib.dylib", () => ({
-      dlopen: () => ({ symbols }),
-      FFIType: { i32: "i32", f64: "f64", ptr: "ptr", void: "void", cstring: "cstring" },
-    }));
+    const loaded = dlopenVideoLayer(
+      "/tmp/lib.dylib",
+      () =>
+        ({
+          dlopen: () => ({ symbols }),
+          FFIType: { i32: "i32", f64: "f64", ptr: "ptr", void: "void", cstring: "cstring" },
+        }) as unknown as typeof import("bun:ffi"),
+    );
     expect(loaded.symbols.gpiux_video_debug()).toBe("ffi");
   });
 });

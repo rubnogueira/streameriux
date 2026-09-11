@@ -6,12 +6,7 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { hasNativeTestRenderer } from "@gpuix/react/testing";
 
-import {
-  bootstrapStreamerApp,
-  formatClock,
-  shouldBootstrapApp,
-  startAppIfEntry,
-} from "./app";
+import { bootstrapStreamerApp, formatClock, shouldBootstrapApp, startAppIfEntry } from "./app";
 import { keyRouter } from "./focus";
 import { createTestCatalogDir } from "./test-fixtures/seed-catalog";
 import { mountStreamerApp, unmountStreamerApp } from "./test-fixtures/mount-streamer-app";

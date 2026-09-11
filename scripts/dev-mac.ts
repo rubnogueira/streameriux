@@ -21,7 +21,10 @@ export type RunDevMacDeps = {
   existsSync: typeof existsSync;
   compileApp: typeof compileApp;
   ensureBundleMetadata: typeof ensureBundleMetadata;
-  spawn: (command: string[], options: { cwd: string; stdio: ["inherit", "inherit", "inherit"] }) => {
+  spawn: (
+    command: string[],
+    options: { cwd: string; stdio: ["inherit", "inherit", "inherit"] },
+  ) => {
     exited: Promise<number>;
   };
   log: (message: string) => void;
@@ -50,7 +53,10 @@ export async function runDevMac(deps: RunDevMacDeps): Promise<void> {
     deps.exit(1);
   }
 
-  const app = deps.spawn([deps.execPath], { cwd: deps.root, stdio: ["inherit", "inherit", "inherit"] });
+  const app = deps.spawn([deps.execPath], {
+    cwd: deps.root,
+    stdio: ["inherit", "inherit", "inherit"],
+  });
   deps.exit(await app.exited);
 }
 

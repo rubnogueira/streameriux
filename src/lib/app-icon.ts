@@ -65,4 +65,3 @@ export function ensureAppIconPng(appearance: MacAppearance, size = 56): string |
   }
   return rasterizeSvgToPng(svgPath, png, size) ? png : undefined;
 }
-

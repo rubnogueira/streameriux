@@ -3,7 +3,9 @@ import { feedNameFromUrl } from "./feed-name";
 
 describe("feedNameFromUrl", () => {
   it("uses the last path segment", () => {
-    expect(feedNameFromUrl("https://cdn.example.com/feeds/us-guide.xml.gz")).toBe("us-guide.xml.gz");
+    expect(feedNameFromUrl("https://cdn.example.com/feeds/us-guide.xml.gz")).toBe(
+      "us-guide.xml.gz",
+    );
   });
 
   it("decodes percent-encoded names", () => {

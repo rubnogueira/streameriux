@@ -20,7 +20,7 @@ vi.mock("node:fs", async (importOriginal) => {
   const realExists = fs.existsSync.bind(fs);
   return {
     ...fs,
-    existsSync: (path: fs.PathLike) => {
+    existsSync: (path: import("node:fs").PathLike) => {
       const value = String(path);
       if (value.endsWith("/channels") || value.endsWith("\\channels")) return false;
       return realExists(path);

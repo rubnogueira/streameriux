@@ -12,12 +12,7 @@ export default defineConfig({
     retry: 1,
     testTimeout: 20_000,
     setupFiles: ["./vitest.gpuix-mock.ts", "./vitest.setup.ts"],
-    exclude: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "vitest-runner.test.ts",
-      "scripts/**",
-    ],
+    exclude: ["**/node_modules/**", "**/dist/**", "vitest-runner.test.ts", "scripts/**"],
     coverage: {
       provider: "v8",
       reportsDirectory: "./coverage",

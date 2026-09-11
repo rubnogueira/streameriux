@@ -26,15 +26,12 @@ describeNative("channel components", () => {
     const onFavorite = vi.fn();
     const { render, renderer } = createTestRoot({ width: 360, height: 240 });
     render(
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div
+        style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 8 }}
+      >
         <ChannelNumber chno="7" />
         <ChannelMark channel={channel} active />
-        <ChannelRow
-          channel={channel}
-          active
-          onClick={onSelect}
-          onToggleFavorite={onFavorite}
-        />
+        <ChannelRow channel={channel} active onClick={onSelect} onToggleFavorite={onFavorite} />
         <GroupRow name="Live" count={2} testId="group-live" onClick={onSelect} />
       </div>,
     );
@@ -62,12 +59,7 @@ describeNative("channel components", () => {
     const { render, renderer } = createTestRoot({ width: 320, height: 120 });
     render(<ChannelMark channel={plain} />);
     render(
-      <ChannelRow
-        channel={plain}
-        active={false}
-        onClick={() => {}}
-        onToggleFavorite={() => {}}
-      />,
+      <ChannelRow channel={plain} active={false} onClick={() => {}} onToggleFavorite={() => {}} />,
     );
     expect(renderer.getPaintedText().join(" ")).toContain("Plain");
   });
