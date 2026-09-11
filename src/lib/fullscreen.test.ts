@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { isNativeFullscreen, setNativeFullscreen, type FullscreenSpawn } from "./fullscreen";
+import type { DarwinWindowFullscreen } from "./darwin-window-fullscreen";
 
 function spawnSequence(responses: { stdout: string; exitCode: number }[]): FullscreenSpawn {
   let index = 0;
@@ -17,82 +18,81 @@ function spawnSequence(responses: { stdout: string; exitCode: number }[]): Fulls
   };
 }
 
+const darwinDeps = (darwin: DarwinWindowFullscreen) => ({
+  platform: "darwin" as const,
+  spawn: vi.fn(),
+  darwin,
+});
+
 describe("isNativeFullscreen", () => {
   it("returns null off darwin", async () => {
-    expect(await isNativeFullscreen({ platform: "linux", pid: 1, spawn: vi.fn() })).toBeNull();
+    expect(await isNativeFullscreen({ platform: "linux", spawn: vi.fn() })).toBeNull();
   });
 
-  it("parses true and false from osascript", async () => {
+  it("reads state from the macOS binding", async () => {
     expect(
-      await isNativeFullscreen({
-        platform: "darwin",
-        pid: 42,
-        spawn: spawnSequence([{ stdout: "true", exitCode: 0 }]),
-      }),
+      await isNativeFullscreen(
+        darwinDeps({
+          isFullscreen: () => true,
+          setFullscreen: () => true,
+        }),
+      ),
     ).toBe(true);
     expect(
-      await isNativeFullscreen({
-        platform: "darwin",
-        pid: 42,
-        spawn: spawnSequence([{ stdout: "false", exitCode: 0 }]),
-      }),
+      await isNativeFullscreen(
+        darwinDeps({
+          isFullscreen: () => false,
+          setFullscreen: () => false,
+        }),
+      ),
     ).toBe(false);
     expect(
-      await isNativeFullscreen({
-        platform: "darwin",
-        pid: 42,
-        spawn: spawnSequence([{ stdout: "missing", exitCode: 0 }]),
-      }),
+      await isNativeFullscreen(
+        darwinDeps({
+          isFullscreen: () => null,
+          setFullscreen: () => false,
+        }),
+      ),
     ).toBeNull();
   });
 
-  it("returns null when spawn throws", async () => {
-    const spawn: FullscreenSpawn = () => {
-      throw new Error("spawn failed");
-    };
-    expect(await isNativeFullscreen({ platform: "darwin", pid: 1, spawn })).toBeNull();
-  });
-});
-
-describe("native wrappers", () => {
-  it("isNativeFullscreenForProcess delegates to spawn", async () => {
-    const spawn = vi.fn(() => ({
-      stdout: new ReadableStream({
-        start(c) {
-          c.enqueue(new TextEncoder().encode("false"));
-          c.close();
-        },
-      }),
-      exited: Promise.resolve(0),
-    }));
-    const previous = globalThis.Bun;
-    globalThis.Bun = { ...previous, spawn } as unknown as typeof Bun;
-    const { isNativeFullscreenForProcess } = await import("./fullscreen");
-    await expect(isNativeFullscreenForProcess()).resolves.toBe(false);
-    globalThis.Bun = previous;
+  it("returns null on darwin when the binding is missing", async () => {
+    expect(
+      await isNativeFullscreen({ platform: "darwin", spawn: vi.fn(), darwin: null }),
+    ).toBeNull();
   });
 });
 
 describe("setNativeFullscreen", () => {
-  it("re-reads state on darwin", async () => {
+  it("uses the macOS binding", async () => {
+    const setFullscreen = vi.fn(() => true);
     const on = await setNativeFullscreen(
-      {
-        platform: "darwin",
-        pid: 9,
-        spawn: spawnSequence([
-          { stdout: "", exitCode: 0 },
-          { stdout: "true", exitCode: 0 },
-        ]),
-      },
+      darwinDeps({
+        isFullscreen: () => true,
+        setFullscreen,
+      }),
       true,
     );
     expect(on).toBe(true);
+    expect(setFullscreen).toHaveBeenCalledWith(true);
+  });
+
+  it("falls back to the requested state when macOS set returns unknown", async () => {
+    expect(
+      await setNativeFullscreen(
+        darwinDeps({
+          isFullscreen: () => null,
+          setFullscreen: () => false,
+        }),
+        false,
+      ),
+    ).toBe(false);
   });
 
   it("uses wmctrl on linux when it succeeds", async () => {
     expect(
       await setNativeFullscreen(
-        { platform: "linux", pid: 1, spawn: spawnSequence([{ stdout: "", exitCode: 0 }]) },
+        { platform: "linux", spawn: spawnSequence([{ stdout: "", exitCode: 0 }]) },
         true,
       ),
     ).toBe(true);
@@ -103,7 +103,6 @@ describe("setNativeFullscreen", () => {
       await setNativeFullscreen(
         {
           platform: "linux",
-          pid: 1,
           spawn: spawnSequence([
             { stdout: "", exitCode: 1 },
             { stdout: "", exitCode: 0 },
@@ -117,31 +116,13 @@ describe("setNativeFullscreen", () => {
   it("maximizes on win32", async () => {
     expect(
       await setNativeFullscreen(
-        { platform: "win32", pid: 1, spawn: spawnSequence([{ stdout: "", exitCode: 0 }]) },
+        { platform: "win32", spawn: spawnSequence([{ stdout: "", exitCode: 0 }]) },
         true,
       ),
     ).toBe(true);
   });
 
   it("returns the requested state on unknown platforms", async () => {
-    expect(await setNativeFullscreen({ platform: "freebsd", pid: 1, spawn: vi.fn() }, true)).toBe(
-      true,
-    );
-  });
-
-  it("returns fallback when darwin re-read fails", async () => {
-    expect(
-      await setNativeFullscreen(
-        {
-          platform: "darwin",
-          pid: 1,
-          spawn: spawnSequence([
-            { stdout: "", exitCode: 0 },
-            { stdout: "weird", exitCode: 0 },
-          ]),
-        },
-        false,
-      ),
-    ).toBe(false);
+    expect(await setNativeFullscreen({ platform: "freebsd", spawn: vi.fn() }, true)).toBe(true);
   });
 });

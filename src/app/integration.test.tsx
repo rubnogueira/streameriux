@@ -91,6 +91,10 @@ describeNative("streamer shell integration", () => {
     await ui.click("prev-channel");
     await ui.click("next-channel");
     await ui.click("video-fit-contain");
+    await ui.click("collapse-sidebar");
+    await ui.waitFor("expand-sidebar");
+    await ui.click("expand-sidebar");
+    await ui.waitFor("sidebar");
     await ui.click("fullscreen");
     await ui.click("exit-fullscreen");
 

@@ -91,6 +91,8 @@ export function PlayerPane({
   onPrev,
   onNext,
   onFullscreen,
+  onToggleSidebar,
+  sidebarCollapsed,
   onGuide,
   videoFit,
   onCycleVideoFit,
@@ -100,6 +102,7 @@ export function PlayerPane({
   player: StreamPlayer | null;
   nativeVideoActive: boolean;
   fullscreen: boolean;
+  sidebarCollapsed: boolean;
   programme: EpgProgramme | null;
   epgEnabled: boolean;
   videoFit: VideoFit;
@@ -112,6 +115,7 @@ export function PlayerPane({
   onPrev: () => void;
   onNext: () => void;
   onFullscreen: () => void;
+  onToggleSidebar: () => void;
   onGuide: () => void;
   onCycleVideoFit: () => void;
 }) {
@@ -366,6 +370,14 @@ export function PlayerPane({
             {videoFitLabel(videoFit)}
           </text>
         </div>
+        {!fullscreen ? (
+          <IconButton
+            icon={sidebarCollapsed ? "chevronRight" : "chevronLeft"}
+            testId={sidebarCollapsed ? "expand-sidebar" : "collapse-sidebar"}
+            onClick={onToggleSidebar}
+            color={C.text}
+          />
+        ) : null}
         <IconButton
           icon={fullscreen ? "minimize" : "maximize"}
           testId={fullscreen ? "exit-fullscreen" : "fullscreen"}

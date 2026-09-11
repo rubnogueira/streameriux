@@ -29,6 +29,7 @@ export function StreamerApp() {
   const [dialog, setDialog] = useState<"settings" | "guide" | null>(null);
   const [videoFit, setVideoFit] = useState<VideoFit>("contain");
   const [fullscreen, setFullscreen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [, setNativeFullscreenState] = useState(false);
   const [player] = useState(() => new StreamPlayer(setPlayerState));
   const playerRef = useRef(player);
@@ -60,9 +61,10 @@ export function StreamerApp() {
   // player pane instead of through GPUIX's `<img>`, so frame memory stays flat.
   const nativeChannelUp =
     !!selected && playerState.status !== "idle" && playerState.status !== "error";
+  const showSidebar = !fullscreen && !sidebarCollapsed;
   const nativeVideoActive = useNativeVideo(player, {
     enabled: appSettings.settings.nativeVideo,
-    leftInset: fullscreen ? 0 : SIDEBAR_WIDTH,
+    leftInset: showSidebar ? SIDEBAR_WIDTH : 0,
     videoFit,
   });
   // Only punch a transparent hole while the native layer is actually shown; when
@@ -165,7 +167,7 @@ export function StreamerApp() {
     fullscreenRef.current = true;
     setFullscreen(true);
     // If native fullscreen actually engages, the traffic lights are gone and the
-    // chrome need not clear them; if it doesn't (e.g. Accessibility not granted),
+    // chrome need not clear them; if it doesn't (e.g. AppKit binding unavailable),
     // we stay windowed-immersive and must keep clearing them.
     void setNativeFullscreenForProcess(true).then((ok) => setNativeFullscreenState(ok));
   };
@@ -182,6 +184,8 @@ export function StreamerApp() {
     if (fullscreenRef.current) exitFullscreen();
     else enterFullscreen();
   };
+
+  const toggleSidebarCollapsed = () => setSidebarCollapsed((collapsed) => !collapsed);
 
   // Keep the in-app immersive layout in step with the real window when the user
   // leaves native fullscreen another way (green button, Ctrl+Cmd+F, swipe), so
@@ -257,7 +261,7 @@ export function StreamerApp() {
         backgroundColor: nativeVideoShowing ? "transparent" : C.canvas,
       }}
     >
-      {fullscreen ? null : (
+      {showSidebar ? (
         <Sidebar
           channels={visibleChannelList}
           selectedId={selectedId}
@@ -276,13 +280,14 @@ export function StreamerApp() {
           catalogError={catalog.error}
           defaultSidebarView={appSettings.settings.defaultSidebarView}
         />
-      )}
+      ) : null}
       <PlayerPane
         channel={selected}
         state={playerState}
         player={player}
         nativeVideoActive={nativeVideoShowing}
         fullscreen={fullscreen}
+        sidebarCollapsed={sidebarCollapsed}
         programme={currentProgramme}
         epgEnabled={epg.enabled}
         onToggle={() => playerRef.current?.toggle()}
@@ -294,6 +299,7 @@ export function StreamerApp() {
         onPrev={() => step(-1)}
         onNext={() => step(1)}
         onFullscreen={toggleFullscreen}
+        onToggleSidebar={toggleSidebarCollapsed}
         onGuide={() => setDialog((current) => (current === "guide" ? null : "guide"))}
         videoFit={videoFit}
         onCycleVideoFit={() => setVideoFit((current) => cycleVideoFit(current))}

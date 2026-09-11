@@ -2,11 +2,15 @@
  * Native OS fullscreen for the app window.
  *
  * GPUIX only takes `fullscreen` at window creation and exposes no runtime
- * toggle, so we drive the platform window manager directly. Everything targets
- * *this* process by pid — never "the frontmost app" — so a background window or
- * a different foreground app can never be flipped by accident, and the app's
- * own fullscreen state stays in sync with the real window.
+ * toggle, so we drive the platform window manager directly. On macOS this uses
+ * an in-process AppKit dylib (no System Events / Accessibility). Linux and
+ * Windows still shell out to `wmctrl` / `xdotool` / PowerShell.
  */
+
+import {
+  loadDarwinWindowFullscreen,
+  type DarwinWindowFullscreen,
+} from "./darwin-window-fullscreen";
 
 export type FullscreenSpawn = (
   command: string[],
@@ -15,8 +19,9 @@ export type FullscreenSpawn = (
 
 export type FullscreenDeps = {
   platform: NodeJS.Platform;
-  pid: number;
   spawn: FullscreenSpawn;
+  /** Injected in tests; defaults to the macOS AppKit dylib when available. */
+  darwin?: DarwinWindowFullscreen | null;
 };
 
 async function run(deps: FullscreenDeps, command: string, args: string[]): Promise<boolean> {
@@ -28,39 +33,17 @@ async function run(deps: FullscreenDeps, command: string, args: string[]): Promi
   }
 }
 
-async function output(
-  deps: FullscreenDeps,
-  command: string,
-  args: string[],
-): Promise<string | null> {
-  try {
-    const proc = deps.spawn([command, ...args], { stdout: "pipe", stderr: "pipe" });
-    const text = proc.stdout ? (await new Response(proc.stdout).text()).trim() : "";
-    return (await proc.exited) === 0 ? text : null;
-  } catch {
-    return null;
-  }
-}
-
-function ownProcess(pid: number): string {
-  return `first process whose unix id is ${pid}`;
+function darwinBinding(deps: FullscreenDeps): DarwinWindowFullscreen | null {
+  if (deps.platform !== "darwin") return null;
+  if (deps.darwin !== undefined) return deps.darwin;
+  return loadDarwinWindowFullscreen();
 }
 
 /** Read the window's current native fullscreen state, or null if unknown. */
 export async function isNativeFullscreen(deps: FullscreenDeps): Promise<boolean | null> {
-  if (deps.platform !== "darwin") return null;
-  const value = await output(deps, "osascript", [
-    "-e",
-    `tell application "System Events" to tell (${ownProcess(deps.pid)})
-      try
-        return value of attribute "AXFullScreen" of window 1
-      on error
-        return "missing"
-      end try
-    end tell`,
-  ]);
-  if (value === "true") return true;
-  if (value === "false") return false;
+  const darwin = darwinBinding(deps);
+  if (darwin) return darwin.isFullscreen();
+  if (deps.platform === "darwin") return null;
   return null;
 }
 
@@ -70,18 +53,8 @@ export async function isNativeFullscreen(deps: FullscreenDeps): Promise<boolean 
  * Returns whether the window is fullscreen afterwards (best effort).
  */
 export async function setNativeFullscreen(deps: FullscreenDeps, on: boolean): Promise<boolean> {
-  if (deps.platform === "darwin") {
-    await run(deps, "osascript", [
-      "-e",
-      `tell application "System Events" to tell (${ownProcess(deps.pid)})
-        try
-          set fs to value of attribute "AXFullScreen" of window 1
-          if fs is not ${on} then set value of attribute "AXFullScreen" of window 1 to ${on}
-        end try
-      end tell`,
-    ]);
-    return (await isNativeFullscreen(deps)) ?? on;
-  }
+  const darwin = darwinBinding(deps);
+  if (darwin) return darwin.setFullscreen(on);
 
   if (deps.platform === "linux") {
     const state = on ? "add" : "remove";
@@ -117,7 +90,6 @@ export async function setNativeFullscreen(deps: FullscreenDeps, on: boolean): Pr
 
 const defaultDeps = (): FullscreenDeps => ({
   platform: process.platform,
-  pid: process.pid,
   spawn: (command, options) => Bun.spawn(command, options),
 });
 
